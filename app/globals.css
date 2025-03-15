@@ -1,15 +1,14 @@
-@import "tailwindcss";
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  
+  /* Game colors */
+  --color-common: #475569;
+  --color-uncommon: #2563eb;
+  --color-rare: #9333ea;
+  --color-cell-empty: #334155;
+  --color-bonus: #22c55e;
+  --color-effect: #facc15;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,4 +22,225 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Basic layout */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Typography */
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-base {
+  font-size: 1rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+/* Spacing */
+.m-1 {
+  margin: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+/* Game specific styles */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #1e293b, #0f172a);
+  color: white;
+  padding: 1rem;
+}
+
+.content-container {
+  width: 100%;
+  max-width: 28rem;
+}
+
+
+/* Button styles */
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background: linear-gradient(to right, #f59e0b, #d97706);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(to right, #d97706, #b45309);
+}
+
+.btn-secondary {
+  background-color: #475569;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #334155;
+}
+
+.spin-button {
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: scale(1);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.spin-button:hover {
+  transform: scale(1.05);
+}
+
+.spin-button:active {
+  transform: scale(0.95);
+}
+
+/* Header styles */
+.header {
+  background-color: #334155;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.stat-box {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.stat-box-coins {
+  background-color: #b45309;
+}
+
+.stat-box-rent {
+  background-color: #dc2626;
+}
+
+.stat-box-turns {
+  background-color: #2563eb;
+}
+
+/* Animations */
+@keyframes spin-grid {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95) rotate(3deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-20px); opacity: 0; }
+}
+
+@keyframes coin-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.animate-spin-grid {
+  animation: spin-grid 0.5s ease-in-out;
+}
+
+.animate-float-up {
+  animation: float-up 1s forwards;
+}
+
+.animate-coin-pop {
+  animation: coin-pop 0.5s ease-in-out;
 }

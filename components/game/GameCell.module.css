@@ -1,0 +1,71 @@
+.cellContainer {
+  position: relative;
+  width: 100%;
+  height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cellEmpty {
+  background-color: var(--color-cell-empty);
+}
+
+.cellCommon {
+  background-color: var(--color-common);
+}
+
+.cellUncommon {
+  background-color: var(--color-uncommon);
+}
+
+.cellRare {
+  background-color: var(--color-rare);
+}
+
+.symbolEmoji {
+  font-size: 1.875rem;
+}
+
+.cellContainer:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  width: 10rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  font-size: 0.75rem;
+  pointer-events: none;
+  text-align: left;
+}
+
+.tooltipTitle {
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.tooltipValue {
+  margin-bottom: 0.25rem;
+}
+
+.tooltipEffect {
+  color: var(--color-effect);
+  font-style: italic;
+  margin-bottom: 0.25rem;
+}
+
+.tooltipBonus {
+  color: var(--color-bonus);
+}

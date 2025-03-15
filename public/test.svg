@@ -1,0 +1,6 @@
+<!-- Green Button -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+    <rect x="0" y="0" width="300" height="150" rx="40" ry="40" fill="#3CB043" stroke="#2C8230" stroke-width="8"/>
+    <circle cx="150" cy="75" r="60" fill="#49D469" />
+    <text x="150" y="90" font-size="60" font-family="Arial" fill="white" text-anchor="middle">3</text>
+</svg>

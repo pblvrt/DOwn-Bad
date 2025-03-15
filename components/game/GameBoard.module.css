@@ -1,0 +1,27 @@
+.gameGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: #1e293b;
+  padding: 0.5rem;
+  column-gap: 0.25rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.slotColumn {
+  position: relative;
+  overflow: hidden;
+  height: 4rem;
+  width: 4rem;
+}
+
+.slotContainer {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  transition: top 0.7s ease-in-out;
+}
+
+.spinning .slotContainer {
+  transition: top 0.7s cubic-bezier(0.1, 0.7, 0.5, 1);
+}

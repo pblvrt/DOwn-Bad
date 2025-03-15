@@ -3,12 +3,19 @@ import { getAdjacentIndices } from './utils';
 
 // Symbol definitions
 export const symbolTypes: Symbol[] = [
-  { 
-    id: 'cherry', 
-    name: 'Cherry', 
-    value: 1, 
-    rarity: 'common', 
-    emoji: '🍒' 
+  {
+    id: "empty",
+    name: "Empty",
+    value: 0,
+    rarity: "common",
+    emoji: "❔",
+  },
+  {
+    id: "cherry",
+    name: "Cherry",
+    value: 1,
+    rarity: "common",
+    emoji: "🍒",
   },
   { 
     id: 'banana', 
