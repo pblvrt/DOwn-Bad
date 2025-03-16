@@ -23,4 +23,6 @@ export type GameState = {
   soundEnabled: boolean;
   floor: number;
   rentSchedule: RentSchedule[];
+  shopOpen: boolean;
+  lost: boolean;
 };

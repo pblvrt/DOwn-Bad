@@ -1,7 +1,7 @@
 .cellContainer {
   position: relative;
   width: 100%;
-  height: 4rem;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,7 +12,7 @@
 }
 
 .cellCommon {
-  background-color: var(--color-common);
+  background-color: white;
 }
 
 .cellUncommon {
@@ -38,7 +38,7 @@
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 0.5rem;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: white;
   padding: 0.5rem;
   border-radius: 0.25rem;
   width: 10rem;

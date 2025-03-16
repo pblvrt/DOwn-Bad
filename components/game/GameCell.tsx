@@ -1,7 +1,7 @@
 "use client";
 
 import { Symbol } from "@/types/game";
-import styles from "./GameCell.module.css";
+import styles from "@/styles/GameCell.module.css";
 
 type GameCellProps = {
   index: number;

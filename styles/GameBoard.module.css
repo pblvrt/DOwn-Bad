@@ -1,0 +1,62 @@
+.gameGrid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(5, 1fr);
+  background-color: transparent;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  box-shadow: 
+    rgba(0, 0, 0, 0.5) 0px 15px 30px -10px inset,
+    rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, 
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;  
+  padding: 0.25rem;
+  position: relative;
+}
+
+.slotColumn {
+  position: relative;
+  overflow: hidden;
+  height: 4rem;
+  width: 100%;
+  border-left: 0.12rem solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+}
+
+.shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+}
+
+.slotContainer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  transition: top 0.7s ease-in-out;
+}
+
+.spinning .slotContainer {
+  transition: top 0.7s cubic-bezier(0.1, 0.7, 0.5, 1);
+}
+
+.topLeft {
+  border-top-left-radius: 0.5rem;
+}
+
+.topRight {
+  border-top-right-radius: 0.5rem;
+}
+
+.bottomLeft {
+  border-bottom-left-radius: 0.5rem;
+}
+
+.bottomRight {
+  border-bottom-right-radius: 0.5rem;
+}

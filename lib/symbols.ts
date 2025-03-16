@@ -167,8 +167,6 @@ export function getStartingSymbols(): Symbol[] {
     JSON.parse(JSON.stringify(symbolTypes.find(s => s.id === 'cherry'))),
     JSON.parse(JSON.stringify(symbolTypes.find(s => s.id === 'cherry'))),
     JSON.parse(JSON.stringify(symbolTypes.find(s => s.id === 'banana'))),
-    JSON.parse(JSON.stringify(symbolTypes.find(s => s.id === 'apple'))),
-    JSON.parse(JSON.stringify(symbolTypes.find(s => s.id === 'orange')))
   ].filter(Boolean) as Symbol[];
 }
 
