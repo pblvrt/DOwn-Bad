@@ -75,10 +75,6 @@ export default function Shop() {
 
       <div className={styles.shopFooter}>
         <div className={styles.buttonGroup}>
-          <button className={styles.backButton}>
-            <span>↩️</span>
-          </button>
-
           <button onClick={handleClose} className={styles.skipButton}>
             Skip
           </button>

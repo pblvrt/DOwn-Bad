@@ -1,6 +1,9 @@
 /* You can add this class to customize the shop modal */
 .shopModal {
   max-width: 600px; /* or whatever width you prefer */
+  background-color: #5d3cb5;
+  border-radius: 1rem;
+  border: 2px solid #6842d1;
 }
 
 /* Keep your existing styles for the shop content */
@@ -37,6 +40,7 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
   padding: 1rem;
+  box-sizing: border-box;
 }
 
 .shopFooter {
@@ -57,20 +61,27 @@
   border-radius: 4px;
   padding: 0.5rem 1rem;
   cursor: pointer;
+
 }
 
 .skipButton {
-  background-color: #3498db;
-  color: white;
+  flex: 1;
   border: none;
-  border-radius: 4px;
-  padding: 0.5rem 1.5rem;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.1s;
+  width: 100px;
 }
 
-.skipButton:hover {
-  background-color: #2980b9;
+.skipButton {
+  background: linear-gradient(to bottom, #4a90e2, #3a70c2);
+  color: white;
 }
+
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {

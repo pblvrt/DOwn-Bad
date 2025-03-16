@@ -6,8 +6,16 @@ const ProgressBar: React.FC = () => {
   const { state } = useGameState();
   const { isSpinning } = state;
   const [coins, setCoins] = useState(0);
+  const [floor, setFloor] = useState(0);
   const animationQueue = useRef<Array<{ value: number; delay: number }>>([]);
   const isAnimating = useRef(false);
+
+  useEffect(() => {
+    if (state.floor !== floor) {
+      setFloor(state.floor);
+      setCoins(state.coins);
+    }
+  }, [state.floor]);
 
   // Calculate the percentage for the progress bar width
   const percentage = Math.min(

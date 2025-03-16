@@ -35,16 +35,11 @@ export default function IntroModal() {
       <div className={styles.modalContent}>
         <div className={styles.introSection}>
           <h3>🎮 How to Play</h3>
-          <p>Match symbols to earn coins and pay your rent!</p>
-          <ul>
-            <li>Spin the reels to match symbols</li>
-            <li>Match 3 or more symbols to win coins</li>
-            <li>Pay your rent to advance to the next floor</li>
-            <li>Each floor has higher rent but better rewards</li>
-          </ul>
+          <p>Welcome anon - its a bear market out here and you are in the brink of getting liquidated.</p>
+          <p>Earn enough coins before you run out of turns to increase you liquidation threshold before its too late.</p>
         </div>
 
-        <div className={styles.introSection}>
+        {/* <div className={styles.introSection}>
           <h3>💰 Special Symbols</h3>
           <p>Look out for special symbols with unique effects:</p>
           <div className={styles.symbolGrid}>
@@ -65,7 +60,7 @@ export default function IntroModal() {
               <span>Wild</span>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className={styles.introSection}>
           <h3>🏆 Goal</h3>

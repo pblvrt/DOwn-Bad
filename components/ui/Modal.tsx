@@ -23,23 +23,12 @@ const Modal: React.FC<ModalProps> = ({
 
   // Close modal when clicking outside
   useEffect(() => {
-    const handleOutsideClick = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    };
-
     if (isOpen) {
-      document.addEventListener("mousedown", handleOutsideClick);
       // Prevent scrolling when modal is open
       document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleOutsideClick);
       document.body.style.overflow = "auto";
     };
   }, [isOpen, onClose]);
@@ -72,18 +61,6 @@ const Modal: React.FC<ModalProps> = ({
         role="dialog"
         aria-modal="true"
       >
-        {title && (
-          <div className={styles.modalHeader}>
-            <h2>{title}</h2>
-            <button
-              className={styles.closeButton}
-              onClick={onClose}
-              aria-label="Close modal"
-            >
-              ×
-            </button>
-          </div>
-        )}
         <div className={styles.modalBody}>{children}</div>
       </div>
     </div>,

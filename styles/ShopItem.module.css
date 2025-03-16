@@ -1,74 +1,128 @@
 .itemContainer {
-  border-radius: 1rem;
-  padding: 0.75rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  cursor: pointer;
-  background-color: #2a4a6a;
-  border: 1px solid #2a4a6a;
+  background: linear-gradient(to bottom, #1e3a8a, #0f172a);
+  border-radius: 16px;
+  padding: 5px;
+  width: 100%;
+  max-width: 180px;
+  color: white;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
   box-sizing: border-box;
-  box-shadow: 
-    rgba(0, 0, 0, 0.5) 0px 15px 30px -10px inset,
-    rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, 
-    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset; 
-       height: 100%;
 }
 
-.itemContainer:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+.itemTitle {
+  font-size: rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.itemContainer:active {
-  transform: translateY(0);
-}
-
-.itemCommon, .itemUncommon, .itemRare {
-  background: #333333;
-  border: 2px solid #555555;
+.itemImageContainer {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .itemEmoji {
-  font-size: 2.25rem;
-  margin-bottom: 0.5rem;
+  font-size: 3rem;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
 }
 
-.itemName {
+.rarityLabel {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #e0e0e0;
+}
+
+.valueContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.valueLabel {
   font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 0.25rem;
-  color: white;
+  color: #ffd700;
+  font-size: 1.1rem;
+  margin-right: 4px;
 }
 
-.itemValue {
-  font-size: 0.85rem;
-  color: #cccccc;
-  margin-bottom: 0.5rem;
+.coinIcon {
+  font-size: 1.2rem;
 }
 
-.itemEffect {
-  font-size: 0.75rem;
-  color: #ffcc00;
-  font-style: italic;
+.divider {
+  width: 80%;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 8px 0 12px 0;
+}
+
+.effectDescription {
+  font-size: 0.9rem;
+  color: #00ffff;
   text-align: center;
-  line-height: 1.2;
+  line-height: 1.4;
+  margin-bottom: 16px;
+  min-height: 60px;
 }
 
-/* Add a subtle glow effect for rare items */
-.itemRare::before {
-  content: '';
+.addButtonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.addButton {
+  background-color: #4ade80;
+  color: #111827;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.addButton:hover {
+  background-color: #22c55e;
+  transform: scale(1.05);
+}
+
+/* For the "NEW" badge if needed */
+.newBadge {
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 0.3; }
-  50% { opacity: 0.7; }
-  100% { opacity: 0.3; }
+  top: 10px;
+  right: 10px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 8px;
 } 

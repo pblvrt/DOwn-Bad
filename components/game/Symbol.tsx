@@ -33,15 +33,14 @@ export default function SymbolComponent({
   const [symbolPosition, setSymbolPosition] = useState({ x: 0, y: 0 });
   const [targetPosition, setTargetPosition] = useState({ x: 0, y: 0 });
 
-  const isFirstRender = useRef(true);
 
   // Get positions for animation
   useEffect(() => {
     // Skip animation on first render
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!state.tutorialSeen) {
       return;
     }
+
 
     if (showReward && !state.isSpinning) {
       // Get symbol position
