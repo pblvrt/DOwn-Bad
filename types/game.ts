@@ -2,7 +2,7 @@ export type Symbol = {
   id: string;
   name: string;
   value: number;
-  rarity: 'common' | 'uncommon' | 'rare';
+  rarity: "common" | "uncommon" | "rare";
   emoji: string;
   effectDescription?: string;
   bonusValue?: number;

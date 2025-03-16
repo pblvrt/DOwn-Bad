@@ -151,7 +151,12 @@ export default function GameBoard() {
                 isLeftEdge ? styles.leftEdge : ""
               } ${isRightEdge ? styles.rightEdge : ""}`}
             >
-              <SymbolComponent symbol={symbol || symbolTypes[0]} />
+              <SymbolComponent
+                symbol={symbol || symbolTypes[0]}
+                showReward={symbol !== null}
+                rewardValue={symbol?.value || 0}
+                position={i}
+              />
             </div>
           </div>
         </div>

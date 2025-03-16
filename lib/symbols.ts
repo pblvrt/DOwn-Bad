@@ -26,7 +26,7 @@ export const symbolTypes: Symbol[] = [
     value: 1,
     rarity: "common",
     emoji: "⚓",
-    effectDescription: "Gives Coin 4 more when in a corner.",
+    effectDescription: "Gives +4 Coin more when in a corner.",
     effect: function (grid: (Symbol | null)[], index: number): number {
       // Check if in corner (0, 4, 20, 24 for a 5x5 grid)
       const corners = [0, 4, 20, 24];
@@ -250,7 +250,8 @@ export const symbolTypes: Symbol[] = [
       "Destroys adjacent Milk. Gives Coin 9 for each Milk destroyed.",
     effect: function (grid: (Symbol | null)[], index: number): number {
       // Destruction effect handled in game logic
-      return 0;
+
+      return 1+1;
     },
   },
   {
@@ -659,6 +660,10 @@ export const symbolTypes: Symbol[] = [
     value: 1,
     rarity: "common",
     emoji: "🌸",
+    effectDescription: "Gives Coin 1 more for each other Flower.",
+    effect: function (): number {
+      return Math.floor(Math.random() * 5) + 1;
+    },
   },
   {
     id: "frozen_fossil",

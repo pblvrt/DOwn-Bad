@@ -16,13 +16,25 @@ export default function SpinButton() {
       audio.play().catch((e) => console.log("Error playing sound:", e));
     }
 
-    const { grid: newGrid, baseCoins } = spinGrid(state.grid, state.symbols);
+    const {
+      grid: newGrid,
+      baseCoins,
+      bonusCoins,
+      effectGrid,
+    } = spinGrid(state.grid, state.symbols);
     dispatch({ type: "UPDATE_GRID", payload: newGrid });
-
+    dispatch({ type: "UPDATE_EFFECT_GRID", payload: effectGrid });
+    dispatch({
+      type: "ADD_COINS",
+      payload: {
+        baseCoins: baseCoins,
+        bonusCoins: bonusCoins,
+      },
+    });
+    const notNullEffectGrid = effectGrid.filter((effect) => effect !== null);
     setTimeout(() => {
-      dispatch({ type: "ADD_COINS", payload: baseCoins });
       dispatch({ type: "DECREASE_TURNS" });
-    }, 1500);
+    }, notNullEffectGrid.length * 1000 + 1400 + 2000);
   };
 
   return (

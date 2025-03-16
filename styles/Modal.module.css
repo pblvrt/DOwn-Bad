@@ -13,7 +13,6 @@
 }
 
 .modalContent {
-  background: #5d3cb5;
   border-radius: 1.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   width: 100%;
@@ -21,7 +20,6 @@
   max-height: 90vh;
   box-sizing: border-box;
   margin: 0 1rem;
-  border: 2px solid #4a2882;
   overflow-y: auto;
   animation: modalFadeIn 0.3s ease-out;
 }
@@ -71,7 +69,6 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .modalContent {
-    background: #5d3cb5;
     color: #f0f0f0;
   }
   

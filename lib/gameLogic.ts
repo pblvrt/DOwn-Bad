@@ -61,15 +61,19 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
 
   // Apply special effects
   let bonusCoins = 0;
-  newGrid.forEach((symbol, index) => {
+  const newEffectGrid = newGrid.map((symbol, index) => {
     if (symbol && symbol.effect) {
       const bonusValue = symbol.effect(newGrid, index);
       bonusCoins += bonusValue;
+      return bonusValue === 0 ? null : bonusValue;
     }
+    return null;
   });
 
+  
   return {
     grid: newGrid,
+    effectGrid: newEffectGrid,
     baseCoins,
     bonusCoins,
   };

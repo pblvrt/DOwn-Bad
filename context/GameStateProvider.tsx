@@ -29,9 +29,12 @@ type RentSchedule = {
 
 type GameState = {
   coins: number;
+  baseCoins: number;
+  bonusCoins: number;
   turn: number;
   isSpinning: boolean;
   grid: (Symbol | null)[];
+  effectGrid: (number | null)[];
   symbols: Symbol[];
   soundEnabled: boolean;
   floor: number;
@@ -43,7 +46,6 @@ type GameState = {
 };
 
 type GameAction =
-  | { type: "ADD_COINS"; payload: number }
   | { type: "PAY_RENT" }
   | { type: "UPDATE_GRID"; payload: (Symbol | null)[] }
   | { type: "ADD_SYMBOL"; payload: Symbol }
@@ -56,7 +58,9 @@ type GameAction =
   | { type: "TOGGLE_SHOP" }
   | { type: "CLOSE_SHOP" }
   | { type: "SET_TUTORIAL_SEEN" }
-  | { type: "START_GAME" };
+  | { type: "START_GAME" }
+  | { type: "UPDATE_EFFECT_GRID"; payload: (number | null)[] }
+  | { type: "ADD_COINS"; payload: { baseCoins: number; bonusCoins: number } };
 
 const GameStateContext = createContext<
   | {
@@ -71,9 +75,12 @@ const startingSymbols = getStartingSymbols();
 
 const initialState: GameState = {
   coins: 0,
+  baseCoins: 0,
+  bonusCoins: 0,
   turn: 0,
   isSpinning: false,
   grid: updateGridWithSymbols(startingSymbols),
+  effectGrid: [],
   symbols: startingSymbols,
   soundEnabled: true,
   floor: 0,
@@ -102,7 +109,13 @@ const initialState: GameState = {
 function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "ADD_COINS":
-      return { ...state, coins: state.coins + action.payload };
+      return {
+        ...state,
+        baseCoins: state.baseCoins + action.payload.baseCoins,
+        bonusCoins: state.bonusCoins + action.payload.bonusCoins,
+        coins:
+          state.coins + action.payload.baseCoins + action.payload.bonusCoins,
+      };
     case "SET_TUTORIAL_SEEN":
       return { ...state, tutorialSeen: true };
 
@@ -114,6 +127,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       };
     case "UPDATE_GRID":
       return { ...state, grid: action.payload };
+    case "UPDATE_EFFECT_GRID":
+      return { ...state, effectGrid: action.payload };
     case "START_SPIN_GRID":
       return {
         ...state,
