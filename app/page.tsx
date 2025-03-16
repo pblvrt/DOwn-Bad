@@ -10,6 +10,8 @@ import styles from "@/styles/Home.module.css";
 import ProgressBar from "@/components/ui/ProgressBar";
 import LostModal from "@/components/ui/LostModal";
 import Inventory from "@/components/game/Inventory";
+import IntroModal from "@/components/ui/IntroModal";
+import StageCompleteModal from "@/components/ui/StageCompleteModal";
 
 export default function Home() {
   const [showShop, setShowShop] = useState(false);
@@ -19,6 +21,8 @@ export default function Home() {
 
       <div className={styles.gameContainer}>
         <LostModal />
+        <IntroModal />
+        <StageCompleteModal />
         <Shop />
         <Header />
         <GameBoard />

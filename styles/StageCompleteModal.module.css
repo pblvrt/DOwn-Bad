@@ -1,0 +1,127 @@
+.stageModal {
+  background: linear-gradient(to bottom, #3a5a2a, #2a4a1a);
+  max-width: 450px;
+  color: white;
+}
+
+.modalContent {
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-size: 3rem;
+  transform: rotate(15deg);
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) rotate(15deg); }
+  50% { transform: translateY(-10px) rotate(25deg); }
+}
+
+.stageInfo {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.stageInfo h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #ffcc00;
+}
+
+.rentInfo {
+  font-size: 1.1rem;
+}
+
+.rentAmount {
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.rewardsSection, .nextStageInfo {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.rewardsSection h4, .nextStageInfo h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: #7fff7f;
+}
+
+.rewardsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.rewardItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.rewardIcon {
+  font-size: 1.5rem;
+}
+
+.rewardText {
+  font-size: 1rem;
+}
+
+.nextRent {
+  font-weight: bold;
+  color: #ffcc00;
+}
+
+.tipText {
+  font-style: italic;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: #aaffaa;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.shopButton, .continueButton {
+  flex: 1;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.3);
+  transition: all 0.1s;
+}
+
+.shopButton {
+  background: linear-gradient(to bottom, #4a90e2, #3a70c2);
+  color: white;
+}
+
+.continueButton {
+  background: linear-gradient(to bottom, #4aff4a, #2a9a2a);
+  color: white;
+}
+
+.shopButton:hover, .continueButton:hover {
+  transform: translateY(-2px);
+}
+
+.shopButton:active, .continueButton:active {
+  transform: translateY(4px);
+  box-shadow: none;
+} 

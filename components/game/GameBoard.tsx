@@ -1,10 +1,10 @@
 "use client";
 
 import { useGameState } from "@/context/GameStateProvider";
-import GameCell from "./GameCell";
 import { useEffect, useRef, useMemo, useCallback } from "react";
 import styles from "@/styles/GameBoard.module.css";
 import { symbolTypes } from "@/lib/symbols";
+import SymbolComponent from "./Symbol";
 
 export default function GameBoard() {
   const { state, dispatch } = useGameState();
@@ -67,6 +67,10 @@ export default function GameBoard() {
       const isBottomRight = i === GRID_SIZE * GRID_SIZE - 1;
       const isCorner = isTopLeft || isTopRight || isBottomLeft || isBottomRight;
 
+      // Determine if cell is on an edge
+      const isLeftEdge = col === 0;
+      const isRightEdge = col === GRID_SIZE - 1;
+
       // Add corner class based on position
       let cornerClass = "";
       if (isTopLeft) cornerClass = styles.topLeft;
@@ -97,7 +101,14 @@ export default function GameBoard() {
             }}
           >
             {columnSymbols.map((symbol, symbolIndex) => (
-              <GameCell key={symbolIndex} index={i} symbol={symbol} />
+              <div
+                className={`${styles.cellContainer} ${
+                  isLeftEdge ? styles.leftEdge : ""
+                } ${isRightEdge ? styles.rightEdge : ""}`}
+                key={symbolIndex}
+              >
+                <SymbolComponent symbol={symbol} />
+              </div>
             ))}
           </div>
         </div>
@@ -109,12 +120,18 @@ export default function GameBoard() {
 
   const renderColumns = useMemo(() => {
     return grid.map((symbol, i) => {
+      const col = i % GRID_SIZE;
+
       // Determine if this is a corner cell
       const isTopLeft = i === 0;
       const isTopRight = i === GRID_SIZE - 1;
       const isBottomLeft = i === GRID_SIZE * (GRID_SIZE - 1);
       const isBottomRight = i === GRID_SIZE * GRID_SIZE - 1;
       const isCorner = isTopLeft || isTopRight || isBottomLeft || isBottomRight;
+
+      // Determine if cell is on an edge
+      const isLeftEdge = col === 0;
+      const isRightEdge = col === GRID_SIZE - 1;
 
       // Add corner class based on position
       let cornerClass = "";
@@ -129,7 +146,13 @@ export default function GameBoard() {
           className={`${styles.slotColumn} ${isCorner ? cornerClass : ""}`}
         >
           <div className={styles.slotContainer}>
-            <GameCell index={i} symbol={symbol || symbolTypes[0]} />
+            <div
+              className={`${styles.cellContainer} ${
+                isLeftEdge ? styles.leftEdge : ""
+              } ${isRightEdge ? styles.rightEdge : ""}`}
+            >
+              <SymbolComponent symbol={symbol || symbolTypes[0]} />
+            </div>
           </div>
         </div>
       );

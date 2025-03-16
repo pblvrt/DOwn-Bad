@@ -12,15 +12,18 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.modalContent {
-  background: linear-gradient(to bottom, #3a2a6a, #2a1a5a);
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 80%;
+.lostModal {
+
   max-width: 400px;
   text-align: center;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  animation: slideIn 0.4s ease-out;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
 }
 
 .modalTitle {

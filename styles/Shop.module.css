@@ -1,35 +1,15 @@
-.modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
+/* You can add this class to customize the shop modal */
+.shopModal {
+  max-width: 600px; /* or whatever width you prefer */
 }
 
-.modalContent {
-  background: #5d3cb5;
-  border-radius: 1.5rem;
-  max-width: 400px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-  border: 2px solid #4a2882;
-  box-sizing: border-box;
-  height: 60%;
-}
-
+/* Keep your existing styles for the shop content */
 .modalHeader {
   display: flex;
   justify-content: space-between;
-  padding: 1rem 1.5rem;
-  color: white;
-  font-size: 0.9rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px 8px 0 0;
 }
 
 .infoItem {
@@ -39,17 +19,16 @@
 }
 
 .infoIcon {
-  color: #88ccff;
-  font-weight: bold;
+  color: #666;
 }
 
 .redText {
-  color: #ff5555;
+  color: #e74c3c;
   font-weight: bold;
 }
 
 .luckText {
-  color: white;
+  color: #27ae60;
   font-weight: bold;
 }
 
@@ -57,12 +36,60 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  padding: 0 0.5rem;
-  height: 100%;
+  padding: 1rem;
 }
 
 .shopFooter {
+  display: flex;
+  justify-content: flex-end;
   padding: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.backButton {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.skipButton {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+}
+
+.skipButton:hover {
+  background-color: #2980b9;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .modalHeader {
+    background: #5d3cb5;
+  }
+  
+  .infoIcon {
+    color: #aaa;
+  }
+  
+  .shopFooter {
+    border-top: 1px solid #333;
+  }
+  
+  .backButton {
+    border-color: #444;
+    color: #ddd;
+  }
 }
 
 .coinCounter {
@@ -70,26 +97,6 @@
   text-align: center;
   margin-bottom: 1rem;
   font-size: 1rem;
-}
-
-.buttonGroup {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.backButton {
-  background: #4455aa;
-  border: none;
-  border-radius: 50%;
-  width: 3rem;
-  height: 3rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
 }
 
 .rerollButton {
@@ -116,24 +123,6 @@
 .costText {
   font-size: 0.7rem;
   opacity: 0.8;
-}
-
-.skipButton {
-  background: #4455aa;
-  border: none;
-  border-radius: 2rem;
-  padding: 0.5rem 1.5rem;
-  color: white;
-  font-size: 1.2rem;
-  font-weight: bold;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.skipButton:hover, .rerollButton:hover, .backButton:hover {
-  filter: brightness(1.1);
 }
 
 .closeButton {

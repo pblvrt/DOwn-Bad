@@ -38,6 +38,8 @@ type GameState = {
   lost: boolean;
   rentSchedule: RentSchedule[];
   shopOpen: boolean;
+  stageComplete: boolean;
+  tutorialSeen: boolean;
 };
 
 type GameAction =
@@ -52,7 +54,9 @@ type GameAction =
   | { type: "LOAD_GAME"; payload: GameState }
   | { type: "START_SPIN_GRID" }
   | { type: "TOGGLE_SHOP" }
-  | { type: "CLOSE_SHOP" };
+  | { type: "CLOSE_SHOP" }
+  | { type: "SET_TUTORIAL_SEEN" }
+  | { type: "START_GAME" };
 
 const GameStateContext = createContext<
   | {
@@ -75,6 +79,8 @@ const initialState: GameState = {
   floor: 0,
   lost: false,
   shopOpen: false,
+  stageComplete: false,
+  tutorialSeen: false,
   rentSchedule: [
     { rent: 25, turns: 4 },
     { rent: 50, turns: 4 },
@@ -97,6 +103,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
     case "ADD_COINS":
       return { ...state, coins: state.coins + action.payload };
+    case "SET_TUTORIAL_SEEN":
+      return { ...state, tutorialSeen: true };
+
     case "PAY_RENT":
       return {
         ...state,
@@ -126,6 +135,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             floor: state.floor + 1,
             turn: 0,
             shopOpen: true,
+            stageComplete: true,
           };
         }
       }

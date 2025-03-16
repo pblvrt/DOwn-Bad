@@ -5,12 +5,11 @@ import { Symbol } from "@/types/game";
 import styles from "@/styles/GameCell.module.css";
 import SymbolModal from "./SymbolModal";
 
-type GameCellProps = {
-  index: number;
+type SymbolProps = {
   symbol: Symbol | null;
 };
 
-export default function GameCell({ symbol }: GameCellProps) {
+export default function SymbolComponent({ symbol }: SymbolProps) {
   const [showModal, setShowModal] = useState(false);
 
   if (!symbol) {
@@ -18,12 +17,6 @@ export default function GameCell({ symbol }: GameCellProps) {
       <div className={`${styles.cellContainer} ${styles.cellEmpty}`}></div>
     );
   }
-
-  const rarityStyles = {
-    common: styles.cellCommon,
-    uncommon: styles.cellUncommon,
-    rare: styles.cellRare,
-  };
 
   const handleClick = () => {
     setShowModal(true);
@@ -34,15 +27,15 @@ export default function GameCell({ symbol }: GameCellProps) {
   };
 
   return (
-    <>
-      <div
-        className={`${styles.cellContainer}`}
-        onClick={handleClick}
-      >
-        <div className={styles.symbolEmoji}>{symbol.emoji}</div>
-      </div>
-
-      {showModal && <SymbolModal symbol={symbol} onClose={closeModal} />}
-    </>
+    <div onClick={handleClick}>
+      <div className={styles.symbolEmoji}>{symbol.emoji}</div>
+      {showModal && (
+        <SymbolModal
+          symbol={symbol}
+          onClose={closeModal}
+          isOpen={showModal}
+        />
+      )}
+    </div>
   );
 }

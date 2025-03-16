@@ -6,6 +6,7 @@ import ShopItem from "./ShopItem";
 import { useEffect, useState } from "react";
 import { Symbol } from "@/types/game";
 import styles from "@/styles/Shop.module.css";
+import Modal from "@/components/ui/Modal";
 
 export default function Shop() {
   const { state, dispatch } = useGameState();
@@ -41,51 +42,48 @@ export default function Shop() {
     dispatch({ type: "CLOSE_SHOP" });
   };
 
-  if (!state.shopOpen) {
-    return null;
-  }
-
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
-        <div className={styles.modalHeader}>
-          <div className={styles.infoItem}>
-            <span className={styles.infoIcon}>ⓘ</span>
-            <span>
-              Symbol Count: <span className={styles.redText}>30</span>
-            </span>
-          </div>
-          <div className={styles.infoItem}>
-            <span className={styles.infoIcon}>ⓘ</span>
-            <span>
-              Luck Modifier: <span className={styles.luckText}>x1.32 🍀</span>
-            </span>
-          </div>
+    <Modal
+      isOpen={state.shopOpen}
+      onClose={handleClose}
+      className={styles.shopModal}
+    >
+      <div className={styles.modalHeader}>
+        <div className={styles.infoItem}>
+          <span className={styles.infoIcon}>ⓘ</span>
+          <span>
+            Symbol Count: <span className={styles.redText}>30</span>
+          </span>
         </div>
-
-        <div className={styles.shopItems}>
-          {shopItems.map((item, index) => (
-            <ShopItem
-              key={index}
-              symbol={item}
-              onPurchase={() => handlePurchase(item)}
-            />
-          ))}
-        </div>
-
-        <div className={styles.shopFooter}>
-
-          <div className={styles.buttonGroup}>
-            <button className={styles.backButton}>
-              <span>↩️</span>
-            </button>
-
-            <button onClick={handleClose} className={styles.skipButton}>
-              Skip
-            </button>
-          </div>
+        <div className={styles.infoItem}>
+          <span className={styles.infoIcon}>ⓘ</span>
+          <span>
+            Luck Modifier: <span className={styles.luckText}>x1.32 🍀</span>
+          </span>
         </div>
       </div>
-    </div>
+
+      <div className={styles.shopItems}>
+        {shopItems.map((item, index) => (
+          <ShopItem
+            key={index}
+            symbol={item}
+            onPurchase={() => handlePurchase(item)}
+          />
+        ))}
+      </div>
+
+      <div className={styles.shopFooter}>
+        <div className={styles.buttonGroup}>
+          <button className={styles.backButton}>
+            <span>↩️</span>
+          </button>
+
+          <button onClick={handleClose} className={styles.skipButton}>
+            Skip
+          </button>
+        </div>
+      </div>
+    </Modal>
   );
 }

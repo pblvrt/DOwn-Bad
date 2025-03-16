@@ -1,11 +1,18 @@
 "use client";
 
 import { useGameState } from "@/context/GameStateProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "@/styles/LostModal.module.css";
+import Modal from "@/components/ui/Modal";
 
 export default function LostModal() {
   const { state, dispatch } = useGameState();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Update modal open state when game is lost
+  useEffect(() => {
+    setIsOpen(state.lost);
+  }, [state.lost]);
 
   // Play game over sound when lost state becomes true
   useEffect(() => {
@@ -20,19 +27,24 @@ export default function LostModal() {
     }
   }, [state.lost, state.soundEnabled]);
 
-  // If not lost, don't render anything
-  if (!state.lost) {
-    return null;
-  }
-
   const handleResetGame = () => {
     dispatch({ type: "RESET_GAME" });
   };
 
+  const handleClose = () => {
+    // Optional: you might want to prevent closing without resetting
+    // or you could make closing equivalent to resetting
+    handleResetGame();
+  };
+
   return (
-    <div className={styles.modalOverlay}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title="Game Over!"
+      className={styles.lostModal}
+    >
       <div className={styles.modalContent}>
-        <h2 className={styles.modalTitle}>Game Over!</h2>
         <p className={styles.modalText}>
           You couldn&apos;t pay the rent of{" "}
           {state.rentSchedule[state.floor].rent} coins.
@@ -45,6 +57,6 @@ export default function LostModal() {
           Try Again
         </button>
       </div>
-    </div>
+    </Modal>
   );
 }
