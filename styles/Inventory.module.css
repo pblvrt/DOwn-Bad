@@ -1,0 +1,55 @@
+.inventoryContainer {
+  width: 100%;
+  background-color: #2a4a6a;
+  border-radius: 0.6rem;
+  position: relative;
+  margin-top: 10px;
+  max-height: 100px;
+  overflow: scroll;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border: 2px solid #4b2882bb;
+  box-shadow: 
+    rgba(0, 0, 0, 0.5) 0px 15px 30px -10px inset,
+    rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, 
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;  
+}
+
+
+
+.inventoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+  gap: 4px;
+  padding: 5px;
+  background-color: transparent;
+}
+
+.inventoryItem {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.symbolEmoji {
+  font-size: 24px;
+}
+
+.symbolCount {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background-color: #ff3a3a;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+} 

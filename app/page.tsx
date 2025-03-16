@@ -9,6 +9,7 @@ import Shop from "@/components/shop/Shop";
 import styles from "@/styles/Home.module.css";
 import ProgressBar from "@/components/ui/ProgressBar";
 import LostModal from "@/components/ui/LostModal";
+import Inventory from "@/components/game/Inventory";
 
 export default function Home() {
   const [showShop, setShowShop] = useState(false);
@@ -21,10 +22,7 @@ export default function Home() {
         <Shop />
         <Header />
         <GameBoard />
-
-        <div className={styles.itemsBar}>
-
-        </div>
+        <Inventory />
 
         <ProgressBar />
 

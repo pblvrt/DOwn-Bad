@@ -11,13 +11,18 @@ export default function Shop() {
   const { state, dispatch } = useGameState();
   const [shopItems, setShopItems] = useState<Symbol[]>([]);
 
-  // Add debugging
-  console.log("Shop component rendered, shopOpen:", state.shopOpen);
-
+  // Regenerate shop items when shop is opened
   useEffect(() => {
-    // Generate 3 random symbols for the shop
-    setShopItems([getRandomSymbol(), getRandomSymbol(), getRandomSymbol()]);
-  }, []);
+    if (state.shopOpen) {
+      // Generate new shop items based on floor/rent paid
+      const newShopItems = Array(3)
+        .fill(null)
+        .map(
+          () => getRandomSymbol(state.floor) // Pass floor as timeRentPaid
+        );
+      setShopItems(newShopItems);
+    }
+  }, [state.shopOpen, state.floor]);
 
   const handlePurchase = (symbol: Symbol) => {
     // Add the symbol to the player's collection

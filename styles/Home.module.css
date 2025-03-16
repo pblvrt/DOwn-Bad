@@ -189,6 +189,8 @@
   border-radius: 0.6rem;
   position: relative;
   overflow: hidden;
+  border: 2px solid #4b2882bb;
+  box-sizing: border-box;
   box-shadow: 
     rgba(0, 0, 0, 0.5) 0px 15px 30px -10px inset,
     rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, 

@@ -22,7 +22,7 @@ export default function GameCell({ symbol }: GameCellProps) {
   };
 
   return (
-    <div className={`${styles.cellContainer} ${rarityStyles[symbol.rarity]}`}>
+    <div className={`${styles.cellContainer} ${rarityStyles["common"]}`}>
       <div className={styles.symbolEmoji}>{symbol.emoji}</div>
 
       {/* Tooltip */}
