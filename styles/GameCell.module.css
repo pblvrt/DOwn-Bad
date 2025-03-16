@@ -5,10 +5,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  border-right: 1px solid rgba(255, 255, 255, 0.3);
+  box-sizing: border-box;
+}
+
+.cellContainer:hover {
+  transform: scale(1.05);
 }
 
 .cellEmpty {
   background-color: var(--color-cell-empty);
+  cursor: default;
+}
+
+.cellEmpty:hover {
+  transform: none;
 }
 
 .cellCommon {
@@ -25,47 +43,4 @@
 
 .symbolEmoji {
   font-size: 1.875rem;
-}
-
-.cellContainer:hover .tooltip {
-  visibility: visible;
-  opacity: 1;
-}
-
-.tooltip {
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 0.5rem;
-  background-color: white;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  width: 10rem;
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 10;
-  font-size: 0.75rem;
-  pointer-events: none;
-  text-align: left;
-}
-
-.tooltipTitle {
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-}
-
-.tooltipValue {
-  margin-bottom: 0.25rem;
-}
-
-.tooltipEffect {
-  color: var(--color-effect);
-  font-style: italic;
-  margin-bottom: 0.25rem;
-}
-
-.tooltipBonus {
-  color: var(--color-bonus);
 }

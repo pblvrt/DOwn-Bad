@@ -74,11 +74,6 @@ export default function GameBoard() {
       if (isBottomLeft) cornerClass = styles.bottomLeft;
       if (isBottomRight) cornerClass = styles.bottomRight;
 
-      // For each position, we need to show:
-      // 1. The symbol that will end up in this position (bottom of the 3)
-      // 2. The symbol that will end up above this position (middle of the 3)
-      // 3. The symbol that will end up two positions above (top of the 3)
-
       // Add symbols in reverse order (top to bottom in the slot)
       for (let offset = 20; offset >= 0; offset--) {
         // Calculate which row's symbol to show

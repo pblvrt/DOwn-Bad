@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { Symbol } from "@/types/game";
 import styles from "@/styles/GameCell.module.css";
+import SymbolModal from "./SymbolModal";
 
 type GameCellProps = {
   index: number;
@@ -9,6 +11,8 @@ type GameCellProps = {
 };
 
 export default function GameCell({ symbol }: GameCellProps) {
+  const [showModal, setShowModal] = useState(false);
+
   if (!symbol) {
     return (
       <div className={`${styles.cellContainer} ${styles.cellEmpty}`}></div>
@@ -21,23 +25,24 @@ export default function GameCell({ symbol }: GameCellProps) {
     rare: styles.cellRare,
   };
 
-  return (
-    <div className={`${styles.cellContainer} ${rarityStyles["common"]}`}>
-      <div className={styles.symbolEmoji}>{symbol.emoji}</div>
+  const handleClick = () => {
+    setShowModal(true);
+  };
 
-      {/* Tooltip */}
-      <div className={styles.tooltip}>
-        <div className={styles.tooltipTitle}>{symbol.name}</div>
-        <div className={styles.tooltipValue}>Value: {symbol.value} coins</div>
-        {symbol.effectDescription && (
-          <div className={styles.tooltipEffect}>
-            Effect: {symbol.effectDescription}
-          </div>
-        )}
-        {symbol.bonusValue && symbol.bonusValue > 0 && (
-          <div className={styles.tooltipBonus}>Bonus: +{symbol.bonusValue}</div>
-        )}
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <>
+      <div
+        className={`${styles.cellContainer}`}
+        onClick={handleClick}
+      >
+        <div className={styles.symbolEmoji}>{symbol.emoji}</div>
       </div>
-    </div>
+
+      {showModal && <SymbolModal symbol={symbol} onClose={closeModal} />}
+    </>
   );
 }

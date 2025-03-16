@@ -9,15 +9,11 @@ type ShopItemProps = {
 };
 
 export default function ShopItem({ symbol, onPurchase }: ShopItemProps) {
-  const rarityClasses = {
-    common: styles.itemCommon,
-    uncommon: styles.itemUncommon,
-    rare: styles.itemRare,
-  };
+
 
   return (
     <div
-      className={`${styles.itemContainer} ${rarityClasses[symbol.rarity]}`}
+      className={`${styles.itemContainer} `}
       onClick={onPurchase}
     >
       <div className={styles.itemEmoji}>{symbol.emoji}</div>

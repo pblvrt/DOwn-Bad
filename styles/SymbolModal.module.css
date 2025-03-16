@@ -1,0 +1,146 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modalContent {
+  width: 85%;
+  max-width: 350px;
+  border-radius: 15px;
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Rarity-based styling */
+.common {
+  background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
+  border: 2px solid #7a7a7a;
+}
+
+.uncommon {
+  background: linear-gradient(to bottom, #3a5a9a, #2a4a8a);
+  border: 2px solid #4a6aaa;
+}
+
+.rare {
+  background: linear-gradient(to bottom, #7a3a9a, #6a2a8a);
+  border: 2px solid #8a4aaa;
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.closeButton:hover {
+  opacity: 1;
+}
+
+.symbolHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.symbolEmoji {
+  font-size: 48px;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.symbolName {
+  font-size: 24px;
+  color: white;
+  margin: 5px 0;
+  text-align: center;
+}
+
+.rarityBadge {
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.symbolDetails {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  color: #e0e0e0;
+}
+
+.detailLabel {
+  font-weight: bold;
+}
+
+.detailValue {
+  color: white;
+}
+
+.bonusValue {
+  color: #4aff4a;
+}
+
+.effectBox {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.effectTitle {
+  color: #ffcc00;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.effectDescription {
+  color: #ffcc00;
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+} 

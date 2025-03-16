@@ -13,7 +13,7 @@ const ProgressBar: React.FC = () => {
       <div className={styles.stageInfo}>
         <span className={styles.stageLabel}>Stage {state.floor + 1}</span>
         <span className={styles.coinTarget}>
-          {state.coins} <span>🪙</span>
+          {state.coins} of {state.rentSchedule[state.floor].rent}
         </span>
       </div>
       <div

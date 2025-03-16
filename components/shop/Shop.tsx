@@ -37,6 +37,10 @@ export default function Shop() {
     dispatch({ type: "CLOSE_SHOP" });
   };
 
+  const handleClose = () => {
+    dispatch({ type: "CLOSE_SHOP" });
+  };
+
   if (!state.shopOpen) {
     return null;
   }
@@ -44,7 +48,20 @@ export default function Shop() {
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <h2 className={styles.modalTitle}>Symbol Shop</h2>
+        <div className={styles.modalHeader}>
+          <div className={styles.infoItem}>
+            <span className={styles.infoIcon}>ⓘ</span>
+            <span>
+              Symbol Count: <span className={styles.redText}>30</span>
+            </span>
+          </div>
+          <div className={styles.infoItem}>
+            <span className={styles.infoIcon}>ⓘ</span>
+            <span>
+              Luck Modifier: <span className={styles.luckText}>x1.32 🍀</span>
+            </span>
+          </div>
+        </div>
 
         <div className={styles.shopItems}>
           {shopItems.map((item, index) => (
@@ -56,12 +73,18 @@ export default function Shop() {
           ))}
         </div>
 
-        <button
-          onClick={() => dispatch({ type: "CLOSE_SHOP" })}
-          className={styles.skipButton}
-        >
-          Skip
-        </button>
+        <div className={styles.shopFooter}>
+
+          <div className={styles.buttonGroup}>
+            <button className={styles.backButton}>
+              <span>↩️</span>
+            </button>
+
+            <button onClick={handleClose} className={styles.skipButton}>
+              Skip
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

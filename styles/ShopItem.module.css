@@ -1,44 +1,37 @@
 .itemContainer {
-  border-radius: 0.75rem;
-  padding: 1rem 0.75rem;
+  border-radius: 1rem;
+  padding: 0.75rem 0.5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  position: relative;
-  overflow: hidden;
+  background-color: #2a4a6a;
+  border: 1px solid #2a4a6a;
+  box-sizing: border-box;
+  box-shadow: 
+    rgba(0, 0, 0, 0.5) 0px 15px 30px -10px inset,
+    rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, 
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset; 
+       height: 100%;
 }
 
 .itemContainer:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .itemContainer:active {
-  transform: translateY(0) scale(0.98);
+  transform: translateY(0);
 }
 
-.itemCommon {
-  background: linear-gradient(to bottom, #5a5a5a, #3a3a3a);
-  border: 2px solid #7a7a7a;
-}
-
-.itemUncommon {
-  background: linear-gradient(to bottom, #3a5a9a, #2a4a8a);
-  border: 2px solid #4a6aaa;
-}
-
-.itemRare {
-  background: linear-gradient(to bottom, #7a3a9a, #6a2a8a);
-  border: 2px solid #8a4aaa;
+.itemCommon, .itemUncommon, .itemRare {
+  background: #333333;
+  border: 2px solid #555555;
 }
 
 .itemEmoji {
-  font-size: 2.5rem;
+  font-size: 2.25rem;
   margin-bottom: 0.5rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .itemName {
@@ -59,6 +52,7 @@
   color: #ffcc00;
   font-style: italic;
   text-align: center;
+  line-height: 1.2;
 }
 
 /* Add a subtle glow effect for rare items */

@@ -4,60 +4,152 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeIn 0.3s ease-in-out;
 }
 
 .modalContent {
-  background: linear-gradient(to bottom, #3a2a6a, #2a1a5a);
-  border-radius: 1rem;
-  padding: 2rem;
-  width: 90%;
-  max-width: 450px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  animation: slideIn 0.4s ease-out;
+  background: #5d3cb5;
+  border-radius: 1.5rem;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid #4a2882;
+  box-sizing: border-box;
+  height: 60%;
 }
 
-.modalTitle {
-  font-size: 2rem;
-  color: #ffcc00;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.infoIcon {
+  color: #88ccff;
+  font-weight: bold;
+}
+
+.redText {
+  color: #ff5555;
+  font-weight: bold;
+}
+
+.luckText {
+  color: white;
+  font-weight: bold;
 }
 
 .shopItems {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: 0.5rem;
+  padding: 0 0.5rem;
+  height: 100%;
+}
+
+.shopFooter {
+  padding: 1rem;
+}
+
+.coinCounter {
+  color: white;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.backButton {
+  background: #4455aa;
+  border: none;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.rerollButton {
+  background: #4455aa;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.rerollIcon {
+  color: #00ffcc;
+  font-size: 1.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.costText {
+  font-size: 0.7rem;
+  opacity: 0.8;
 }
 
 .skipButton {
-  background: linear-gradient(to bottom, #6a6a6a, #4a4a4a);
+  background: #4455aa;
   border: none;
-  border-radius: 0.5rem;
-  padding: 0.75rem 2rem;
+  border-radius: 2rem;
+  padding: 0.5rem 1.5rem;
+  color: white;
   font-size: 1.2rem;
   font-weight: bold;
-  color: white;
   cursor: pointer;
-  box-shadow: 0 4px 0 #3a3a3a;
-  transition: all 0.1s;
-  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.skipButton:hover {
-  transform: translateY(-2px);
+.skipButton:hover, .rerollButton:hover, .backButton:hover {
+  filter: brightness(1.1);
 }
 
-.skipButton:active {
-  transform: translateY(4px);
-  box-shadow: none;
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 @keyframes fadeIn {
@@ -67,7 +159,7 @@
 
 @keyframes slideIn {
   from { 
-    transform: translateY(-50px);
+    transform: translateY(-30px);
     opacity: 0;
   }
   to { 
