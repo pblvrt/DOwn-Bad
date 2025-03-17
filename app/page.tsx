@@ -10,11 +10,12 @@ import LostModal from "@/components/ui/LostModal";
 import Inventory from "@/components/game/Inventory";
 import IntroModal from "@/components/ui/IntroModal";
 import StageCompleteModal from "@/components/ui/StageCompleteModal";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 export default function Home() {
-
   return (
     <GameStateProvider>
+      <ServiceWorkerRegistration />
       <div className={styles.gameContainer}>
         <LostModal />
         <IntroModal />
@@ -54,7 +55,6 @@ export default function Home() {
             🏪
           </div>
         </div>
-
 
         {/* Audio elements */}
         <audio id="spin-sound" src="/sounds/spin.mp3" preload="auto"></audio>
