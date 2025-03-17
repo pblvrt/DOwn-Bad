@@ -1,6 +1,7 @@
-import { effectResult } from "@/types/game";
+import { ANIMATION_DELAYS } from "@/hooks/useAnimationTimers";
+import { effectResult, Symbol } from "@/types/game";
 
-// Get adjacent indices for a given index in a 5x5 grid
+// Get adjacent indices for a given index in a 5x5 grid (including diagonals)
 export function getAdjacentIndices(index: number): number[] {
   const row = Math.floor(index / 5);
   const col = index % 5;
@@ -9,20 +10,95 @@ export function getAdjacentIndices(index: number): number[] {
   // Check top
   if (row > 0) adjacentIndices.push(index - 5);
 
+  // Check top-right
+  if (row > 0 && col < 4) adjacentIndices.push(index - 5 + 1);
+
   // Check right
   if (col < 4) adjacentIndices.push(index + 1);
+
+  // Check bottom-right
+  if (row < 4 && col < 4) adjacentIndices.push(index + 5 + 1);
 
   // Check bottom
   if (row < 4) adjacentIndices.push(index + 5);
 
+  // Check bottom-left
+  if (row < 4 && col > 0) adjacentIndices.push(index + 5 - 1);
+
   // Check left
   if (col > 0) adjacentIndices.push(index - 1);
+
+  // Check top-left
+  if (row > 0 && col > 0) adjacentIndices.push(index - 5 - 1);
 
   return adjacentIndices;
 }
 
-export function cellTriggeringEffects(effectResult: (effectResult | null)[]): number {
-  return effectResult.filter((effect) => effect?.bonusValue && effect.bonusValue > 0).length;
+export function getAdjacentSymbols(grid: (Symbol | null)[], index: number): Symbol[] {
+  const adjacentIndices = getAdjacentIndices(index);
+  return adjacentIndices.map((i) => grid[i]).filter((s) => s !== null);
+}
+
+export function isAdjacentToSymbols(grid: (Symbol | null)[], index: number, symbols: string[]): boolean {
+  const adjacentIndices = getAdjacentIndices(index);
+  return adjacentIndices.some((i) => symbols.includes(grid[i]?.id || ""));
+}
+
+export function adjacentSymbolMoneyModifier(grid: (Symbol | null)[], index: number, type: Symbol["type"]): number {
+  const adjacentSymbols = getAdjacentSymbols(grid, index);
+  const currentSymbol = grid[index];
+  let moneyModifier = 0;
+  if (adjacentSymbols.some((s) => s?.id === "buffing_capsule")) {
+    moneyModifier += 2;
+  }
+
+  if (type === "food" && adjacentSymbols.some((s) => s?.id === "chef")) {
+    moneyModifier += 2;
+  }
+
+  if (type === "food" && adjacentSymbols.some((s) => s?.id === "farmer")) {
+    moneyModifier += 2;
+  }
+
+  if (["banana", "banana_peel", "dog", "monkey", "toddler", "joker"].includes(currentSymbol?.id || "") && adjacentSymbols.some((s) => s?.id === "comedian")) {
+    moneyModifier += 3;
+  }
+
+  return moneyModifier;
+}
+
+// Calculate dynamic delay based on animation type
+export function calculateAnimationDelay(
+  isEffect: boolean,
+  isDestroy: boolean
+): number {
+  let delay = ANIMATION_DELAYS.BASE_DELAY;
+
+  if (isEffect) {
+    delay += ANIMATION_DELAYS.EFFECT_DURATION;
+  }
+
+  if (isDestroy) {
+    delay += ANIMATION_DELAYS.DESTROY_DURATION;
+  }
+
+  return delay;
+}
+
+export function totalDelayUntilPos(
+  effectResult: (effectResult | null)[],
+  position: number
+): number {
+  return effectResult.slice(0, position).reduce((acc, effect) => {
+    const hasEffectBonus =
+      effect?.bonusValue !== undefined && effect.bonusValue > 0;
+    const isDestroy = effect?.isDestroyed ?? false;
+
+    if (hasEffectBonus || isDestroy) {
+      return acc + calculateAnimationDelay(hasEffectBonus, isDestroy);
+    }
+    return acc;
+  }, 0);
 }
 
 // Fisher-Yates shuffle algorithm

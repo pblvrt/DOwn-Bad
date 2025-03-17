@@ -41,12 +41,28 @@ export function updateGridWithSymbols(symbols: Symbol[]): (Symbol | null)[] {
 }
 
 export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
-  console.log("spinGrid", symbols);
   // Create a new grid with updated symbols
   const newGrid = updateGridWithSymbols(symbols);
 
+  // Create a map to track original symbols by tempId
+  const originalSymbolsByTempId = new Map<string, Symbol>();
+  symbols.forEach((symbol) => {
+    if (symbol.tempId) {
+      originalSymbolsByTempId.set(symbol.tempId, symbol);
+    }
+  });
 
-  // Calculate base coins from symbols
+  // Update counters in the grid based on original symbols
+  newGrid.forEach((symbol) => {
+    if (symbol && symbol.tempId && originalSymbolsByTempId.has(symbol.tempId)) {
+      const originalSymbol = originalSymbolsByTempId.get(symbol.tempId)!;
+      if (originalSymbol.counter !== undefined) {
+        symbol.counter = originalSymbol.counter + 1;
+      }
+    }
+  });
+
+  // Calculate base coins
   let baseCoins = 0;
   newGrid.forEach((symbol) => {
     if (symbol) {
@@ -54,71 +70,80 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
     }
   });
 
-  // Apply special effects
+  // Apply effects cell by cell
   let bonusCoins = 0;
-  const newEffectGrid = newGrid.map((symbol, index) => {
+  const effectGrid = Array(newGrid.length).fill(null);
+  const symbolsToAdd: Symbol[] = [];
+  const symbolsToDestroy = new Set<string>();
+
+  // Process each cell in the grid
+  for (let index = 0; index < newGrid.length; index++) {
+    const symbol = newGrid[index];
     if (symbol && symbol.effect) {
+      // Apply the effect
       const effectResult = symbol.effect(newGrid, index);
+      effectGrid[index] = effectResult;
+
+      // Update bonus value on the symbol in the grid
+      symbol.bonusValue = effectResult.bonusValue;
       bonusCoins += effectResult.bonusValue;
 
-      // Update the symbol in the newGrid directly
-      if (symbol) {
-        symbol.bonusValue = effectResult.bonusValue;
-      }
-
-      return effectResult;
-    }
-    return null;
-  });
-
-  // Update the original symbols array with values from newGrid
-  // Create a map for faster lookup
-  const gridSymbolsMap = new Map();
-  newGrid.forEach((symbol) => {
-    if (symbol && symbol.tempId) {
-      gridSymbolsMap.set(symbol.tempId, symbol);
-    }
-  });
-
-  // Update original symbols with data from the grid and track symbols to remove
-  const symbolsToKeep: Symbol[] = [];
-  symbols.forEach((symbol) => {
-    const gridSymbol = gridSymbolsMap.get(symbol.tempId);
-    if (gridSymbol) {
-      symbol.bonusValue = gridSymbol.bonusValue || 0;
-
-      // Increment counter if it exists
-      if (symbol.counter !== undefined) {
-        symbol.counter += 1;
-      }
-
-      // Instead of looking for effect.symbol, find the index of this symbol in the grid
-      // and check if there's a destruction effect at that index
-      let shouldDestroy = false;
-      newGrid.forEach((gridItem, gridIndex) => {
-        if (gridItem && gridItem.tempId === symbol.tempId) {
-          const effect = newEffectGrid[gridIndex];
-          if (effect && effect.isDestroyed) {
-            shouldDestroy = true;
+      // Track symbols to add
+      if (effectResult.add && effectResult.add.length > 0) {
+        effectResult.add.forEach((addId) => {
+          const addSymbol = symbolTypes.find((s) => s.id === addId);
+          if (addSymbol) {
+            symbolsToAdd.push({ ...addSymbol, tempId: crypto.randomUUID() });
           }
-        }
-      });
-
-      if (!shouldDestroy) {
-        symbolsToKeep.push(symbol);
+        });
       }
+
+      // Track symbols to destroy
+      if (effectResult.isDestroyed && symbol.tempId) {
+        symbolsToDestroy.add(symbol.tempId);
+      }
+    }
+  }
+
+  // Update the original symbols array based on grid state
+  const symbolsToKeep: Symbol[] = [];
+
+  symbols.forEach((symbol) => {
+    if (symbol.tempId) {
+      // Check if this symbol should be destroyed
+      if (symbolsToDestroy.has(symbol.tempId)) {
+        return; // Skip this symbol
+      }
+
+      // Find this symbol in the grid to get updated values
+      for (const gridSymbol of newGrid) {
+        if (gridSymbol && gridSymbol.tempId === symbol.tempId) {
+          // Copy updated values from grid symbol
+          symbol.bonusValue = gridSymbol.bonusValue || 0;
+          if (gridSymbol.counter !== undefined) {
+            symbol.counter = gridSymbol.counter;
+          }
+          break;
+        }
+      }
+
+      // If symbol wasn't in the grid this round, keep it as is
+      symbolsToKeep.push(symbol);
     } else {
-      // If not found in grid, keep it (it wasn't placed this round)
+      // Symbol has no tempId, keep it
       symbolsToKeep.push(symbol);
     }
   });
 
+  // Add new symbols
+  symbolsToKeep.push(...symbolsToAdd);
+
   return {
     grid: newGrid,
-    effectGrid: newEffectGrid,
+    effectGrid,
     baseCoins,
     bonusCoins,
-    symbols: symbolsToKeep, // Return filtered symbols array
+    symbols: symbolsToKeep,
   };
 }
 

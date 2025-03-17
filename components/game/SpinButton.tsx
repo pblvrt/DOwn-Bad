@@ -2,8 +2,9 @@
 
 import { useGameState } from "@/context/GameStateProvider";
 import { spinGrid } from "@/lib/gameLogic";
-import { cellTriggeringEffects } from "@/lib/utils";
+import { totalDelayUntilPos } from "@/lib/utils";
 import styles from "@/styles/Home.module.css";
+import { effectResult, Symbol } from "@/types/game";
 
 export default function SpinButton() {
   const { state, dispatch } = useGameState();
@@ -21,7 +22,13 @@ export default function SpinButton() {
     }, 1000);
   };
 
-  const processSpinResults = (spinResults) => {
+  const processSpinResults = (spinResults: {
+    grid: (Symbol | null)[];
+    baseCoins: number;
+    bonusCoins: number;
+    effectGrid: (effectResult | null)[];
+    symbols: Symbol[];
+  }) => {
     const {
       grid: newGrid,
       baseCoins,
@@ -38,9 +45,8 @@ export default function SpinButton() {
     });
   };
 
-  const scheduleEndOfTurn = (effectGrid) => {
-    const effectsDuration = 1000 * cellTriggeringEffects(effectGrid);
-    const totalDelay = effectsDuration + 1400 + 2000;
+  const scheduleEndOfTurn = (effectGrid: (effectResult | null)[]) => {
+    const totalDelay = totalDelayUntilPos(effectGrid, 25) + 3000;
 
     setTimeout(() => {
       dispatch({ type: "DECREASE_TURNS" });

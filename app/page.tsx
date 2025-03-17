@@ -1,6 +1,4 @@
 "use client";
-
-import { useState } from "react";
 import { GameStateProvider } from "@/context/GameStateProvider";
 import GameBoard from "@/components/game/GameBoard";
 import Header from "@/components/ui/Header";
@@ -14,11 +12,9 @@ import IntroModal from "@/components/ui/IntroModal";
 import StageCompleteModal from "@/components/ui/StageCompleteModal";
 
 export default function Home() {
-  const [showShop, setShowShop] = useState(false);
 
   return (
     <GameStateProvider>
-
       <div className={styles.gameContainer}>
         <LostModal />
         <IntroModal />
@@ -59,7 +55,6 @@ export default function Home() {
           </div>
         </div>
 
-        {showShop && <Shop onClose={() => setShowShop(false)} />}
 
         {/* Audio elements */}
         <audio id="spin-sound" src="/sounds/spin.mp3" preload="auto"></audio>

@@ -72,4 +72,22 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes buzz {
+  0% { transform: translate(0, 0) rotate(0); }
+  10% { transform: translate(-2px, -2px) rotate(-2deg); }
+  20% { transform: translate(2px, -2px) rotate(2deg); }
+  30% { transform: translate(-2px, 2px) rotate(0); }
+  40% { transform: translate(2px, 2px) rotate(-2deg); }
+  50% { transform: translate(-2px, -2px) rotate(2deg); }
+  60% { transform: translate(2px, -2px) rotate(0); }
+  70% { transform: translate(-2px, 2px) rotate(-2deg); }
+  80% { transform: translate(-2px, -2px) rotate(2deg); }
+  90% { transform: translate(2px, 2px) rotate(0); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
+
+.destroyPhase {
+  animation: buzz 0.5s ease-in-out;
 } 

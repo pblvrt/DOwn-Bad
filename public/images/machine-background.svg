@@ -1,0 +1,80 @@
+<svg width="100%" height="100%" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="100%" height="100%" fill="#121212"/>
+  
+  <!-- Circuit-like patterns -->
+  <g stroke="#333333" stroke-width="2" fill="none">
+    <path d="M0,200 H1000" />
+    <path d="M0,400 H1000" />
+    <path d="M0,600 H1000" />
+    <path d="M0,800 H1000" />
+    
+    <path d="M200,0 V1000" />
+    <path d="M400,0 V1000" />
+    <path d="M600,0 V1000" />
+    <path d="M800,0 V1000" />
+  </g>
+  
+  <!-- Circuit nodes -->
+  <g fill="#2a4a6a" stroke="#444444" stroke-width="1">
+    <circle cx="200" cy="200" r="10" />
+    <circle cx="400" cy="200" r="10" />
+    <circle cx="600" cy="200" r="10" />
+    <circle cx="800" cy="200" r="10" />
+    
+    <circle cx="200" cy="400" r="10" />
+    <circle cx="400" cy="400" r="10" />
+    <circle cx="600" cy="400" r="10" />
+    <circle cx="800" cy="400" r="10" />
+    
+    <circle cx="200" cy="600" r="10" />
+    <circle cx="400" cy="600" r="10" />
+    <circle cx="600" cy="600" r="10" />
+    <circle cx="800" cy="600" r="10" />
+    
+    <circle cx="200" cy="800" r="10" />
+    <circle cx="400" cy="800" r="10" />
+    <circle cx="600" cy="800" r="10" />
+    <circle cx="800" cy="800" r="10" />
+  </g>
+  
+  <!-- Glowing elements -->
+  <g>
+    <circle cx="400" cy="400" r="15" fill="#4b2882" opacity="0.7">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="600" cy="600" r="15" fill="#4b2882" opacity="0.7">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="4s" repeatCount="indefinite" />
+    </circle>
+    <circle cx="200" cy="600" r="15" fill="#4b2882" opacity="0.7">
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="5s" repeatCount="indefinite" />
+    </circle>
+  </g>
+  
+  <!-- Machine details -->
+  <g fill="none" stroke="#333333" stroke-width="3">
+    <rect x="300" y="300" width="400" height="400" rx="20" ry="20" />
+    <circle cx="500" cy="500" r="150" />
+    <circle cx="500" cy="500" r="100" />
+  </g>
+  
+  <!-- Decorative elements -->
+  <g fill="#222222" stroke="#333333">
+    <rect x="50" y="50" width="100" height="100" rx="10" ry="10" />
+    <rect x="850" y="50" width="100" height="100" rx="10" ry="10" />
+    <rect x="50" y="850" width="100" height="100" rx="10" ry="10" />
+    <rect x="850" y="850" width="100" height="100" rx="10" ry="10" />
+  </g>
+  
+  <!-- Subtle gradient overlay -->
+  <rect width="100%" height="100%" fill="url(#gradient)" opacity="0.3"/>
+  
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4b2882" stop-opacity="0.3"/>
+      <stop offset="50%" stop-color="#2a4a6a" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.3"/>
+    </linearGradient>
+  </defs>
+</svg> 

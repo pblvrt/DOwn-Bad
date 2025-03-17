@@ -1,0 +1,757 @@
+{
+  id: "dove",
+  name: "Dove",
+  value: 2,
+  rarity: "rare",
+  emoji: "🕊️",
+  effectDescription:
+    "If an adjacent symbol would be destroyed, instead it isn't, and this symbol permanently gives Coin 1 more.",
+  // Protection effect handled in game logic
+},
+{
+  id: "dud",
+  name: "Dud",
+  value: 0,
+  rarity: "special",
+  emoji: "💣",
+  effectDescription: "Destroys itself after 33 spins. Cannot be removed.",
+  // Self-destruction handled in game logic
+},
+{
+  id: "eldritch_creature",
+  name: "Eldritch Creature",
+  value: 4,
+  rarity: "very_rare",
+  emoji: "👾",
+  counter: 0,
+  type: "character",
+  effectDescription:
+    "Destroys Cultist, Witch, and Hex symbols. Gives Coin 1 for each such symbol destroyed or removed this game.",
+  // Destruction effect and tracking handled in game logic
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const adjacentSymbols = getAdjacentSymbols(grid, index);
+    const destroyedSymbols = adjacentSymbols.filter(
+      (symbol) => symbol.id === "cultist" || symbol.id === "witch" || symbol.id === "hex"
+    );
+    return { isDestroyed: false, bonusValue: destroyedSymbols.length };
+  },
+},
+{
+  id: "essence_capsule",
+  name: "Essence Capsule",
+  value: -12,
+  rarity: "uncommon",
+  emoji: "💊",
+  effectDescription: "Destroys itself. Gives Essence Token 1 when destroyed",
+  // Self-destruction and token effect handled in game logic
+},
+
+{
+  id: "dame",
+  name: "Dame",
+  value: 2,
+  rarity: "rare",
+  emoji: "👸",
+  type: "character",
+  effectDescription:
+    "Adjacent gems give 2x more Coin. Destroys adjacent Martini. Gives Coin 40 for each Martini destroyed.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Multiplier and destruction effect handled in game logic
+    return 0;
+  },
+},
+
+{
+  id: "frozen_fossil",
+  name: "Frozen Fossil",
+  value: 0,
+  rarity: "rare",
+  emoji: "🧊",
+  effectDescription:
+    "Destroys itself after 20 spins. The amount of spins needed is reduced by 5 for each Cultist, Witch, and Hex destroyed or removed this game. Adds Eldritch Creature when destroyed.",
+  // Self-destruction and tracking handled in game logic
+},
+
+{
+  id: "golden_arrow",
+  name: "Golden Arrow",
+  value: 0,
+  rarity: "very_rare",
+  emoji: "🏹",
+  effectDescription:
+    "Points a random direction. Symbols that are pointed to give 4x more Coin. Destroys Target that are pointed to.",
+  // Direction and effect handled in game logic
+},
+
+{
+  id: "hex_of_destruction",
+  name: "Hex of Destruction",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  type: "hex",
+  effectDescription: "Has a 30% chance to Destroy an adjacent symbol.",
+  // Random destruction handled in game logic
+},
+{
+  id: "hex_of_draining",
+  name: "Hex of Draining",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  type: "hex",
+  effectDescription:
+    "Has a 30% chance to make an adjacent symbol give Coin 0.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "hex");
+    // Draining effect handled in game logic
+    return { isDestroyed: false, bonusValue: 3 * multiplier };
+  },
+},
+{
+  id: "hex_of_emptiness",
+  name: "Hex of Emptiness",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  type: "hex",
+  effectDescription:
+    "Has a 30% chance of forcing you to skip the symbols you can add after a spin.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "hex");
+    // Skip effect handled in game logic
+    return { isDestroyed: false, bonusValue: 3 * multiplier };
+  },
+},
+{
+  id: "hex_of_hoarding",
+  name: "Hex of Hoarding",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  type: "hex",
+  effectDescription:
+    "Has a 30% chance of forcing you to add a symbol after this spin.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "hex");
+    // Hoarding effect handled in game logic
+    return { isDestroyed: false, bonusValue: 3 * multiplier };
+  },
+},
+{
+  id: "hex_of_midas",
+  name: "Hex of Midas",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  effectDescription: "Has a 30% chance of adding Coin.",
+  // Random chance handled in game logic
+},
+{
+  id: "hex_of_tedium",
+  name: "Hex of Tedium",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  type: "hex",
+  effectDescription:
+    "You are 1.3x less likely to find Uncommon, Rare, and Very Rare symbols.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "hex");
+    // Rarity effect handled in game logic
+    return { isDestroyed: false, bonusValue: 3 * multiplier };
+  },
+},
+{
+  id: "hex_of_thievery",
+  name: "Hex of Thievery",
+  value: 3,
+  rarity: "uncommon",
+  emoji: "🔮",
+  type: "hex",
+  effectDescription: "Has a 30% chance to take Coin 6.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "hex");
+    const random = Math.random();
+
+    if (random < 0.3) {
+      return { isDestroyed: false, bonusValue: -6 * multiplier };
+    }
+
+    return { isDestroyed: false, bonusValue: 3 * multiplier };
+  },
+},
+
+
+{
+  id: "highlander",
+  name: "Highlander",
+  value: 6,
+  rarity: "very_rare",
+  emoji: "⚔️",
+  type: "character",
+  effectDescription: "There can be only 1 Highlander.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "character");
+    // Uniqueness handled in game logic
+    return { isDestroyed: false, bonusValue: 6 * multiplier };
+  },
+},
+
+
+{
+  id: "matryoshka_doll_2",
+  name: "Matryoshka Doll 2",
+  value: 1,
+  rarity: "special",
+  emoji: "🪆",
+  effectDescription:
+    "Destroys itself after 5 spins. Adds Matryoshka Doll 3 when destroyed.",
+  // Self-destruction and effect handled in game logic
+},
+{
+  id: "matryoshka_doll_3",
+  name: "Matryoshka Doll 3",
+  value: 2,
+  rarity: "special",
+  emoji: "🪆",
+  effectDescription:
+    "Destroys itself after 7 spins. Adds Matryoshka Doll 4 when destroyed.",
+  // Self-destruction and effect handled in game logic
+},
+{
+  id: "matryoshka_doll_4",
+  name: "Matryoshka Doll 4",
+  value: 3,
+  rarity: "special",
+  emoji: "🪆",
+  effectDescription:
+    "Destroys itself after 9 spins. Adds Matryoshka Doll 5 when destroyed.",
+  // Self-destruction and effect handled in game logic
+},
+{
+  id: "matryoshka_doll_5",
+  name: "Matryoshka Doll 5",
+  value: 4,
+  rarity: "special",
+  emoji: "🪆",
+},
+{
+  id: "mega_chest",
+  name: "Mega Chest",
+  value: 3,
+  rarity: "very_rare",
+  emoji: "🧰",
+  effectDescription: "Gives Coin 100 when destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "midas_bomb",
+  name: "Midas Bomb",
+  value: 0,
+  rarity: "very_rare",
+  emoji: "💣",
+  effectDescription:
+    "Destroys itself and all adjacent symbols. Symbols destroyed this way give Coin equal to 7x their value.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "milk",
+  name: "Milk",
+  value: 1,
+  rarity: "common",
+  emoji: "🥛",
+},
+{
+  id: "mine",
+  name: "Mine",
+  value: 4,
+  rarity: "rare",
+  emoji: "⛏️",
+  effectDescription:
+    "Adds Ore each spin. Destroys itself after giving Coin 4 times. Adds 1 Mining Pick item when destroyed.",
+  // Self-destruction and effect handled in game logic
+},
+{
+  id: "miner",
+  name: "Miner",
+  value: 1,
+  rarity: "common",
+  emoji: "👷",
+  effectDescription:
+    "Destroys adjacent Ore and Big Ore. Gives Coin 20 for each Ore and Big Ore destroyed.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Destruction effect handled in game logic
+    return 0;
+  },
+},
+{
+  id: "missing",
+  name: "Missing",
+  value: 0,
+  rarity: "special",
+  emoji: "❓",
+  type: "special",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    return { isDestroyed: false, bonusValue: 0 };
+  },
+},
+{
+  id: "monkey",
+  name: "Monkey",
+  value: 1,
+  rarity: "common",
+  emoji: "🐒",
+  effectDescription:
+    "Destroys adjacent Banana, Coconut and Coconut Half. Gives Coin equal to 6x the value of symbols destroyed this way.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Destruction effect handled in game logic
+    return 0;
+  },
+},
+{
+  id: "moon",
+  name: "Moon",
+  value: 3,
+  rarity: "rare",
+  emoji: "🌙",
+  type: "celestial",
+  effectDescription:
+    "Adjacent Owl, Rabbit and Wolf give 3x more Coin. Adds 3 Cheese when destroyed.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "celestial");
+    // Multiplier effect handled in game logic
+    return {
+      isDestroyed: false,
+      bonusValue: 3 * multiplier,
+    };
+  },
+},
+{
+  id: "mouse",
+  name: "Mouse",
+  value: 1,
+  rarity: "common",
+  emoji: "🐭",
+  effectDescription:
+    "Destroys adjacent Cheese. Gives Coin 20 for each Cheese destroyed.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Destruction effect handled in game logic
+    return 0;
+  },
+},
+{
+  id: "mrs_fruit",
+  name: "Mrs. Fruit",
+  value: 2,
+  rarity: "rare",
+  emoji: "👩‍🌾",
+  effectDescription:
+    "Destroys adjacent Banana, Cherry, Coconut, Coconut Half, Orange and Peach. Permanently gives Coin 1 for each symbol destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "ninja",
+  name: "Ninja",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🥷",
+  effectDescription: "Gives Coin 1 less for each other Ninja.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    let ninjaCount = 0;
+
+    grid.forEach((symbol, i) => {
+      if (i !== index && symbol && symbol.id === "ninja") {
+        ninjaCount++;
+      }
+    });
+
+    return { isDestroyed: false, bonusValue: -ninjaCount };
+  },
+},
+{
+  id: "omelette",
+  name: "Omelette",
+  value: 3,
+  rarity: "rare",
+  emoji: "🍳",
+  effectDescription:
+    "Gives Coin 2 more if adjacent to Cheese, Egg, Milk, Golden Egg or Omelette. This effect only applies once per spin.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const adjacentIndices = getAdjacentIndices(index);
+
+    for (const adjIndex of adjacentIndices) {
+      const adjSymbol = grid[adjIndex];
+      if (
+        adjSymbol &&
+        ["cheese", "egg", "milk", "golden_egg", "omelette"].includes(
+          adjSymbol.id
+        )
+      ) {
+        return { isDestroyed: false, bonusValue: 2 }; // Only applies once
+      }
+    }
+
+    return { isDestroyed: false, bonusValue: 0 };
+  },
+},
+{
+  id: "orange",
+  name: "Orange",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🍊",
+},
+{
+  id: "ore",
+  name: "Ore",
+  value: 1,
+  rarity: "common",
+  emoji: "🪨",
+  effectDescription:
+    "Adds Void Stone, Amethyst, Pearl, Shiny Pebble, Sapphire, Emerald, Ruby or Diamond when destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "owl",
+  name: "Owl",
+  value: 1,
+  rarity: "common",
+  emoji: "🦉",
+  effectDescription: "Gives Coin 1 every 3 spins.",
+  // Periodic effect handled in game logic
+},
+{
+  id: "oyster",
+  name: "Oyster",
+  value: 1,
+  rarity: "common",
+  emoji: "🦪",
+  effectDescription:
+    "Has a 20% chance of adding Pearl. Adds Pearl when removed.",
+  // Random chance and removal effect handled in game logic
+},
+{
+  id: "peach",
+  name: "Peach",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🍑",
+  effectDescription: "Adds Seed when destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "pear",
+  name: "Pear",
+  value: 1,
+  rarity: "rare",
+  emoji: "🍐",
+  effectDescription:
+    "Whenever another symbol makes this symbol give additional Coin, this symbol permanently gives Coin 1 more.",
+  // Special effect handled in game logic
+},
+{
+  id: "pearl",
+  name: "Pearl",
+  value: 1,
+  rarity: "common",
+  emoji: "🔘",
+},
+{
+  id: "pirate",
+  name: "Pirate",
+  value: 2,
+  rarity: "very_rare",
+  emoji: "🏴‍☠️",
+  effectDescription:
+    "Destroys adjacent Anchor, Beer, Coin, Lockbox, Safe, Orange, Treasure Chest and Mega Chest. Permanently gives Coin 1 for each symbol destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "pinata",
+  name: "Piñata",
+  value: 1,
+  rarity: "uncommon",
+  emoji: "🪅",
+  effectDescription: "Adds 7 Candy when destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "present",
+  name: "Present",
+  value: 0,
+  rarity: "common",
+  emoji: "🎁",
+  effectDescription:
+    "Destroys itself after 12 spins. Gives Coin 10 when destroyed.",
+  // Self-destruction and effect handled in game logic
+},
+{
+  id: "pufferfish",
+  name: "Pufferfish",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🐡",
+  effectDescription: "Gives Reroll Token 1 when removed.",
+  // Removal effect handled in game logic
+},
+{
+  id: "rabbit",
+  name: "Rabbit",
+  value: 1,
+  rarity: "uncommon",
+  emoji: "🐰",
+  effectDescription:
+    "Permanently gives Coin 2 more after giving Coin 10 times.",
+  // Counter effect handled in game logic
+},
+{
+  id: "rabbit_fluff",
+  name: "Rabbit Fluff",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🧶",
+  effectDescription:
+    "You are 1.2x more likely to find Uncommon, Rare, and Very Rare symbols.",
+  // Rarity effect handled in game logic
+},
+{
+  id: "rain",
+  name: "Rain",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🌧️",
+  effectDescription:
+    "Adjacent Flower give 2x more Coin. Adjacent Seed are 50% more likely to grow.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Multiplier and growth chance handled in game logic
+    return 0;
+  },
+},
+{
+  id: "removal_capsule",
+  name: "Removal Capsule",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "💊",
+  effectDescription: "Destroys itself. Gives Removal Token 1 when destroyed.",
+  // Self-destruction and token effect handled in game logic
+},
+{
+  id: "reroll_capsule",
+  name: "Reroll Capsule",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "💊",
+  effectDescription: "Destroys itself. Gives Reroll Token 1 when destroyed.",
+  // Self-destruction and token effect handled in game logic
+},
+{
+  id: "robin_hood",
+  name: "Robin Hood",
+  value: -4,
+  rarity: "rare",
+  emoji: "🏹",
+  effectDescription:
+    "Gives Coin 25 every 4 spins. Adjacent Thief, Bronze Arrow, Golden Arrow and Silver Arrow give Coin 3 more. Destroys adjacent Billionaire, Target and Apple. Gives Coin 15 for each Billionaire, Target and Apple destroyed.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Periodic effect and destruction effect handled in game logic
+    return 0;
+  },
+},
+{
+  id: "ruby",
+  name: "Ruby",
+  value: 3,
+  rarity: "rare",
+  emoji: "🔴",
+  effectDescription: "Gives Coin 1 more if there are at least 2 Ruby.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    let rubyCount = 0;
+
+    grid.forEach((symbol) => {
+      if (symbol && symbol.id === "ruby") {
+        rubyCount++;
+      }
+    });
+
+    return { isDestroyed: false, bonusValue: rubyCount >= 2 ? 1 : 0 };
+  },
+},
+{
+  id: "safe",
+  name: "Safe",
+  value: 1,
+  rarity: "uncommon",
+  emoji: "🔐",
+  effectDescription: "Gives Coin 30 when destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "sand_dollar",
+  name: "Sand Dollar",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🪙",
+  effectDescription: "Gives Coin 10 when removed.",
+  // Removal effect handled in game logic
+},
+{
+  id: "sapphire",
+  name: "Sapphire",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🔵",
+},
+{
+  id: "seed",
+  name: "Seed",
+  value: 1,
+  rarity: "common",
+  emoji: "🌱",
+  effectDescription: "Has a 25% chance to grow into a fruit or flower.",
+  // Growth chance handled in game logic
+},
+{
+  id: "shiny_pebble",
+  name: "Shiny Pebble",
+  value: 1,
+  rarity: "common",
+  emoji: "✨",
+  effectDescription:
+    "You are 1.1x more likely to find Uncommon, Rare, and Very Rare symbols.",
+  // Rarity effect handled in game logic
+},
+{
+  id: "silver_arrow",
+  name: "Silver Arrow",
+  value: 0,
+  rarity: "rare",
+  emoji: "🏹",
+  effectDescription:
+    "Points a random direction. Symbols that are pointed to give 3x more Coin. Destroys Target that are pointed to.",
+  // Direction and effect handled in game logic
+},
+{
+  id: "sloth",
+  name: "Sloth",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "🦥",
+  effectDescription: "Gives Coin 4 every 2 spins.",
+  // Periodic effect handled in game logic
+},
+{
+  id: "snail",
+  name: "Snail",
+  value: 0,
+  rarity: "common",
+  emoji: "🐌",
+  counter: 0,
+  effectDescription: "Gives Coin 5 every 4 spins.",
+  // Periodic effect handled in game logic
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const currentCounter = grid[index]?.counter || 0;
+    const isMultipleof5 = (currentCounter + 1) % 5 === 0;
+    return { isDestroyed: false, bonusValue: isMultipleof5 ? 5 : 0 };
+  },
+},
+{
+  id: "spades",
+  name: "Spades",
+  value: 1,
+  rarity: "uncommon",
+  emoji: "♠️",
+  effectDescription:
+    "Adjacent Clubs and Spades give Coin 1 more. Gives Coin 1 more if there are at least 3 Clubs, Diamonds, Hearts or Spades.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Count card symbols
+    let cardCount = 0;
+    grid.forEach((symbol) => {
+      if (
+        symbol &&
+        ["clubs", "diamonds", "hearts", "spades"].includes(symbol.id)
+      ) {
+        cardCount++;
+      }
+    });
+
+    return { isDestroyed: false, bonusValue: cardCount >= 3 ? 1 : 0 };
+  },
+},
+{
+  id: "spirit",
+  name: "Spirit",
+  value: 6,
+  rarity: "rare",
+  emoji: "👻",
+  effectDescription: "Destroys itself after giving Coin 4 times.",
+  // Self-destruction handled in game logic
+},
+{
+  id: "strawberry",
+  name: "Strawberry",
+  value: 3,
+  rarity: "rare",
+  emoji: "🍓",
+  effectDescription: "Gives Coin 1 more if there are at least 2 Strawberry.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    let strawberryCount = 0;
+
+    grid.forEach((symbol) => {
+      if (symbol && symbol.id === "strawberry") {
+        strawberryCount++;
+      }
+    });
+
+    return { isDestroyed: false, bonusValue: strawberryCount >= 2 ? 1 : 0 };
+  },
+},
+{
+  id: "sun",
+  name: "Sun",
+  value: 3,
+  rarity: "rare",
+  emoji: "☀️",
+  effectDescription:
+    "Adjacent Flower give 5x more Coin. Adjacent Seed are 50% more likely to grow.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Multiplier and growth chance handled in game logic
+    return 0;
+  },
+},
+{
+  id: "target",
+  name: "Target",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🎯",
+  effectDescription: "Gives Coin 10 when destroyed.",
+  // Destruction effect handled in game logic
+},
+{
+  id: "tedium_capsule",
+  name: "Tedium Capsule",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "💊",
+  effectDescription:
+    "Destroys itself. Gives Coin 5 when destroyed. At least 1 of the symbols to add after this spin will be Common.",
+  // Self-destruction and effect handled in game logic
+},
+
+
+{
+  id: "bronze_arrow",
+  name: "Bronze Arrow",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "🏹",
+  type: "arrow",
+  effectDescription:
+    "Points a random direction. Symbols that are pointed to give 2x more Coin. Destroys Target that are pointed to.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    // Direction and multiplier effect handled in game logic
+    return { isDestroyed: false, bonusValue: 0 };
+  },
+},

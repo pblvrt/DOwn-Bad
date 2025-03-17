@@ -18,7 +18,8 @@ export default function IntroModal() {
   useEffect(() => {
     // Create audio context
     audioContext = new (window.AudioContext ||
-      (window as any).webkitAudioContext)();
+      (window as unknown as { webkitAudioContext: typeof AudioContext })
+        .webkitAudioContext)();
 
     // Load audio file
     fetch("/background.wav")

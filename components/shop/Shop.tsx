@@ -20,7 +20,8 @@ export default function Shop() {
   useEffect(() => {
     if (!audioContext) {
       audioContext = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext)();
 
       // Load coin sound
       fetch("/coins.wav")

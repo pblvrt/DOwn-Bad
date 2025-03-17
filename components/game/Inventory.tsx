@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useGameState } from "@/context/GameStateProvider";
 import styles from "@/styles/Inventory.module.css";
+import Symbol from "./Symbol";
 
 const Inventory: React.FC = () => {
   const { state } = useGameState();
@@ -32,17 +33,21 @@ const Inventory: React.FC = () => {
     return Array.from(symbols.values());
   }, [state.grid]);
 
+  // Calculate total number of symbols
+  const totalSymbolCount = useMemo(() => {
+    return state.grid.filter((symbol) => symbol !== null).length;
+  }, [state.grid]);
+
   return (
     <div className={styles.inventoryContainer}>
+      <div className={styles.totalCount}>Total: {totalSymbolCount}</div>
       <div className={styles.inventoryGrid}>
         {uniqueSymbols.map((symbol) => (
-          <div key={symbol.id} className={styles.inventoryItem}>
-            <div className={styles.symbolEmoji}>{symbol.emoji}</div>
-            {symbolCounts.get(symbol.id) > 1 && (
-              <div className={styles.symbolCount}>
-                {symbolCounts.get(symbol.id)}
-              </div>
-            )}
+          <div key={symbol.id} className={styles.symbolStack}>
+            <Symbol symbol={symbol} />
+            <div className={styles.symbolCount}>
+              {symbolCounts.get(symbol.id)}
+            </div>
           </div>
         ))}
       </div>
