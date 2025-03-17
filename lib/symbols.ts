@@ -1374,7 +1374,7 @@ export const symbolTypes: Symbol[] = [
       const counter = grid[index]?.counter || 0;
 
       if (counter >= 5) {
-        return { isDestroyed: true, bonusValue: 1 * multiplier };
+        return { isDestroyed: true, bonusValue: 1 * (1 + multiplier) };
       }
 
       return { isDestroyed: false, bonusValue: 1 * multiplier };
@@ -1451,7 +1451,7 @@ export const symbolTypes: Symbol[] = [
       }
 
       if (destroyedChest) {
-        return { isDestroyed: true, bonusValue: totalBonus * multiplier };
+        return { isDestroyed: true, bonusValue: totalBonus * (1 + multiplier) };
       }
 
       return { isDestroyed: false, bonusValue: 2 * multiplier };
@@ -1574,7 +1574,7 @@ export const symbolTypes: Symbol[] = [
       if (destroyedCount > 0) {
         return {
           isDestroyed: false,
-          bonusValue: 6 * destroyedCount * multiplier,
+          bonusValue: 6 * destroyedCount * (1 + multiplier),
         };
       }
 
