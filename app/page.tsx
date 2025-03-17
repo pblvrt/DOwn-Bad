@@ -28,16 +28,6 @@ export default function Home() {
         <div className={styles.spinButtonContainer}>
           <SpinButton />
         </div>
-        <div className={styles.actionButtons}>
-          <button className={styles.actionButton}>
-            <span className={styles.notificationBadge}>7</span>
-            📋
-          </button>
-          <button className={styles.actionButton}>
-            <span className={styles.notificationBadge}>7</span>
-            🔔
-          </button>
-        </div>
         <div className={styles.bottomNav}>
           <div className={styles.navItem}>
             <span className={styles.navBadge}>3</span>
