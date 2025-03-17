@@ -3,11 +3,11 @@
 import { useState, useRef, useCallback } from "react";
 import { Symbol } from "@/types/game";
 import styles from "@/styles/GameCell.module.css";
-import RewardAnimation from "./RewardAnimation";
 import { useGameState } from "@/context/GameStateProvider";
 import SymbolModal from "./SymbolModal";
 import { useAnimationPositions } from "@/hooks/useAnimationPositions";
 import { useAnimationTimers } from "@/hooks/useAnimationTimers";
+import DynamicRewardAnimation from "./DynamicRewardAnimation";
 
 type SymbolProps = {
   symbol: Symbol | null;
@@ -77,7 +77,7 @@ export default function SymbolComponent({
       {showReward && (
         <>
           {(hasEffectBonus || isDestroy) && (
-            <RewardAnimation
+            <DynamicRewardAnimation
               key={`effect-${position}`}
               value={currentEffect?.bonusValue ?? 0}
               isTriggered={triggerEffectReward}
@@ -89,7 +89,7 @@ export default function SymbolComponent({
               soundUrl="/specialEffect.wav"
             />
           )}
-          <RewardAnimation
+          <DynamicRewardAnimation
             key={`reward-${position}`}
             value={rewardValue}
             isTriggered={triggerReward}

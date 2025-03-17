@@ -19,6 +19,9 @@ export default function RewardAnimation({
   id = "default",
 }: RewardAnimationProps) {
   const [isMounted, setIsMounted] = useState(false);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
+    null
+  );
 
   const { isAnimating, animationPhase, style, animationIdRef, startAnimation } =
     useAnimationSequences(
@@ -34,7 +37,11 @@ export default function RewardAnimation({
   // Handle client-side rendering for createPortal
   useEffect(() => {
     setIsMounted(true);
-    return () => setIsMounted(false);
+    setPortalContainer(document.body);
+    return () => {
+      setIsMounted(false);
+      setPortalContainer(null);
+    };
   }, []);
 
   // Main animation trigger
@@ -51,7 +58,7 @@ export default function RewardAnimation({
     };
   }, []);
 
-  if (!isAnimating || !isMounted) return null;
+  if (!isAnimating || !isMounted || !portalContainer) return null;
 
   const animationElement = (
     <div
@@ -93,6 +100,6 @@ export default function RewardAnimation({
     </div>
   );
 
-  // Use createPortal to render at document body level
-  return createPortal(animationElement, document.body);
+  // Only use createPortal when we have a valid container
+  return createPortal(animationElement, portalContainer);
 }
