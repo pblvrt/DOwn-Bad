@@ -5,7 +5,7 @@ import { useGameState } from "@/context/GameStateProvider";
 const ProgressBar: React.FC = () => {
   const { state } = useGameState();
   const { isSpinning } = state;
-  const [coins, setCoins] = useState(state.coins);
+  const [coins, setCoins] = useState(0);
   const [floor, setFloor] = useState(0);
   const animationQueue = useRef<Array<{ value: number; delay: number }>>([]);
   const isAnimating = useRef(false);
