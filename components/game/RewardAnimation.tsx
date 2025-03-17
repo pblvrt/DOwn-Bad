@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { createPortal } from "react-dom";
 import styles from "@/styles/RewardAnimation.module.css";
 
@@ -12,7 +12,11 @@ interface RewardAnimationProps {
   targetPosition: { x: number; y: number };
   isEffect?: boolean;
   effectDescription?: string;
+  soundUrl?: string;
 }
+
+// Add this at the top level of the file, outside the component
+let isPlayingRewardSound = false;
 
 export default function RewardAnimation({
   value,
@@ -22,11 +26,13 @@ export default function RewardAnimation({
   targetPosition,
   isEffect = false,
   effectDescription = "",
+  soundUrl,
 }: RewardAnimationProps) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationPhase, setAnimationPhase] = useState(0); // 0: not started, 1: appear, 2: move
   const [style, setStyle] = useState({});
   const [isMounted, setIsMounted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Handle client-side rendering for createPortal
   useEffect(() => {
@@ -34,10 +40,38 @@ export default function RewardAnimation({
     return () => setIsMounted(false);
   }, []);
 
+  // Initialize audio element
+  useEffect(() => {
+    if (isMounted && soundUrl) {
+      audioRef.current = new Audio(soundUrl);
+    }
+  }, [isMounted, soundUrl]);
+
+  // Play sound function
+  const playSound = () => {
+    if (audioRef.current && !isPlayingRewardSound) {
+      isPlayingRewardSound = true;
+      audioRef.current.currentTime = 0; // Reset to start
+      audioRef.current
+        .play()
+        .catch((err) => console.error("Error playing sound:", err))
+        .finally(() => {
+          // Set a timeout to reset the flag after the sound duration
+          // Using 1 second as an example duration - adjust as needed
+          setTimeout(() => {
+            isPlayingRewardSound = false;
+          }, 500);
+        });
+    }
+  };
+
   useEffect(() => {
     if (isTriggered && !isAnimating) {
       setIsAnimating(true);
       setAnimationPhase(1);
+
+      // Play sound when animation starts
+      playSound();
 
       // Initial position (where the symbol is) with a pop-up effect
       setStyle({

@@ -1,6 +1,6 @@
-import { Symbol } from "@/types/game";
-import { getAdjacentIndices } from "./utils";
 
+import { getAdjacentIndices } from "./utils";
+import { Symbol, effectResult } from "@/types/game";
 // Symbol definitions
 export const symbolTypes: Symbol[] = [
   {
@@ -10,16 +10,16 @@ export const symbolTypes: Symbol[] = [
     rarity: "special",
     emoji: "",
   },
-  {
-    id: "amethyst",
-    name: "Amethyst",
-    value: 1,
-    rarity: "rare",
-    emoji: "🟣",
-    effectDescription:
-      "Whenever another symbol makes this symbol give additional Coin, this symbol permanently gives Coin 1 more.",
-    // Special effect handled in game logic
-  },
+  // {
+  //   id: "amethyst",
+  //   name: "Amethyst",
+  //   value: 1,
+  //   rarity: "rare",
+  //   emoji: "🟣",
+  //   effectDescription:
+  //     "Whenever another symbol makes this symbol give additional Coin, this symbol permanently gives Coin 1 more.",
+  //   // Special effect handled in game logic
+  // },
   {
     id: "anchor",
     name: "Anchor",
@@ -27,7 +27,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "common",
     emoji: "⚓",
     effectDescription: "Gives +4 Coin more when in a corner.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Check if in corner (0, 4, 20, 24 for a 5x5 grid)
       const corners = [0, 4, 20, 24];
       if (corners.includes(index)) {
@@ -58,7 +58,16 @@ export const symbolTypes: Symbol[] = [
     value: 1,
     rarity: "common",
     emoji: "🍌",
-    effectDescription: "Destroys adjacent Thief. Destroys itself afterwards.",
+    effectDescription: "Destroys adjacent <thief>. Destroys itself afterwards.",
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
+      // check if adjacent symbol is thief
+      const adjacentIndices = getAdjacentIndices(index);
+      const adjacentSymbol = grid[adjacentIndices[0]];
+      if (adjacentSymbol && adjacentSymbol.id === "thief") {
+        return { isDestroyed: true, bonusValue: 0 };
+      }
+      return { isDestroyed: false, bonusValue: 0 };
+    },
     // Effect handled in game logic
   },
   {
@@ -79,7 +88,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🧑‍🍳",
     effectDescription:
       "Has a 10% chance of adding Chemical Seven, Beer, Wine or Martini.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Random chance handled in game logic
       return 0;
     },
@@ -92,7 +101,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🐻",
     effectDescription:
       "Destroys adjacent Honey. Gives Coin 40 for each Honey destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -104,7 +113,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "rare",
     emoji: "🧙‍♂️",
     effectDescription: "Adjacent animal symbols give 2x more Coin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -117,7 +126,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🐝",
     effectDescription:
       "Adjacent Flower, Beehive and Honey give 2x more Coin. Gives Coin 1 more for each adjacent Flower, Beehive or Honey.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
       let bonusValue = 0;
 
@@ -177,7 +186,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🤵",
     effectDescription:
       "Adjacent Cheese and Wine give 2x more Coin. Gives Coin 39 when destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -190,7 +199,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🕵️",
     effectDescription:
       "Destroys adjacent Thief. Gives Coin 20 for each Thief destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -248,10 +257,13 @@ export const symbolTypes: Symbol[] = [
     emoji: "🐱",
     effectDescription:
       "Destroys adjacent Milk. Gives Coin 9 for each Milk destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
 
-      return 1+1;
+      return {
+        isDestroyed: false,
+        bonusValue: 1,
+      };
     },
   },
   {
@@ -268,7 +280,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "rare",
     emoji: "👨‍🍳",
     effectDescription: "Adjacent food items give 2x more Coin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -317,7 +329,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "♣️",
     effectDescription:
       "Adjacent Clubs and Spades give Coin 1 more. Gives Coin 1 more if there are at least 3 Clubs, Diamonds, Hearts or Spades.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Count card symbols
       let cardCount = 0;
       grid.forEach((symbol) => {
@@ -372,7 +384,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🤡",
     effectDescription:
       "Adjacent Banana, Banana Peel, Dog, Monkey, Toddler and Joker give 3x more Coin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -393,7 +405,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "common",
     emoji: "🦀",
     effectDescription: "Gives Coin 3 more for each other Crab in the same row.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Calculate row bounds
       const rowSize = 5; // Assuming 5x5 grid
       const rowStart = Math.floor(index / rowSize) * rowSize;
@@ -426,7 +438,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🧙",
     effectDescription:
       "Gives Coin 1 more for each other Cultist. Gives Coin 1 more if there are at least 3 Cultist.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let cultistCount = 0;
 
       grid.forEach((symbol, i) => {
@@ -446,7 +458,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "👸",
     effectDescription:
       "Adjacent gems give 2x more Coin. Destroys adjacent Martini. Gives Coin 40 for each Martini destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier and destruction effect handled in game logic
       return 0;
     },
@@ -458,7 +470,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "very_rare",
     emoji: "💎",
     effectDescription: "Gives Coin 1 more for each other Diamond.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let diamondCount = 0;
 
       grid.forEach((symbol, i) => {
@@ -478,7 +490,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "♦️",
     effectDescription:
       "Adjacent Diamonds and Hearts give Coin 1 more. Gives Coin 1 more if there are at least 3 Clubs, Diamonds, Hearts or Spades.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Count card symbols
       let cardCount = 0;
       grid.forEach((symbol) => {
@@ -511,7 +523,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🐶",
     effectDescription:
       "Gives Coin 2 more if adjacent to human characters. This effect only applies once per spin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
       const humanCharacters = [
         "robin_hood",
@@ -578,7 +590,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "👨‍🦰",
     effectDescription:
       "Destroys adjacent Beer and Wine. Gives Coin equal to 10x the value of symbols destroyed this way.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -609,7 +621,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "rare",
     emoji: "🟢",
     effectDescription: "Gives Coin 1 more if there are at least 2 Emerald.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let emeraldCount = 0;
 
       grid.forEach((symbol) => {
@@ -638,7 +650,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "👨‍🌾",
     effectDescription:
       "Adjacent food and farm-related symbols give 2x more Coin. Adjacent Seed are 50% more likely to grow.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier and growth chance handled in game logic
       return 0;
     },
@@ -650,7 +662,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "uncommon",
     emoji: "🎲",
     effectDescription: "Gives between Coin 1 and Coin 5 randomly.",
-    effect: function (): number {
+    effect: function (): effectResult {
       return Math.floor(Math.random() * 5) + 1;
     },
   },
@@ -661,7 +673,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "common",
     emoji: "🌸",
     effectDescription: "Gives Coin 1 more for each other Flower.",
-    effect: function (): number {
+    effect: function (): effectResult {
       return Math.floor(Math.random() * 5) + 1;
     },
   },
@@ -759,7 +771,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "♥️",
     effectDescription:
       "Adjacent Diamonds and Hearts give Coin 1 more. Gives Coin 1 more if there are at least 3 Clubs, Diamonds, Hearts or Spades.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Count card symbols
       let cardCount = 0;
       grid.forEach((symbol) => {
@@ -902,7 +914,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🃏",
     effectDescription:
       "Adjacent Clubs, Diamonds, Hearts and Spades give 2x more Coin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -924,7 +936,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "rare",
     emoji: "👑",
     effectDescription: "Adds Coin each spin. Adjacent Coin give 3x more Coin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -937,7 +949,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "💡",
     effectDescription:
       "Adjacent gems give 2x more Coin. Destroys itself after making other symbols give additional Coin 5 times.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect and self-destruction handled in game logic
       return 0;
     },
@@ -1078,7 +1090,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "👷",
     effectDescription:
       "Destroys adjacent Ore and Big Ore. Gives Coin 20 for each Ore and Big Ore destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -1098,7 +1110,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🐒",
     effectDescription:
       "Destroys adjacent Banana, Coconut and Coconut Half. Gives Coin equal to 6x the value of symbols destroyed this way.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -1111,7 +1123,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🌙",
     effectDescription:
       "Adjacent Owl, Rabbit and Wolf give 3x more Coin. Adds 3 Cheese when destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -1124,7 +1136,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🐭",
     effectDescription:
       "Destroys adjacent Cheese. Gives Coin 20 for each Cheese destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -1146,7 +1158,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "uncommon",
     emoji: "🥷",
     effectDescription: "Gives Coin 1 less for each other Ninja.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let ninjaCount = 0;
 
       grid.forEach((symbol, i) => {
@@ -1166,7 +1178,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🍳",
     effectDescription:
       "Gives Coin 2 more if adjacent to Cheese, Egg, Milk, Golden Egg or Omelette. This effect only applies once per spin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
 
       for (const adjIndex of adjacentIndices) {
@@ -1312,7 +1324,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🌧️",
     effectDescription:
       "Adjacent Flower give 2x more Coin. Adjacent Seed are 50% more likely to grow.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier and growth chance handled in game logic
       return 0;
     },
@@ -1343,7 +1355,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🏹",
     effectDescription:
       "Gives Coin 25 every 4 spins. Adjacent Thief, Bronze Arrow, Golden Arrow and Silver Arrow give Coin 3 more. Destroys adjacent Billionaire, Target and Apple. Gives Coin 15 for each Billionaire, Target and Apple destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Periodic effect and destruction effect handled in game logic
       return 0;
     },
@@ -1355,7 +1367,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "rare",
     emoji: "🔴",
     effectDescription: "Gives Coin 1 more if there are at least 2 Ruby.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let rubyCount = 0;
 
       grid.forEach((symbol) => {
@@ -1436,8 +1448,14 @@ export const symbolTypes: Symbol[] = [
     value: 0,
     rarity: "common",
     emoji: "🐌",
+    counter: 0,
     effectDescription: "Gives Coin 5 every 4 spins.",
     // Periodic effect handled in game logic
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
+      const currentCounter = grid[index]?.counter  || 0;
+      const isMultipleof5 = (currentCounter +1) % 5 === 0;
+      return { isDestroyed: false, bonusValue: isMultipleof5 ? 5 : 0 };
+    },
   },
   {
     id: "spades",
@@ -1447,7 +1465,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "♠️",
     effectDescription:
       "Adjacent Clubs and Spades give Coin 1 more. Gives Coin 1 more if there are at least 3 Clubs, Diamonds, Hearts or Spades.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Count card symbols
       let cardCount = 0;
       grid.forEach((symbol) => {
@@ -1478,7 +1496,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "rare",
     emoji: "🍓",
     effectDescription: "Gives Coin 1 more if there are at least 2 Strawberry.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let strawberryCount = 0;
 
       grid.forEach((symbol) => {
@@ -1498,7 +1516,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "☀️",
     effectDescription:
       "Adjacent Flower give 5x more Coin. Adjacent Seed are 50% more likely to grow.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier and growth chance handled in game logic
       return 0;
     },
@@ -1528,9 +1546,21 @@ export const symbolTypes: Symbol[] = [
     value: -1,
     rarity: "uncommon",
     emoji: "🦹",
+    counter: 0,
     effectDescription:
-      'Gives Coin ? when destroyed. "Coin ?" increases by Coin 4 each spin.',
+      "Gives ? coins when destroyed. Increases by 4 coins each spin.",
     // Variable value handled in game logic
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
+      // check symbol id on edges
+      const adjacentIndices = getAdjacentIndices(index);
+      for (const adjIndex of adjacentIndices) {
+        if (grid[adjIndex]?.id === "banana_peel") {
+          const currentCounter = grid[index]?.counter || 0;
+          return { isDestroyed: true, bonusValue: currentCounter * 4 };
+        }
+      }
+      return { isDestroyed: false, bonusValue: 0 };
+    },
   },
   {
     id: "three_sided_die",
@@ -1539,7 +1569,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "common",
     emoji: "🎲",
     effectDescription: "Gives between Coin 1 and Coin 3 randomly.",
-    effect: function (): number {
+    effect: function (): effectResult {
       return Math.floor(Math.random() * 3) + 1;
     },
   },
@@ -1561,7 +1591,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "👶",
     effectDescription:
       "Destroys adjacent Present, Candy, Piñata and Bubble. Gives Coin 6 for each Present, Candy, Piñata and Bubble destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Destruction effect handled in game logic
       return 0;
     },
@@ -1611,7 +1641,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "👾",
     effectDescription:
       "Adjacent Empty give Coin 1 more. Destroys itself if adjacent to 0 Empty. Gives Coin 8 when destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
       let emptyCount = 0;
 
@@ -1633,7 +1663,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🍎",
     effectDescription:
       "Adjacent Empty give Coin 1 more. Destroys itself if adjacent to 0 Empty. Gives Coin 8 when destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
       let emptyCount = 0;
 
@@ -1655,7 +1685,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🌑",
     effectDescription:
       "Adjacent Empty give Coin 1 more. Destroys itself if adjacent to 0 Empty. Gives Coin 8 when destroyed.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
       let emptyCount = 0;
 
@@ -1676,7 +1706,7 @@ export const symbolTypes: Symbol[] = [
     rarity: "very_rare",
     emoji: "🍉",
     effectDescription: "Gives Coin 1 more for each other Watermelon.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let watermelonCount = 0;
 
       grid.forEach((symbol, i) => {
@@ -1705,7 +1735,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🃏",
     effectDescription:
       "Gives Coin equal to the highest value among adjacent symbols.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const adjacentIndices = getAdjacentIndices(index);
       let highestValue = 0;
 
@@ -1737,7 +1767,7 @@ export const symbolTypes: Symbol[] = [
     emoji: "🧙‍♀️",
     effectDescription:
       "Adjacent Cat, Owl, Crow, Apple, Hex symbols, Eldritch Creature and Spirit give 2x more Coin.",
-    effect: function (grid: (Symbol | null)[], index: number): number {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Multiplier effect handled in game logic
       return 0;
     },
@@ -1822,11 +1852,25 @@ export function getRandomSymbol(timeRentPaid: number = 0): Symbol {
 // Get starting symbols for a new game
 export function getStartingSymbols(): Symbol[] {
   return [
-    JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cat"))),
-    JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cherry"))),
-    JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "coin"))),
-    JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "pearl"))),
-    JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "flower"))),
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cat"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cherry"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "coin"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "banana_peel"))),
+      tempId: crypto.randomUUID(),
+    },   {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "thief"))),
+      tempId: crypto.randomUUID(),
+    },
   ].filter(Boolean) as Symbol[];
 }
 

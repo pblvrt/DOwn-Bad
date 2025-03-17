@@ -1,7 +1,9 @@
 import React from "react";
 import { Symbol } from "@/types/game";
+import SymbolComponent from "@/components/game/Symbol";
 import styles from "@/styles/SymbolModal.module.css";
 import Modal from "@/components/ui/Modal";
+import { symbolTypes } from "@/lib/symbols";
 
 interface SymbolModalProps {
   symbol: Symbol | null;
@@ -29,6 +31,45 @@ const SymbolModal: React.FC<SymbolModalProps> = ({
     }
   };
 
+  const modifyDescription = (description: string) => {
+    if (!description) return null;
+
+    const result = [];
+    let currentIndex = 0;
+    let lastIndex = 0;
+
+    const regex = /<([^>]*)>/g;
+    let match;
+
+    while ((match = regex.exec(description)) !== null) {
+      // Add text before the match
+      if (match.index > lastIndex) {
+        result.push(description.substring(lastIndex, match.index));
+      }
+
+      // Add the symbol component
+      const symbolId = match[1];
+      const symbolType = symbolTypes.find((s) => s.id === symbolId);
+
+      if (symbolType) {
+        result.push(
+          <SymbolComponent key={currentIndex++} symbol={symbolType} />
+        );
+      } else {
+        result.push(match[0]);
+      }
+
+      lastIndex = regex.lastIndex;
+    }
+
+    // Add any remaining text
+    if (lastIndex < description.length) {
+      result.push(description.substring(lastIndex));
+    }
+
+    return result;
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} className={getRarityClass()}>
       <div className={styles.symbolHeader}>
@@ -42,6 +83,12 @@ const SymbolModal: React.FC<SymbolModalProps> = ({
           <span className={styles.detailLabel}>Base Value:</span>
           <span className={styles.detailValue}>{symbol.value} 🪙</span>
         </div>
+        {symbol.counter !== undefined && (
+          <div className={styles.detailRow}>
+            <span className={styles.detailLabel}>Counter:</span>
+            <span className={styles.detailValue}>{symbol.counter}</span>
+          </div>
+        )}
 
         {symbol.bonusValue !== undefined && (
           <div className={styles.detailRow}>
@@ -54,7 +101,7 @@ const SymbolModal: React.FC<SymbolModalProps> = ({
           <div className={styles.effectBox}>
             <h3 className={styles.effectTitle}>Special Effect</h3>
             <p className={styles.effectDescription}>
-              {symbol.effectDescription}
+              {modifyDescription(symbol.effectDescription)}
             </p>
           </div>
         )}

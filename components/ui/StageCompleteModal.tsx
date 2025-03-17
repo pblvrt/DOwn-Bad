@@ -43,14 +43,11 @@ export default function StageCompleteModal() {
   ]);
 
   const handleContinue = () => {
-    dispatch({ type: "CONTINUE_GAME" });
+    dispatch({ type: "CLOSE_COMPLETED_STAGE" });
     setIsOpen(false);
   };
 
-  const handleShop = () => {
-    dispatch({ type: "OPEN_SHOP" });
-    setIsOpen(false);
-  };
+
 
   return (
     <Modal
@@ -96,9 +93,6 @@ export default function StageCompleteModal() {
         </div>
 
         <div className={styles.buttonGroup}>
-          <button onClick={handleShop} className={styles.shopButton}>
-            Visit Shop
-          </button>
           <button onClick={handleContinue} className={styles.continueButton}>
             Continue
           </button>

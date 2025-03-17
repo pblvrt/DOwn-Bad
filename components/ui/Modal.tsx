@@ -23,13 +23,24 @@ const Modal: React.FC<ModalProps> = ({
 
   // Close modal when clicking outside
   useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
+        onClose();
+      }
+    };
+
     if (isOpen) {
       // Prevent scrolling when modal is open
       document.body.style.overflow = "hidden";
+      document.addEventListener("mousedown", handleOutsideClick);
     }
 
     return () => {
       document.body.style.overflow = "auto";
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [isOpen, onClose]);
 

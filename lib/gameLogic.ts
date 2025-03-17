@@ -41,15 +41,10 @@ export function updateGridWithSymbols(symbols: Symbol[]): (Symbol | null)[] {
 }
 
 export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
+  console.log("spinGrid", symbols);
   // Create a new grid with updated symbols
   const newGrid = updateGridWithSymbols(symbols);
 
-  // Reset bonus values
-  newGrid.forEach((symbol) => {
-    if (symbol) {
-      symbol.bonusValue = 0;
-    }
-  });
 
   // Calculate base coins from symbols
   let baseCoins = 0;
@@ -63,19 +58,67 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
   let bonusCoins = 0;
   const newEffectGrid = newGrid.map((symbol, index) => {
     if (symbol && symbol.effect) {
-      const bonusValue = symbol.effect(newGrid, index);
-      bonusCoins += bonusValue;
-      return bonusValue === 0 ? null : bonusValue;
+      const effectResult = symbol.effect(newGrid, index);
+      bonusCoins += effectResult.bonusValue;
+
+      // Update the symbol in the newGrid directly
+      if (symbol) {
+        symbol.bonusValue = effectResult.bonusValue;
+      }
+
+      return effectResult;
     }
     return null;
   });
 
-  
+  // Update the original symbols array with values from newGrid
+  // Create a map for faster lookup
+  const gridSymbolsMap = new Map();
+  newGrid.forEach((symbol) => {
+    if (symbol && symbol.tempId) {
+      gridSymbolsMap.set(symbol.tempId, symbol);
+    }
+  });
+
+  // Update original symbols with data from the grid and track symbols to remove
+  const symbolsToKeep: Symbol[] = [];
+  symbols.forEach((symbol) => {
+    const gridSymbol = gridSymbolsMap.get(symbol.tempId);
+    if (gridSymbol) {
+      symbol.bonusValue = gridSymbol.bonusValue || 0;
+
+      // Increment counter if it exists
+      if (symbol.counter !== undefined) {
+        symbol.counter += 1;
+      }
+
+      // Instead of looking for effect.symbol, find the index of this symbol in the grid
+      // and check if there's a destruction effect at that index
+      let shouldDestroy = false;
+      newGrid.forEach((gridItem, gridIndex) => {
+        if (gridItem && gridItem.tempId === symbol.tempId) {
+          const effect = newEffectGrid[gridIndex];
+          if (effect && effect.isDestroyed) {
+            shouldDestroy = true;
+          }
+        }
+      });
+
+      if (!shouldDestroy) {
+        symbolsToKeep.push(symbol);
+      }
+    } else {
+      // If not found in grid, keep it (it wasn't placed this round)
+      symbolsToKeep.push(symbol);
+    }
+  });
+
   return {
     grid: newGrid,
     effectGrid: newEffectGrid,
     baseCoins,
     bonusCoins,
+    symbols: symbolsToKeep, // Return filtered symbols array
   };
 }
 

@@ -5,7 +5,7 @@ import { useGameState } from "@/context/GameStateProvider";
 const ProgressBar: React.FC = () => {
   const { state } = useGameState();
   const { isSpinning } = state;
-  const [coins, setCoins] = useState(0);
+  const [coins, setCoins] = useState(state.coins);
   const [floor, setFloor] = useState(0);
   const animationQueue = useRef<Array<{ value: number; delay: number }>>([]);
   const isAnimating = useRef(false);
@@ -13,7 +13,7 @@ const ProgressBar: React.FC = () => {
   useEffect(() => {
     if (state.floor !== floor) {
       setFloor(state.floor);
-      setCoins(state.coins);
+      setCoins(coins );
     }
   }, [state.floor]);
 
@@ -51,8 +51,8 @@ const ProgressBar: React.FC = () => {
       );
 
       notNullEffects.forEach((effect) => {
-        if (effect !== null) {
-          currentCoins += effect;
+        if (effect !== null && effect.bonusValue > 0) {
+          currentCoins += effect.bonusValue;
           animationQueue.current.push({
             value: currentCoins,
             delay: 1000, // 1 second delay between animations
@@ -66,7 +66,6 @@ const ProgressBar: React.FC = () => {
         }
         return acc;
       }, 0);
-      console.log("totalCoinsNoEffect", totalCoinsNoEffect, state.grid);
       // Add base coins at the end if there are any
       if (totalCoinsNoEffect > 0) {
         currentCoins += totalCoinsNoEffect;

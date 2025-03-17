@@ -2,46 +2,68 @@
 
 import { useGameState } from "@/context/GameStateProvider";
 import { spinGrid } from "@/lib/gameLogic";
+import { cellTriggeringEffects } from "@/lib/utils";
 import styles from "@/styles/Home.module.css";
 
 export default function SpinButton() {
   const { state, dispatch } = useGameState();
 
-  const handleSpin = () => {
-    dispatch({ type: "START_SPIN_GRID" });
-    // Play spin sound
-    const audio = document.getElementById("spin-sound") as HTMLAudioElement;
-    if (state.soundEnabled && audio) {
-      audio.currentTime = 0;
-      audio.play().catch((e) => console.log("Error playing sound:", e));
-    }
+  const playSpinSound = () => {
+    if (!state.soundEnabled) return;
 
+    const audio = new Audio("/spin.wav");
+    audio.play().catch((e) => console.log("Error playing sound:", e));
+
+    // Stop the sound after 3 seconds
+    setTimeout(() => {
+      audio.pause();
+      audio.currentTime = 0;
+    }, 1000);
+  };
+
+  const processSpinResults = (spinResults) => {
     const {
       grid: newGrid,
       baseCoins,
       bonusCoins,
       effectGrid,
-    } = spinGrid(state.grid, state.symbols);
-    dispatch({ type: "UPDATE_GRID", payload: newGrid });
+      symbols,
+    } = spinResults;
+
+    dispatch({ type: "UPDATE_GRID", payload: { grid: newGrid, symbols } });
     dispatch({ type: "UPDATE_EFFECT_GRID", payload: effectGrid });
     dispatch({
       type: "ADD_COINS",
-      payload: {
-        baseCoins: baseCoins,
-        bonusCoins: bonusCoins,
-      },
+      payload: { baseCoins, bonusCoins },
     });
-    const notNullEffectGrid = effectGrid.filter((effect) => effect !== null);
+  };
+
+  const scheduleEndOfTurn = (effectGrid) => {
+    const effectsDuration = 1000 * cellTriggeringEffects(effectGrid);
+    const totalDelay = effectsDuration + 1400 + 2000;
+
     setTimeout(() => {
       dispatch({ type: "DECREASE_TURNS" });
-    }, notNullEffectGrid.length * 1000 + 1400 + 2000);
+    }, totalDelay);
   };
+
+  const handleSpin = () => {
+    dispatch({ type: "START_SPIN_GRID" });
+    playSpinSound();
+
+    const spinResults = spinGrid(state.grid, state.symbols);
+    processSpinResults(spinResults);
+    scheduleEndOfTurn(spinResults.effectGrid);
+  };
+
+  const currentTurn = state.turn + 1;
+  const totalTurns = state.rentSchedule[state.floor].turns + 1;
 
   return (
     <button onClick={handleSpin} className={styles.spinButton}>
       SPIN
       <span className={styles.spinButtonText}>
-        Turn: {state.turn + 1} / {state.rentSchedule[state.floor].turns + 1}
+        Turn: {currentTurn} / {totalTurns}
       </span>
     </button>
   );

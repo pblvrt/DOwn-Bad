@@ -1,3 +1,5 @@
+import { effectResult } from "@/types/game";
+
 // Get adjacent indices for a given index in a 5x5 grid
 export function getAdjacentIndices(index: number): number[] {
   const row = Math.floor(index / 5);
@@ -17,6 +19,10 @@ export function getAdjacentIndices(index: number): number[] {
   if (col > 0) adjacentIndices.push(index - 1);
 
   return adjacentIndices;
+}
+
+export function cellTriggeringEffects(effectResult: (effectResult | null)[]): number {
+  return effectResult.filter((effect) => effect?.bonusValue && effect.bonusValue > 0).length;
 }
 
 // Fisher-Yates shuffle algorithm

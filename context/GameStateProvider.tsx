@@ -6,21 +6,11 @@ import {
   useReducer,
   useEffect,
   ReactNode,
+  useState,
 } from "react";
 import { getStartingSymbols } from "@/lib/symbols";
 import { updateGridWithSymbols } from "@/lib/gameLogic";
-
-// Define types
-type Symbol = {
-  id: string;
-  name: string;
-  value: number;
-  rarity: "common" | "uncommon" | "rare";
-  emoji: string;
-  effectDescription?: string;
-  bonusValue?: number;
-  effect?: (grid: (Symbol | null)[], index: number) => number;
-};
+import { effectResult, Symbol } from "@/types/game";
 
 type RentSchedule = {
   rent: number;
@@ -34,7 +24,7 @@ type GameState = {
   turn: number;
   isSpinning: boolean;
   grid: (Symbol | null)[];
-  effectGrid: (number | null)[];
+  effectGrid: (effectResult | null)[];
   symbols: Symbol[];
   soundEnabled: boolean;
   floor: number;
@@ -47,7 +37,7 @@ type GameState = {
 
 type GameAction =
   | { type: "PAY_RENT" }
-  | { type: "UPDATE_GRID"; payload: (Symbol | null)[] }
+  | { type: "UPDATE_GRID"; payload: { grid: (Symbol | null)[]; symbols: Symbol[] } }
   | { type: "ADD_SYMBOL"; payload: Symbol }
   | { type: "STOP_SPIN_GRID" }
   | { type: "DECREASE_TURNS" }
@@ -59,8 +49,9 @@ type GameAction =
   | { type: "CLOSE_SHOP" }
   | { type: "SET_TUTORIAL_SEEN" }
   | { type: "START_GAME" }
-  | { type: "UPDATE_EFFECT_GRID"; payload: (number | null)[] }
-  | { type: "ADD_COINS"; payload: { baseCoins: number; bonusCoins: number } };
+  | { type: "UPDATE_EFFECT_GRID"; payload: (effectResult | null)[] }
+  | { type: "ADD_COINS"; payload: { baseCoins: number; bonusCoins: number } }
+  | { type: "CLOSE_COMPLETED_STAGE" }
 
 const GameStateContext = createContext<
   | {
@@ -126,7 +117,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         floor: state.floor + 1,
       };
     case "UPDATE_GRID":
-      return { ...state, grid: action.payload };
+      return { ...state, grid: action.payload.grid, symbols: action.payload.symbols };
     case "UPDATE_EFFECT_GRID":
       return { ...state, effectGrid: action.payload };
     case "START_SPIN_GRID":
@@ -165,6 +156,8 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, shopOpen: !state.shopOpen };
     case "CLOSE_SHOP":
       return { ...state, shopOpen: false };
+    case "CLOSE_COMPLETED_STAGE":
+      return { ...state, stageComplete: false, shopOpen: true };
     default:
       return state;
   }
@@ -172,19 +165,22 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
 export function GameStateProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, initialState);
-
+  const [isLoading, setIsLoading] = useState(true);
   // Load saved game on mount
   useEffect(() => {
     const savedGame = localStorage.getItem("landlordLuckSave");
-    if (savedGame) {
-      dispatch({ type: "LOAD_GAME", payload: JSON.parse(savedGame) });
-    }
+    // if (savedGame) {
+    //   dispatch({ type: "LOAD_GAME", payload: JSON.parse(savedGame) });
+    // }
+    setIsLoading(false);
   }, []);
 
   // Save game when state changes
   useEffect(() => {
-    localStorage.setItem("landlordLuckSave", JSON.stringify(state));
-  }, [state]);
+    if (!isLoading) {
+      localStorage.setItem("landlordLuckSave", JSON.stringify(state));
+    }
+  }, [state, isLoading]);
 
   return (
     <GameStateContext.Provider value={{ state, dispatch }}>

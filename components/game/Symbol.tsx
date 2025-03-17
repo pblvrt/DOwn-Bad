@@ -6,6 +6,7 @@ import styles from "@/styles/GameCell.module.css";
 import RewardAnimation from "./RewardAnimation";
 import { useGameState } from "@/context/GameStateProvider";
 import SymbolModal from "./SymbolModal";
+import { cellTriggeringEffects } from "@/lib/utils";
 
 type SymbolProps = {
   symbol: Symbol | null;
@@ -63,17 +64,17 @@ export default function SymbolComponent({
       }
 
       // First show effect animations in sequence
-      const effectDelay = 1000 * cellsNotNullBeforePosition.length;
+      const effectDelay = 1000 * cellTriggeringEffects(cellsNotNullBeforePosition);
       let timerEffect: NodeJS.Timeout | undefined;
 
-      if (state.effectGrid[position] !== null) {
+      if (state.effectGrid[position]?.bonusValue && state.effectGrid[position]?.bonusValue > 0) {
         timerEffect = setTimeout(() => {
           setTriggerEffectReward(true);
         }, effectDelay);
       }
 
       // Then show reward animations after all effects
-      const totalEffectDelay = 1000 * cellsWithEffect.length;
+      const totalEffectDelay = 1000 * cellTriggeringEffects(cellsWithEffect);
       const rewardDelay = totalEffectDelay ; // Add a small buffer after effects
 
       const timer = setTimeout(() => {
@@ -121,12 +122,13 @@ export default function SymbolComponent({
       {showReward && (
         <RewardAnimation
           key={position + "effect"}
-          value={state.effectGrid[position] || 0}
+          value={state.effectGrid[position]?.bonusValue || 0}
           isTriggered={triggerEffectReward}
           isEffect={true}
           onAnimationComplete={handleEffectAnimationComplete}
           position={symbolPosition}
           targetPosition={targetPosition}
+          soundUrl={"/specialEffect.wav"}
         />
       )}
       {showReward && (
@@ -137,6 +139,7 @@ export default function SymbolComponent({
           onAnimationComplete={handleAnimationComplete}
           position={symbolPosition}
           targetPosition={targetPosition}
+          soundUrl={"/coin.wav"}
         />
       )}
       {showModal && (
