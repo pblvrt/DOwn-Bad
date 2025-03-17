@@ -109,13 +109,11 @@ export default function Shop() {
     >
       <div className={styles.modalHeader}>
         <div className={styles.infoItem}>
-          <span className={styles.infoIcon}>ⓘ</span>
           <span>
-            Symbol Count: <span className={styles.redText}>30</span>
+            Symbol Count: <span className={styles.redText}>{state.symbols.length}</span>
           </span>
         </div>
         <div className={styles.infoItem}>
-          <span className={styles.infoIcon}>ⓘ</span>
           <span>
             Luck Modifier: <span className={styles.luckText}>x1.32 🍀</span>
           </span>

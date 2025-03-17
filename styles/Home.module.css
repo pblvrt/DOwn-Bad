@@ -70,27 +70,24 @@
 
 
 
-/* Spin button styling */
-.spinButtonContainer {
-  margin: 15px 0;
+.spinButton {
+  width: 240px;
+  height: 120px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-.spinButton {
-  width: 160px;
-  height: 80px;
-  background: linear-gradient(to bottom, #4aff4a, #2a9a2a);
-  border-radius: 15px;
-  border: none;
-  box-shadow: 0 4px 0 #1a7a1a;
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.1s;
+.spinButton:hover {
+  transform: scale(1.03);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+}
+
+.spinButton:active {
+  transform: scale(0.98);
 }
 
 .spinButtonText {

@@ -9,8 +9,8 @@ export default function Header() {
         <p className={styles.version}>v0.0.1</p>
       </div>
       <div className={styles.links}>
-        <p className={styles.link}>Twitter</p>
-        <p className={styles.link}>Discord</p>
+        <p className={styles.link}> <a href="https://x.com/pblvrt" target="_blank" rel="noopener noreferrer">X</a></p>
+        <p className={styles.link}> <a href="https://github.com/pblvrt/DOwn-Bad" target="_blank" rel="noopener noreferrer">Github</a></p>
       </div>
     </div>
   );
