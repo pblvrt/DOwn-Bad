@@ -1,7 +1,9 @@
 .stageModal {
-  background: linear-gradient(to bottom, #3a5a2a, #2a4a1a);
-  max-width: 450px;
+  background: linear-gradient(to bottom, #2a3a7a, #1a2a5a);
+  max-width: 500px;
   color: white;
+  box-sizing: border-box;
+  border: 2px solid #4b2882bb;
 }
 
 .modalContent {

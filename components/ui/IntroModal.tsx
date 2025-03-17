@@ -104,7 +104,6 @@ export default function IntroModal() {
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Welcome to Symbol Slots!"
       className={styles.introModal}
     >
       <div className={styles.modalContent}>
@@ -120,32 +119,12 @@ export default function IntroModal() {
           </p>
         </div>
 
-        {/* <div className={styles.introSection}>
-          <h3>💰 Special Symbols</h3>
-          <p>Look out for special symbols with unique effects:</p>
-          <div className={styles.symbolGrid}>
-            <div className={styles.symbolItem}>
-              <span className={styles.symbolEmoji}>🍀</span>
-              <span>Luck</span>
-            </div>
-            <div className={styles.symbolItem}>
-              <span className={styles.symbolEmoji}>💎</span>
-              <span>Bonus</span>
-            </div>
-            <div className={styles.symbolItem}>
-              <span className={styles.symbolEmoji}>🔄</span>
-              <span>Respin</span>
-            </div>
-            <div className={styles.symbolItem}>
-              <span className={styles.symbolEmoji}>⭐</span>
-              <span>Wild</span>
-            </div>
-          </div>
-        </div> */}
-
         <div className={styles.introSection}>
-          <h3>🏆 Goal</h3>
-          <p>See how many floors you can climb before you run out of coins!</p>
+          <h3> PWA support </h3>
+          <p>
+            For the best experience, install this app on your phone by adding
+            it to your home screen from the share menu.
+          </p>
         </div>
 
         <button onClick={handleClose} className={styles.startButton}>

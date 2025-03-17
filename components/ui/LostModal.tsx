@@ -41,7 +41,6 @@ export default function LostModal() {
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Game Over!"
       className={styles.lostModal}
     >
       <div className={styles.modalContent}>

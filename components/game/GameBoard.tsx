@@ -5,17 +5,16 @@ import { useEffect, useRef, useMemo, useCallback } from "react";
 import styles from "@/styles/GameBoard.module.css";
 import { symbolTypes } from "@/lib/symbols";
 import SymbolComponent from "./Symbol";
-
+import { CELL_NUMBER, GRID_SIZE } from "@/lib/constants";
 export default function GameBoard() {
   const { state, dispatch } = useGameState();
   const { grid, isSpinning } = state;
-  const slotRefs = useRef<(HTMLDivElement | null)[]>(Array(25).fill(null));
-  const GRID_SIZE = 5; // Constant for grid dimensions
+  const slotRefs = useRef<(HTMLDivElement | null)[]>(Array(CELL_NUMBER).fill(null));
 
   // Memoize the spin slots function to prevent unnecessary recreations
   const spinSlots = useCallback(() => {
     // For each cell in the grid
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < CELL_NUMBER; i++) {
       const ref = slotRefs.current[i];
       if (ref) {
         // Reset position first
@@ -31,7 +30,7 @@ export default function GameBoard() {
 
           const options = ref.children;
           // We want to end with the final symbol (which is the last in our array) visible
-          const finalPosition = -(options.length - 1) * 4; // 4rem is the height of each cell
+          const finalPosition = -(options.length - 1) * 5; // 4rem is the height of each cell
           ref.style.transition = "top 0.7s ease-out";
           ref.style.top = `${finalPosition}rem`;
         }, Math.floor(i / GRID_SIZE)); // Stagger by row
@@ -55,7 +54,7 @@ export default function GameBoard() {
   const renderSpinningColumns = useMemo(() => {
     const columns = [];
 
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < CELL_NUMBER; i++) {
       const row = Math.floor(i / GRID_SIZE);
       const col = i % GRID_SIZE;
       const columnSymbols = [];

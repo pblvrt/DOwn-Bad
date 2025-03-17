@@ -255,13 +255,7 @@
     "Destroys itself and all adjacent symbols. Symbols destroyed this way give Coin equal to 7x their value.",
   // Destruction effect handled in game logic
 },
-{
-  id: "milk",
-  name: "Milk",
-  value: 1,
-  rarity: "common",
-  emoji: "🥛",
-},
+
 {
   id: "mine",
   name: "Mine",

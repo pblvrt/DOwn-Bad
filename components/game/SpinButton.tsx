@@ -5,7 +5,7 @@ import { spinGrid } from "@/lib/gameLogic";
 import { totalDelayUntilPos } from "@/lib/utils";
 import styles from "@/styles/Home.module.css";
 import { effectResult, Symbol } from "@/types/game";
-
+import { CELL_NUMBER } from "@/lib/constants";
 export default function SpinButton() {
   const { state, dispatch } = useGameState();
 
@@ -46,7 +46,7 @@ export default function SpinButton() {
   };
 
   const scheduleEndOfTurn = (effectGrid: (effectResult | null)[]) => {
-    const totalDelay = totalDelayUntilPos(effectGrid, 25) + 3000;
+    const totalDelay = totalDelayUntilPos(effectGrid, CELL_NUMBER) + 3000;
 
     setTimeout(() => {
       dispatch({ type: "DECREASE_TURNS" });

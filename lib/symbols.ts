@@ -36,9 +36,9 @@ export const symbolTypes: Symbol[] = [
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
       // Check if in corner (0, 4, 20, 24 for a 5x5 grid)
       const multiplier = adjacentSymbolMoneyModifier(grid, index, "other");
-      const corners = [0, 4, 20, 24];
+      const corners = [0, 3, 11, 15];
       if (corners.includes(index)) {
-        return { isDestroyed: false, bonusValue: 4 * multiplier };
+        return { isDestroyed: false, bonusValue: 4 * (1 + multiplier) };
       }
       return { isDestroyed: false, bonusValue: 1 * multiplier };
     },
@@ -446,7 +446,23 @@ export const symbolTypes: Symbol[] = [
       );
       const isAdjacent = isAdjacentToSymbols(grid, index, ["milk"]);
       if (isAdjacent) {
-        return { isDestroyed: true, bonusValue: 9 * multiplier };
+        return { isDestroyed: false, bonusValue: 9 + (1 * multiplier) };
+      }
+      return { isDestroyed: false, bonusValue: 1 * multiplier };
+    },
+  },
+  {
+    id: "milk",
+    name: "Milk",
+    value: 1,
+    rarity: "common",
+    emoji: "🥛",
+    type: "food",
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
+      const multiplier = adjacentSymbolMoneyModifier(grid, index, "food");
+      const isAdjacent = isAdjacentToSymbols(grid, index, ["cat"]);
+      if (isAdjacent) {
+        return { isDestroyed: true, bonusValue: 1 * multiplier };
       }
       return { isDestroyed: false, bonusValue: 1 * multiplier };
     },
@@ -890,9 +906,10 @@ export const symbolTypes: Symbol[] = [
     effectDescription:
       "Destroys adjacent Beer and Wine. Gives Coin equal to 10x the value of symbols destroyed this way.",
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
-      const adjacentSymbols = getAdjacentSymbols(grid, index);
+      const adjacentSymbols = getAdjacentSymbols(grid, index)
+      
       const destroyedSymbols = adjacentSymbols.filter(
-        (symbol) => symbol.id === "beer" || symbol.id === "wine"
+        (symbol) => symbol?.id === "beer" || symbol?.id === "wine"
       );
       const destroyedValue = destroyedSymbols.reduce((acc, symbol) => {
         return acc + symbol.value;
@@ -981,6 +998,7 @@ export const symbolTypes: Symbol[] = [
     effectDescription: "Gives Coin 1 more for each other Flower.",
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
       let flowerCount = 0;
+      const isAdjacent = isAdjacentToSymbols(grid, index, ["bee"]);
 
       grid.forEach((symbol, i) => {
         if (i !== index && symbol && symbol.id === "flower") {
@@ -988,7 +1006,7 @@ export const symbolTypes: Symbol[] = [
         }
       });
 
-      return { isDestroyed: false, bonusValue: flowerCount };
+      return { isDestroyed: false, bonusValue: flowerCount * (isAdjacent ? 2 : 1) };
     },
   },
   {
@@ -1375,7 +1393,7 @@ export const symbolTypes: Symbol[] = [
       const isAdjacent = isAdjacentToSymbols(grid, index, ["key", "magic_key"]);
 
       if (isAdjacent) {
-        return { isDestroyed: true, bonusValue: 15 * multiplier };
+        return { isDestroyed: true, bonusValue: 15 * (1 + multiplier) };
       }
 
       return { isDestroyed: false, bonusValue: 1 * multiplier };
@@ -1940,7 +1958,7 @@ export function getStartingSymbols(): Symbol[] {
     },
     {
       ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "banana_peel"))
+        JSON.stringify(symbolTypes.find((s) => s.id === "flower"))
       ),
       tempId: crypto.randomUUID(),
     },

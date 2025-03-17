@@ -24,13 +24,10 @@ export default function Home() {
         <Header />
         <GameBoard />
         <Inventory />
-
         <ProgressBar />
-
         <div className={styles.spinButtonContainer}>
           <SpinButton />
         </div>
-
         <div className={styles.actionButtons}>
           <button className={styles.actionButton}>
             <span className={styles.notificationBadge}>7</span>
@@ -41,7 +38,6 @@ export default function Home() {
             🔔
           </button>
         </div>
-
         <div className={styles.bottomNav}>
           <div className={styles.navItem}>
             <span className={styles.navBadge}>3</span>

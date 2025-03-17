@@ -1,7 +1,7 @@
 .gameGrid {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   background-color: transparent;
   border-radius: 0.6rem;
   overflow: hidden;
@@ -18,7 +18,7 @@
 .slotColumn {
   position: relative;
   overflow: hidden;
-  height: 4rem;
+  height: 5rem;
   width: 100%;
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
   box-sizing: border-box;

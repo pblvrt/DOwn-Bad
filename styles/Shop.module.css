@@ -39,7 +39,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  padding: 1rem;
+  padding: rem;
   box-sizing: border-box;
 }
 
@@ -47,7 +47,6 @@
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
-  border-top: 1px solid #eee;
 }
 
 .buttonGroup {
@@ -91,10 +90,6 @@
   
   .infoIcon {
     color: #aaa;
-  }
-  
-  .shopFooter {
-    border-top: 1px solid #333;
   }
   
   .backButton {

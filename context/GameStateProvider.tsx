@@ -149,7 +149,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     case "TOGGLE_SOUND":
       return { ...state, soundEnabled: !state.soundEnabled };
     case "RESET_GAME":
-      return initialState;
+      return { ...initialState, tutorialSeen: true };
     case "LOAD_GAME":
       return { ...action.payload };
     case "TOGGLE_SHOP":

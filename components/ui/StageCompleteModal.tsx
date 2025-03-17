@@ -53,11 +53,9 @@ export default function StageCompleteModal() {
     <Modal
       isOpen={isOpen}
       onClose={handleContinue}
-      title="Floor Complete!"
       className={styles.stageModal}
     >
       <div className={styles.modalContent}>
-        <div className={styles.confetti}>🎉</div>
 
         <div className={styles.stageInfo}>
           <h3>Floor {stageData.floor} Completed!</h3>

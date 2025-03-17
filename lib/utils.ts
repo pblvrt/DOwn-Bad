@@ -1,50 +1,61 @@
 import { ANIMATION_DELAYS } from "@/hooks/useAnimationTimers";
 import { effectResult, Symbol } from "@/types/game";
 
-// Get adjacent indices for a given index in a 5x5 grid (including diagonals)
+// Get adjacent indices for a given index in a 4x4 grid (including diagonals)
 export function getAdjacentIndices(index: number): number[] {
-  const row = Math.floor(index / 5);
-  const col = index % 5;
+  const row = Math.floor(index / 4);
+  const col = index % 4;
   const adjacentIndices: number[] = [];
 
   // Check top
-  if (row > 0) adjacentIndices.push(index - 5);
+  if (row > 0) adjacentIndices.push(index - 4);
 
   // Check top-right
-  if (row > 0 && col < 4) adjacentIndices.push(index - 5 + 1);
+  if (row > 0 && col < 3) adjacentIndices.push(index - 4 + 1);
 
   // Check right
-  if (col < 4) adjacentIndices.push(index + 1);
+  if (col < 3) adjacentIndices.push(index + 1);
 
   // Check bottom-right
-  if (row < 4 && col < 4) adjacentIndices.push(index + 5 + 1);
+  if (row < 3 && col < 3) adjacentIndices.push(index + 4 + 1);
 
   // Check bottom
-  if (row < 4) adjacentIndices.push(index + 5);
+  if (row < 3) adjacentIndices.push(index + 4);
 
   // Check bottom-left
-  if (row < 4 && col > 0) adjacentIndices.push(index + 5 - 1);
+  if (row < 3 && col > 0) adjacentIndices.push(index + 4 - 1);
 
   // Check left
   if (col > 0) adjacentIndices.push(index - 1);
 
   // Check top-left
-  if (row > 0 && col > 0) adjacentIndices.push(index - 5 - 1);
+  if (row > 0 && col > 0) adjacentIndices.push(index - 4 - 1);
 
   return adjacentIndices;
 }
 
-export function getAdjacentSymbols(grid: (Symbol | null)[], index: number): Symbol[] {
+export function getAdjacentSymbols(
+  grid: (Symbol | null)[],
+  index: number
+): Symbol[] {
   const adjacentIndices = getAdjacentIndices(index);
   return adjacentIndices.map((i) => grid[i]).filter((s) => s !== null);
 }
 
-export function isAdjacentToSymbols(grid: (Symbol | null)[], index: number, symbols: string[]): boolean {
+export function isAdjacentToSymbols(
+  grid: (Symbol | null)[],
+  index: number,
+  symbols: string[]
+): boolean {
   const adjacentIndices = getAdjacentIndices(index);
   return adjacentIndices.some((i) => symbols.includes(grid[i]?.id || ""));
 }
 
-export function adjacentSymbolMoneyModifier(grid: (Symbol | null)[], index: number, type: Symbol["type"]): number {
+export function adjacentSymbolMoneyModifier(
+  grid: (Symbol | null)[],
+  index: number,
+  type: Symbol["type"]
+): number {
   const adjacentSymbols = getAdjacentSymbols(grid, index);
   const currentSymbol = grid[index];
   let moneyModifier = 0;
@@ -60,7 +71,12 @@ export function adjacentSymbolMoneyModifier(grid: (Symbol | null)[], index: numb
     moneyModifier += 2;
   }
 
-  if (["banana", "banana_peel", "dog", "monkey", "toddler", "joker"].includes(currentSymbol?.id || "") && adjacentSymbols.some((s) => s?.id === "comedian")) {
+  if (
+    ["banana", "banana_peel", "dog", "monkey", "toddler", "joker"].includes(
+      currentSymbol?.id || ""
+    ) &&
+    adjacentSymbols.some((s) => s?.id === "comedian")
+  ) {
     moneyModifier += 3;
   }
 

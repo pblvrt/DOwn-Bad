@@ -100,9 +100,9 @@ const SymbolModal: React.FC<SymbolModalProps> = ({
         {symbol.effectDescription && (
           <div className={styles.effectBox}>
             <h3 className={styles.effectTitle}>Special Effect</h3>
-            <p className={styles.effectDescription}>
+            <div className={styles.effectDescription}>
               {modifyDescription(symbol.effectDescription)}
-            </p>
+            </div>
           </div>
         )}
       </div>

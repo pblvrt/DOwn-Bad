@@ -1,10 +1,10 @@
 import { Symbol } from "@/types/game";
 import { symbolTypes } from "./symbols";
 import { shuffleArray } from "./utils";
-
+import { CELL_NUMBER } from "./constants";
 export function updateGridWithSymbols(symbols: Symbol[]): (Symbol | null)[] {
   // Create a new grid
-  const grid: (Symbol | null)[] = Array(25).fill(null);
+  const grid: (Symbol | null)[] = Array(CELL_NUMBER).fill(null);
 
   // Create a copy of the symbols array
   let symbolsToPlace = [...symbols];
@@ -15,7 +15,7 @@ export function updateGridWithSymbols(symbols: Symbol[]): (Symbol | null)[] {
   }
 
   // Create an array of available positions (0-24)
-  let availablePositions = Array.from({ length: 25 }, (_, i) => i);
+  let availablePositions = Array.from({ length: CELL_NUMBER }, (_, i) => i);
 
   // Shuffle the positions
   availablePositions = shuffleArray(availablePositions);
