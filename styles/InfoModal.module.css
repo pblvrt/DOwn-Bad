@@ -1,0 +1,393 @@
+.infoModal {
+  background: linear-gradient(to bottom, #2a3a5a, #1a2a4a);
+  border: 2px solid #4a6aaa;
+  border-radius: 12px;
+}
+
+
+
+.infoTitle {
+  font-size: 24px;
+  color: #ffcc00;
+  margin: 0;
+  text-align: center;
+}
+
+.infoContent {
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 20px;
+}
+
+.infoDescription {
+  margin-bottom: 20px;
+  color: #e0e0e0;
+}
+
+.animationBox {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exampleBox {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.exampleTitle {
+  color: #4aff4a;
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.exampleText {
+  color: #e0e0e0;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Animation styles */
+.animationContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Destroy animation - completely redone */
+.destroySequence {
+  position: relative;
+  display: inline-block;
+  animation: shake 0.5s ease-in-out 1s forwards;
+}
+
+.symbolToDestroy {
+  font-size: 2.5rem;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.explosionOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  font-size: 3rem;
+  z-index: 2;
+  opacity: 0;
+  animation: explodeIn 0.3s ease-out 1.5s forwards, stayVisible 5s ease-out 1.8s forwards;
+}
+
+.destroyEffect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.5s ease-out 1.8s forwards;
+}
+
+.explosion {
+  font-size: 3rem;
+  filter: drop-shadow(0 0 10px rgba(255, 100, 100, 0.8));
+  animation: bounce 0.8s ease-in-out 2s infinite;
+}
+
+.coinReward {
+  color: #ffcc00;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+  text-shadow: 0 0 5px rgba(255, 204, 0, 0.7);
+  animation: glowPulse 1.5s ease-in-out 2.2s infinite;
+}
+
+/* Grow animation */
+.growSequence {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.growSymbol {
+  font-size: 30px;
+  margin: 0 5px;
+}
+
+.growArrow {
+  color: #4aff4a;
+  font-size: 24px;
+  margin: 0 10px;
+}
+
+.growSequence .growSymbol:nth-child(1) {
+  animation: grow 3s infinite;
+}
+
+.growSequence .growSymbol:nth-child(3) {
+  animation: grow 3s infinite 1s;
+}
+
+.growSequence .growSymbol:nth-child(5) {
+  animation: grow 3s infinite 2s;
+}
+
+/* Adjacent animation */
+.gridExample {
+  display: grid;
+  grid-template-columns: repeat(3, 50px);
+  grid-template-rows: repeat(3, 50px);
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.gridCell {
+  width: 50px;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+.gridExample .gridCell:nth-child(2),
+.gridExample .gridCell:nth-child(4),
+.gridExample .gridCell:nth-child(6),
+.gridExample .gridCell:nth-child(8) {
+  animation: highlight 2s infinite alternate;
+}
+
+.adjacentEffect {
+  text-align: center;
+}
+
+/* Multiplier animation */
+.multiplierExample {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.baseSymbol, .multipliedSymbol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 30px;
+}
+
+.baseValue, .multipliedValue {
+  font-size: 16px;
+  margin-top: 5px;
+}
+
+.baseValue {
+  color: white;
+}
+
+.multipliedValue {
+  color: #4aff4a;
+  animation: pulse 2s infinite;
+}
+
+.multiplierSymbol {
+  font-size: 30px;
+  margin: 0 10px;
+  animation: glow 2s infinite alternate;
+}
+
+.multiplierArrow {
+  color: #ffcc00;
+  font-size: 24px;
+  margin: 0 10px;
+}
+
+/* Counter animation */
+.counterExample {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.counterSequence {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.counterSymbol {
+  position: relative;
+  font-size: 30px;
+  margin: 0 10px;
+}
+
+.counterValue {
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.counterSequence .counterSymbol:nth-child(1) {
+  animation: countUp 8s infinite 0s;
+}
+
+.counterSequence .counterSymbol:nth-child(2) {
+  animation: countUp 8s infinite 2s;
+}
+
+.counterSequence .counterSymbol:nth-child(3) {
+  animation: countUp 8s infinite 4s;
+}
+
+.counterSequence .counterSymbol:nth-child(4) {
+  animation: countUp 8s infinite 6s;
+}
+
+.counterEffect {
+  text-align: center;
+}
+
+/* Animation keyframes */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes explode {
+  0% { transform: scale(0); opacity: 0; }
+  20% { transform: scale(1.2); opacity: 1; }
+  40% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+@keyframes fadeInUp {
+  0% { transform: translateY(10px); opacity: 0; }
+  20% { transform: translateY(0); opacity: 1; }
+  80% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-10px); opacity: 0; }
+}
+
+@keyframes grow {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  20% { transform: scale(1.2); opacity: 1; }
+  40% { transform: scale(1); opacity: 1; }
+  60% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+@keyframes highlight {
+  0% { background-color: rgba(255, 255, 255, 0.1); }
+  100% { background-color: rgba(255, 204, 0, 0.3); }
+}
+
+@keyframes glow {
+  0% { filter: drop-shadow(0 0 2px rgba(255, 204, 0, 0.5)); }
+  100% { filter: drop-shadow(0 0 10px rgba(255, 204, 0, 1)); }
+}
+
+@keyframes countUp {
+  0% { transform: scale(1); filter: brightness(1); }
+  10% { transform: scale(1.2); filter: brightness(1.5); }
+  20% { transform: scale(1); filter: brightness(1); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { 
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* New keyframes for destroy animation */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  10% { transform: translateX(-5px) rotate(-2deg); }
+  20% { transform: translateX(5px) rotate(2deg); }
+  30% { transform: translateX(-5px) rotate(-2deg); }
+  40% { transform: translateX(5px) rotate(2deg); }
+  50% { transform: translateX(-5px) rotate(-2deg); }
+  60% { transform: translateX(5px) rotate(2deg); }
+  70% { transform: translateX(-5px) rotate(-2deg); }
+  80% { transform: translateX(5px) rotate(2deg); }
+  90% { transform: translateX(-5px) rotate(-2deg); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes explodeIn {
+  0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+@keyframes stayVisible {
+  0%, 100% { opacity: 1; }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.1); filter: brightness(1.2); }
+}
+
+.closeButton {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 24px;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}

@@ -86,8 +86,10 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
 
       // Update bonus value on the symbol in the grid
       symbol.bonusValue = effectResult.bonusValue;
-      bonusCoins += effectResult.bonusValue;
-
+      bonusCoins += effectResult.bonusValue || 0;
+      bonusCoins *= effectResult.multiplier
+        ? effectResult.multiplier * (bonusCoins + symbol.value)
+        : 0;
       // Track symbols to add
       if (effectResult.add && effectResult.add.length > 0) {
         effectResult.add.forEach((addId) => {
@@ -198,4 +200,132 @@ export function payRent(
       remainingCoins: coins,
     };
   }
+}
+
+// Get a random symbol based on rarity and game progression
+export function getRandomSymbol(
+  timeRentPaid: number = 0,
+  forceRarity: string | null = null
+): Symbol {
+  // If forceRarity is provided, use that rarity
+  if (forceRarity) {
+    const pool = symbolTypes.filter((s) => s.rarity === forceRarity);
+
+    // If pool is empty, fallback to common
+    if (pool.length === 0) {
+      const commonPool = symbolTypes.filter((s) => s.rarity === "common");
+      const randomSymbol =
+        commonPool[Math.floor(Math.random() * commonPool.length)];
+      return JSON.parse(JSON.stringify(randomSymbol));
+    }
+
+    const randomSymbol = pool[Math.floor(Math.random() * pool.length)];
+    return JSON.parse(JSON.stringify(randomSymbol));
+  }
+
+  // Roll for rarity
+  const rarityRoll = Math.random();
+  let veryRareChance, rareChance, uncommonChance;
+
+  // Set probability thresholds based on times rent paid
+  switch (true) {
+    case timeRentPaid === 0:
+      veryRareChance = 0.0;
+      rareChance = 0.0;
+      uncommonChance = 0.0;
+      break;
+    case timeRentPaid === 1:
+      veryRareChance = 0.0;
+      rareChance = 0.0;
+      uncommonChance = 0.1;
+      break;
+    case timeRentPaid === 2:
+      veryRareChance = 0.0;
+      rareChance = 0.01;
+      uncommonChance = 0.21; // 0.01 + 0.2
+      break;
+    case timeRentPaid === 3:
+      veryRareChance = 0.0;
+      rareChance = 0.01;
+      uncommonChance = 0.26; // 0.01 + 0.25
+      break;
+    case timeRentPaid === 4:
+      veryRareChance = 0.005;
+      rareChance = 0.02; // 0.005 + 0.015
+      uncommonChance = 0.31; // 0.005 + 0.015 + 0.29
+      break;
+    default: // 5+
+      veryRareChance = 0.005;
+      rareChance = 0.02; // 0.005 + 0.015
+      uncommonChance = 0.32; // 0.005 + 0.015 + 0.3
+      break;
+  }
+
+  let pool: Symbol[];
+
+  if (rarityRoll < veryRareChance) {
+    pool = symbolTypes.filter((s) => s.rarity === "very_rare");
+  } else if (rarityRoll < rareChance) {
+    pool = symbolTypes.filter((s) => s.rarity === "rare");
+  } else if (rarityRoll < uncommonChance) {
+    pool = symbolTypes.filter((s) => s.rarity === "uncommon");
+  } else {
+    pool = symbolTypes.filter((s) => s.rarity === "common");
+  }
+
+  // If pool is empty (shouldn't happen with proper setup), fallback to common
+  if (pool.length === 0) {
+    pool = symbolTypes.filter((s) => s.rarity === "common");
+  }
+
+  // Select a random symbol from the pool
+  const randomSymbol = pool[Math.floor(Math.random() * pool.length)];
+  return JSON.parse(JSON.stringify(randomSymbol));
+}
+
+// Get starting symbols for a new game
+export function getStartingSymbols(): Symbol[] {
+  return [
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "hooligan"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "urn"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "urn"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "urn"))),
+      tempId: crypto.randomUUID(),
+    },
+  ].filter(Boolean) as Symbol[];
+}
+
+// Add a new symbol to the game
+export function addSymbolToCollection(
+  symbols: Symbol[],
+  newSymbol: Symbol
+): Symbol[] {
+  return [...symbols, JSON.parse(JSON.stringify(newSymbol))];
+}
+
+// Get all symbols of a specific rarity
+export function getSymbolsByRarity(
+  rarity: "common" | "uncommon" | "rare" | "very_rare" | "special"
+): Symbol[] {
+  return symbolTypes
+    .filter((s) => s.rarity === rarity)
+    .map((s) => JSON.parse(JSON.stringify(s)));
+}
+
+// Get a symbol by ID
+export function getSymbolById(id: string): Symbol | undefined {
+  const symbol = symbolTypes.find((s) => s.id === id);
+  return symbol ? JSON.parse(JSON.stringify(symbol)) : undefined;
 }

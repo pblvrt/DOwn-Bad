@@ -1,7 +1,7 @@
 "use client";
 
 import { useGameState } from "@/context/GameStateProvider";
-import { getRandomSymbol } from "@/lib/symbols";
+import { getRandomSymbol } from "@/lib/gameLogic";
 import ShopItem from "./ShopItem";
 import { useEffect, useState } from "react";
 import { Symbol } from "@/types/game";

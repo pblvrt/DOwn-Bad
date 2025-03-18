@@ -14,6 +14,7 @@ type SymbolProps = {
   showReward?: boolean;
   rewardValue?: number;
   position?: number; // Grid position
+  size?: number;
 };
 
 export default function SymbolComponent({
@@ -21,6 +22,7 @@ export default function SymbolComponent({
   showReward = false,
   rewardValue = 0,
   position = 0,
+  size = 34,
 }: SymbolProps) {
   const { state } = useGameState();
   const [showModal, setShowModal] = useState(false);
@@ -57,8 +59,13 @@ export default function SymbolComponent({
     () => setTriggerEffectReward(false),
     []
   );
-  const handleClick = useCallback(() => setShowModal(true), []);
-  const closeModal = useCallback(() => setShowModal(false), []);
+  const handleClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setShowModal(true);
+  }, []);
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+  }, []);
 
   if (!symbol) {
     return (
@@ -73,7 +80,9 @@ export default function SymbolComponent({
 
   return (
     <div onClick={handleClick} ref={symbolRef}>
-      <div className={styles.symbolEmoji}>{symbol.emoji}</div>
+      <div className={styles.symbolEmoji} style={{ fontSize: `${size}px` }}>
+        {symbol.emoji}
+      </div>
       {showReward && (
         <>
           {(hasEffectBonus || isDestroy) && (

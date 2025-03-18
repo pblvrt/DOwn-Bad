@@ -46,21 +46,22 @@
   // Self-destruction and token effect handled in game logic
 },
 
+
 {
-  id: "dame",
-  name: "Dame",
-  value: 2,
+  id: "card_shark",
+  name: "Card Shark",
+  value: 3,
   rarity: "rare",
-  emoji: "👸",
+  emoji: "🃏",
   type: "character",
   effectDescription:
-    "Adjacent gems give 2x more Coin. Destroys adjacent Martini. Gives Coin 40 for each Martini destroyed.",
+    "Adjacent Clubs, Diamonds, Hearts and Spades are Wildcard.",
   effect: function (grid: (Symbol | null)[], index: number): effectResult {
-    // Multiplier and destruction effect handled in game logic
-    return 0;
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "character");
+    // Wildcard effect handled in game logic
+    return { isDestroyed: false, bonusValue: 3 * multiplier };
   },
 },
-
 {
   id: "frozen_fossil",
   name: "Frozen Fossil",
@@ -255,7 +256,37 @@
     "Destroys itself and all adjacent symbols. Symbols destroyed this way give Coin equal to 7x their value.",
   // Destruction effect handled in game logic
 },
+  // {
+  //   id: "amethyst",
+  //   name: "Amethyst",
+  //   value: 1,
+  //   rarity: "rare",
+  //   emoji: "🟣",
+  //   effectDescription:
+  //     "Whenever another symbol makes this symbol give additional Coin, this symbol permanently gives Coin 1 more.",
+  //   // Special effect handled in game logic
+  // },
+  {
+    id: "light_bulb",
+    name: "Light Bulb",
+    value: 1,
+    rarity: "common",
+    emoji: "💡",
+    type: "object",
+    counter: 0,
+    effectDescription:
+      "Adjacent [<ore><emerald><diamond>] give 2x more Coin. Destroys itself after making other symbols give additional Coin 5 times.",
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
+      const multiplier = adjacentSymbolMoneyModifier(grid, index, "object");
+      const counter = grid[index]?.counter || 0;
 
+      if (counter >= 5) {
+        return { isDestroyed: true, bonusValue: 1 * (1 + multiplier) };
+      }
+
+      return { isDestroyed: false, bonusValue: 1 * multiplier };
+    },
+  },
 {
   id: "mine",
   name: "Mine",
@@ -554,6 +585,24 @@
   },
 },
 {
+  id: "time_capsule",
+  name: "Time Capsule",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "💊",
+  type: "object",
+  effectDescription:
+    "Destroys itself. Adds 1 symbol that was destroyed this game when destroyed. Cannot add Time Capsule.",
+  effect: function (): effectResult {
+    // The actual destroyed symbol selection will be handled in game logic
+    return {
+      isDestroyed: true,
+      bonusValue: 0,
+      add: ["destroyed_symbol"], // This will be replaced with an actual destroyed symbol in game logic
+    };
+  },
+},
+{
   id: "ruby",
   name: "Ruby",
   value: 3,
@@ -627,6 +676,55 @@
   // Direction and effect handled in game logic
 },
 {
+  id: "hustling_capsule",
+  name: "Hustling Capsule",
+  value: -7,
+  rarity: "uncommon",
+  emoji: "💊",
+  type: "object",
+  effectDescription: "Destroys itself. Adds 1 [<pool_ball>] when destroyed.",
+  effect: function (): effectResult {
+    return {
+      isDestroyed: true,
+      bonusValue: -7,
+      add: ["pool_ball"],
+    };
+  },
+},
+{
+  id: "jellyfish",
+  name: "Jellyfish",
+  value: 2,
+  rarity: "uncommon",
+  emoji: "🪼",
+  type: "animal",
+  effectDescription: "Gives Removal Token 1 when removed.",
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "animal");
+    // Token effect handled in game logic
+    return { isDestroyed: false, bonusValue: 2 * multiplier };
+  },
+},
+{
+  id: "lucky_capsule",
+  name: "Lucky Capsule",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "💊",
+  type: "object",
+  effectDescription:
+    "Destroys itself. At least 1 of the symbols to add after this spin will be Rare or better.",
+  effect: function (): effectResult {
+    // The rare+ item selection will be handled in game logic
+    return {
+      isDestroyed: true,
+      bonusValue: 0,
+      // Special flag for game logic to handle
+      add: ["rare_or_better"],
+    };
+  },
+},
+{
   id: "sloth",
   name: "Sloth",
   value: 0,
@@ -673,15 +771,7 @@
     return { isDestroyed: false, bonusValue: cardCount >= 3 ? 1 : 0 };
   },
 },
-{
-  id: "spirit",
-  name: "Spirit",
-  value: 6,
-  rarity: "rare",
-  emoji: "👻",
-  effectDescription: "Destroys itself after giving Coin 4 times.",
-  // Self-destruction handled in game logic
-},
+
 {
   id: "strawberry",
   name: "Strawberry",
@@ -699,6 +789,25 @@
     });
 
     return { isDestroyed: false, bonusValue: strawberryCount >= 2 ? 1 : 0 };
+  },
+},
+{
+  id: "chemical_seven",
+  name: "Chemical Seven",
+  value: 0,
+  rarity: "uncommon",
+  emoji: "🧪",
+  type: "object",
+  effectDescription:
+    "Destroys itself. Gives 7 coins and Adds 1 [<lucky_seven>] when destroyed.",
+  // Self-destruction and effect handled in game logic
+  effect: function (grid: (Symbol | null)[], index: number): effectResult {
+    const multiplier = adjacentSymbolMoneyModifier(grid, index, "character");
+    return {
+      isDestroyed: true,
+      bonusValue: 7 * multiplier,
+      add: ["lucky_seven"],
+    };
   },
 },
 {

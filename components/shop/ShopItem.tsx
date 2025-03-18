@@ -2,6 +2,7 @@
 
 import { Symbol } from "@/types/game";
 import styles from "@/styles/ShopItem.module.css";
+import ParseDescription from "../game/ParseDescription";
 
 type ShopItemProps = {
   symbol: Symbol;
@@ -9,26 +10,40 @@ type ShopItemProps = {
 };
 
 export default function ShopItem({ symbol, onPurchase }: ShopItemProps) {
-  // Get rarity label based on symbol value
-  const getRarityLabel = (value: number) => {
-    if (value >= 100) return "Legendary";
-    if (value >= 50) return "Epic";
-    if (value >= 25) return "Rare";
-    if (value >= 10) return "Uncommon";
-    return "Common";
+  // Get rarity label based on symbol rarity
+  const getRarityLabel = (rarity: string) => {
+    switch (rarity.toLowerCase()) {
+      case "legendary":
+        return "Legendary";
+      case "epic":
+        return "Epic";
+      case "rare":
+        return "Rare";
+      case "uncommon":
+        return "Uncommon";
+      default:
+        return "Common";
+    }
   };
 
-  // Get rarity color class based on symbol value
-  const getRarityColorClass = (value: number) => {
-    if (value >= 100) return styles.legendaryRarity;
-    if (value >= 50) return styles.epicRarity;
-    if (value >= 25) return styles.rareRarity;
-    if (value >= 10) return styles.uncommonRarity;
-    return styles.commonRarity;
+  // Get rarity color class based on symbol rarity
+  const getRarityColorClass = (rarity: string) => {
+    switch (rarity.toLowerCase()) {
+      case "legendary":
+        return styles.legendaryRarity;
+      case "epic":
+        return styles.epicRarity;
+      case "rare":
+        return styles.rareRarity;
+      case "uncommon":
+        return styles.uncommonRarity;
+      default:
+        return styles.commonRarity;
+    }
   };
 
-  const rarityLabel = getRarityLabel(symbol.value);
-  const rarityColorClass = getRarityColorClass(symbol.value);
+  const rarityLabel = getRarityLabel(symbol.rarity);
+  const rarityColorClass = getRarityColorClass(symbol.rarity);
 
   return (
     <div className={`${styles.itemContainer} `} onClick={onPurchase}>
@@ -43,7 +58,9 @@ export default function ShopItem({ symbol, onPurchase }: ShopItemProps) {
         {rarityLabel}
       </div>
       {symbol.effectDescription && (
-        <div className={styles.effectDescription}>{symbol.effectDescription}</div>
+        <div className={styles.effectDescription}>
+          <ParseDescription description={symbol.effectDescription} />
+        </div>
       )}
       {/* <div className={styles.addButtonContainer}>
         <button className={styles.addButton}>+</button>

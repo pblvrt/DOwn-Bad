@@ -125,4 +125,35 @@
   font-weight: bold;
   padding: 2px 6px;
   border-radius: 8px;
+}
+
+/* Rarity color classes */
+.legendaryRarity {
+  color: #ff9900;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(255, 153, 0, 0.5);
+}
+
+.epicRarity {
+  color: #a335ee;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(163, 53, 238, 0.5);
+}
+
+.rareRarity {
+  color: #0070dd;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(0, 112, 221, 0.5);
+}
+
+.uncommonRarity {
+  color: #1eff00;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(30, 255, 0, 0.5);
+}
+
+.commonRarity {
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.5);
 } 

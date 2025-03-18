@@ -8,24 +8,68 @@ export type Symbol = {
   effectDescription?: string;
   bonusValue?: number;
   counter?: number;
-  type:
-    | "card"
-    | "void"
-    | "food"
-    | "drink"
-    | "drug"
-    | "other"
-    | "character"
-    | "animal"
-    | "animal_character"
-    | "object"
-    | "human_character"
-    | "plant"
-    | "dice"
-    | "ore"
-    | "fruit";
+  type: Group[];
   effect?: (grid: (Symbol | null)[], index: number) => effectResult;
 };
+
+export type Group =
+  | "animal"
+  | "anvillikes"
+  | "archlikes"
+  | "arrow"
+  | "beelikes"
+  | "bird"
+  | "booze"
+  | "box"
+  | "capsule"
+  | "chest"
+  | "chickenstuff"
+  | "counted"
+  | "darkhumor"
+  | "destroyable_matryoshka"
+  | "doglikes"
+  | "dwarflikes"
+  | "eachother"
+  | "essence"
+  | "farmerlikes"
+  | "food"
+  | "fossillikes"
+  | "fruit"
+  | "fruitlikes"
+  | "funny"
+  | "gem"
+  | "halloween"
+  | "hex"
+  | "human"
+  | "kyle"
+  | "minerlikes"
+  | "monkeylikes"
+  | "night"
+  | "omelettestuff"
+  | "ore"
+  | "organism"
+  | "pepper"
+  | "piratelikes"
+  | "plant"
+  | "poslikes"
+  | "raritymod"
+  | "richlikes"
+  | "robinhates"
+  | "robinlikes"
+  | "scaler"
+  | "slow"
+  | "spawner0"
+  | "spawner1"
+  | "spiritbox"
+  | "suit"
+  | "time_capsule_effects"
+  | "time_machine"
+  | "time_machine3"
+  | "toddlerlikes"
+  | "triggerchance"
+  | "triggerhex"
+  | "void"
+  | "witchlikes";
 
 export type RentSchedule = {
   rent: number;
@@ -47,6 +91,7 @@ export type GameState = {
 
 export type effectResult = {
   isDestroyed: boolean;
-  bonusValue: number;
+  multiplier?: number;
+  bonusValue?: number;
   add?: string[];
 };

@@ -54,6 +54,7 @@ export default function SpinButton() {
   };
 
   const handleSpin = () => {
+    if (state.isSpinning) return;
     dispatch({ type: "START_SPIN_GRID" });
     playSpinSound();
 

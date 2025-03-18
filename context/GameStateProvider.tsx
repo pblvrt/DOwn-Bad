@@ -8,7 +8,7 @@ import {
   ReactNode,
   useState,
 } from "react";
-import { getStartingSymbols } from "@/lib/symbols";
+import { getStartingSymbols } from "@/lib/gameLogic";
 import { updateGridWithSymbols } from "@/lib/gameLogic";
 import { effectResult, Symbol } from "@/types/game";
 

@@ -1,5 +1,5 @@
 import { ANIMATION_DELAYS } from "@/hooks/useAnimationTimers";
-import { effectResult, Symbol } from "@/types/game";
+import { effectResult, Symbol, Group } from "@/types/game";
 
 // Get adjacent indices for a given index in a 4x4 grid (including diagonals)
 export function getAdjacentIndices(index: number): number[] {
@@ -51,37 +51,359 @@ export function isAdjacentToSymbols(
   return adjacentIndices.some((i) => symbols.includes(grid[i]?.id || ""));
 }
 
-export function adjacentSymbolMoneyModifier(
-  grid: (Symbol | null)[],
-  index: number,
-  type: Symbol["type"]
-): number {
+const checkIfModifierIsActive = (
+  adjacentSymbols: Symbol[],
+  symbolGroups: Group[],
+  id: string,
+  group: Group,
+  moneyModifier: number
+) => {
+  if (
+    adjacentSymbols.some((s) => s?.id === id) &&
+    symbolGroups.includes(group)
+  ) {
+    return moneyModifier;
+  }
+  return 0;
+};
+
+export function getModifier(grid: (Symbol | null)[], index: number): number {
+  if (!grid) {
+    console.log("grid is null", grid, index);
+    return 0;
+  }
   const adjacentSymbols = getAdjacentSymbols(grid, index);
   const currentSymbol = grid[index];
+  const symbolGroups = currentSymbol?.type;
+  if (!symbolGroups) return 0;
   let moneyModifier = 0;
+
+  // Character modifiers for specific groups
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "beastmaster",
+    "animal",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "chef",
+    "food",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "farmer",
+    "food",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "miner",
+    "archlikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "geologist",
+    "archlikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "monkey",
+    "monkeylikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "bee",
+    "beelikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "mrs. fruit",
+    "fruitlikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "comedian",
+    "funny",
+    3
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "bartender",
+    "booze",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "pirate",
+    "piratelikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "diver",
+    "poslikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "witch",
+    "witchlikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "billionaire",
+    "richlikes",
+    3
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "dwarf",
+    "dwarflikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "dog",
+    "doglikes",
+    1
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "toddler",
+    "toddlerlikes",
+    2
+  );
+  moneyModifier += checkIfModifierIsActive(
+    adjacentSymbols,
+    symbolGroups,
+    "dame",
+    "gem",
+    2
+  );
+
+  // Special case for buffing capsule
   if (adjacentSymbols.some((s) => s?.id === "buffing_capsule")) {
     moneyModifier += 2;
   }
 
-  if (type === "food" && adjacentSymbols.some((s) => s?.id === "chef")) {
-    moneyModifier += 2;
+  return moneyModifier;
+}
+
+export function calculateBonusValue(value: number, multiplier: number): number {
+  if (multiplier > 0) {
+    return value * multiplier;
+  }
+  return value;
+}
+
+export const getIsDestroyed = (
+  grid: (Symbol | null)[],
+  index: number
+): boolean => {
+  const adjacentSymbols = getAdjacentSymbols(grid, index);
+  const currentSymbol = grid[index];
+
+  if (!currentSymbol) return false;
+
+  // Check specific destruction patterns
+  if (currentSymbol.id === "bubble") {
+    return adjacentSymbols.some((s) => s?.id === "goldfish");
   }
 
-  if (type === "food" && adjacentSymbols.some((s) => s?.id === "farmer")) {
-    moneyModifier += 2;
+  if (currentSymbol.id === "banana_peel") {
+    return adjacentSymbols.some((s) => s?.id === "thief");
+  }
+
+  if (currentSymbol.id === "key" || currentSymbol.id === "magic_key") {
+    return adjacentSymbols.some((s) =>
+      ["lockbox", "safe", "treasure_chest", "mega_chest"].includes(s?.id || "")
+    );
   }
 
   if (
-    ["banana", "banana_peel", "dog", "monkey", "toddler", "joker"].includes(
-      currentSymbol?.id || ""
-    ) &&
-    adjacentSymbols.some((s) => s?.id === "comedian")
+    ["lockbox", "safe", "treasure_chest", "mega_chest"].includes(
+      currentSymbol.id
+    )
   ) {
-    moneyModifier += 3;
+    return adjacentSymbols.some((s) =>
+      ["key", "magic_key", "pirate"].includes(s?.id || "")
+    );
   }
 
-  return moneyModifier;
-}
+  if (currentSymbol.id === "target") {
+    return adjacentSymbols.some((s) =>
+      ["bronze_arrow", "silver_arrow", "golden_arrow", "robin_hood"].includes(
+        s?.id || ""
+      )
+    );
+  }
+
+  if (currentSymbol.id === "honey") {
+    return adjacentSymbols.some((s) => s?.id === "bear");
+  }
+
+  if (currentSymbol.id === "milk") {
+    return adjacentSymbols.some((s) => s?.id === "cat");
+  }
+
+  if (currentSymbol.id === "cheese") {
+    return adjacentSymbols.some((s) => s?.id === "mouse");
+  }
+
+  if (["banana", "coconut", "coconut_half"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "monkey");
+  }
+
+  if (["present", "candy", "pinata", "bubble"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "toddler");
+  }
+
+  if (["ore", "big_ore"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "miner");
+  }
+
+  if (["urn", "big_urn", "tomb"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "hooligan");
+  }
+
+  if (["beer", "wine"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "dwarf");
+  }
+
+  if (["martini"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "dame");
+  }
+
+  if (["thief"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) =>
+      ["bounty_hunter", "banana_peel"].includes(s?.id || "")
+    );
+  }
+
+  if (
+    ["banana", "cherry", "coconut", "coconut_half", "orange", "peach"].includes(
+      currentSymbol.id
+    )
+  ) {
+    return adjacentSymbols.some(
+      (s) => s?.id === "mrs._fruit" || s?.id === "mrs_fruit"
+    );
+  }
+
+  if (
+    ["ore", "pearl", "shiny_pebble", "big_ore", "sapphire"].includes(
+      currentSymbol.id
+    )
+  ) {
+    return adjacentSymbols.some((s) => s?.id === "geologist");
+  }
+
+  if (["billionaire", "target", "apple"].includes(currentSymbol.id)) {
+    return adjacentSymbols.some((s) => s?.id === "robin_hood");
+  }
+
+  if (
+    [
+      "anchor",
+      "beer",
+      "coin",
+      "lockbox",
+      "safe",
+      "orange",
+      "treasure_chest",
+      "mega_chest",
+    ].includes(currentSymbol.id)
+  ) {
+    return adjacentSymbols.some((s) => s?.id === "pirate");
+  }
+
+  if (
+    [
+      "robin_hood",
+      "thief",
+      "billionaire",
+      "cultist",
+      "toddler",
+      "bounty_hunter",
+      "miner",
+      "dwarf",
+      "king_midas",
+      "gambler",
+      "general_zaroff",
+      "witch",
+      "pirate",
+      "ninja",
+      "mrs._fruit",
+      "mrs_fruit",
+      "hooligan",
+      "farmer",
+      "diver",
+      "dame",
+      "chef",
+      "card_shark",
+      "beastmaster",
+      "geologist",
+      "joker",
+      "comedian",
+      "bartender",
+    ].includes(currentSymbol.id)
+  ) {
+    return adjacentSymbols.some((s) => s?.id === "general_zaroff");
+  }
+
+  // Check for self-destroying items
+  if (
+    [
+      "buffing_capsule",
+      "chemical_seven",
+      "essence_capsule",
+      "hustling_capsule",
+      "item_capsule",
+      "lucky_capsule",
+      "removal_capsule",
+      "reroll_capsule",
+      "tedium_capsule",
+      "time_capsule",
+      "wealthy_capsule",
+    ].includes(currentSymbol.id)
+  ) {
+    return true;
+  }
+
+  // Check for void items that destroy themselves when not adjacent to Empty
+  if (
+    ["void_creature", "void_fruit", "void_stone"].includes(currentSymbol.id)
+  ) {
+    return !adjacentSymbols.some((s) => s?.id === "empty");
+  }
+
+  return false;
+};
 
 // Calculate dynamic delay based on animation type
 export function calculateAnimationDelay(
