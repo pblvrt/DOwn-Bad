@@ -87,14 +87,14 @@ const ProgressBar: React.FC = () => {
       // Queue effect animations if there are any
       let runningTotal = displayedCoins;
       const effectsWithBonus = effectGrid.filter(
-        (effect) => effect !== null && effect.bonusValue > 0
+        (effect) => effect !== null && effect.bonusValue && effect.bonusValue > 0
       );
 
       // Add effect animations
       if (effectsWithBonus.length > 0) {
         effectsWithBonus.forEach((effect) => {
           if (effect !== null) {
-            runningTotal += effect.bonusValue;
+            runningTotal += effect.bonusValue || 0;
             animationQueue.current.push({
               value: runningTotal,
               delay: 800,

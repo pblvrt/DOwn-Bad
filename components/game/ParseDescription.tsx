@@ -4,6 +4,7 @@ import { useState } from "react";
 import InfoModal from "@/components/ui/InfoModal"; // You'll need to create this component
 import styles from "@/styles/Home.module.css";
 import React from "react";
+import { Symbol } from "@/types/game";
 // Define effect keywords that should be clickable
 const EFFECT_KEYWORDS = [
   "Destroys",
@@ -38,7 +39,7 @@ const ParseDescription: React.FC<{
 
   // Even indices are text outside brackets, odd indices are content inside brackets
   const textParts: string[] = [];
-  const symbolGroups = [];
+  const symbolGroups: Array<Array<{ symbol: Symbol; key: string }>> = [];
 
   parts.forEach((part, index) => {
     if (index % 2 === 0) {
