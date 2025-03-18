@@ -301,63 +301,12 @@ export function getStartingSymbols(): Symbol[] {
       tempId: crypto.randomUUID(),
     },
     {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cherry"))),
       tempId: crypto.randomUUID(),
     },
+
     {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
-      ),
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "coin"))),
       tempId: crypto.randomUUID(),
     },
   ].filter(Boolean) as Symbol[];
