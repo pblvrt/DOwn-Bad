@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Symbol } from "@/types/game";
 import styles from "@/styles/Shop.module.css";
 import Modal from "@/components/ui/Modal";
+import Inventory from "../game/Inventory";
 
 // Audio context and buffer at module level
 let audioContext: AudioContext | null = null;
@@ -102,41 +103,47 @@ export default function Shop() {
   };
 
   return (
-    <Modal
-      isOpen={state.shopOpen}
-      onClose={handleClose}
-      className={styles.shopModal}
-    >
-      <div className={styles.modalHeader}>
-        <div className={styles.infoItem}>
-          <span>
-            Symbol Count: <span className={styles.redText}>{state.symbols.length}</span>
-          </span>
-        </div>
-        <div className={styles.infoItem}>
-          <span>
-            Luck Modifier: <span className={styles.luckText}>x1.32 🍀</span>
-          </span>
-        </div>
-      </div>
+    <>
 
-      <div className={styles.shopItems}>
-        {shopItems.map((item, index) => (
-          <ShopItem
-            key={index}
-            symbol={item}
-            onPurchase={() => handlePurchase(item)}
-          />
-        ))}
-      </div>
-
-      <div className={styles.shopFooter}>
-        <div className={styles.buttonGroup}>
-          <button onClick={handleClose} className={styles.skipButton}>
-            Skip
-          </button>
+      <Modal
+        key="shop"
+        isOpen={state.shopOpen}
+        onClose={handleClose}
+        className={styles.shopModal}
+      >
+        <div className={styles.modalHeader}>
+          <div className={styles.infoItem}>
+            <span>
+              Symbol Count:{" "}
+              <span className={styles.redText}>{state.symbols.length}</span>
+            </span>
+          </div>
+          <div className={styles.infoItem}>
+            <span>
+              Luck Modifier: <span className={styles.luckText}>x1.32 🍀</span>
+            </span>
+          </div>
         </div>
-      </div>
-    </Modal>
+
+        <div className={styles.shopItems}>
+          {shopItems.map((item, index) => (
+            <ShopItem
+              key={index}
+              symbol={item}
+              onPurchase={() => handlePurchase(item)}
+            />
+          ))}
+        </div>
+        <Inventory />
+
+        <div className={styles.shopFooter}>
+          <div className={styles.buttonGroup}>
+            <button onClick={handleClose} className={styles.skipButton}>
+              Skip
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 }

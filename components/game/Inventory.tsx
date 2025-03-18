@@ -10,7 +10,7 @@ const Inventory: React.FC = () => {
   const uniqueSymbols = useMemo(() => {
     const symbols = new Map();
 
-    state.grid.forEach((symbol) => {
+    state.symbols.forEach((symbol) => {
       if (symbol && !symbols.has(symbol.id)) {
         symbols.set(symbol.id, symbol);
       }

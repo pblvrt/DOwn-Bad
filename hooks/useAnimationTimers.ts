@@ -61,7 +61,6 @@ export function useAnimationTimers({
     // Then show reward animations after all effects
     // Calculate total effect delay including current cell if it has an effect
     const totalEffectDelay = totalDelayUntilPos(effectGrid, 20);
-    console.log(totalEffectDelay, symbol.id);
     if (symbol.value !== 0) {
       const rewardTimer = setTimeout(() => {
         setTriggerReward(true);

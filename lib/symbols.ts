@@ -154,7 +154,7 @@ export const symbolTypes: Symbol[] = [
     id: "martini",
     name: "Martini",
     value: 7,
-    rarity: "common",
+    rarity: "rare",
     emoji: "🍸",
     type: ["food", "booze"],
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
@@ -971,7 +971,7 @@ export const symbolTypes: Symbol[] = [
 
       return {
         isDestroyed,
-        bonusValue: 0,
+        bonusValue,
         multiplier: getModifier(grid, index),
       };
     },
@@ -1519,7 +1519,7 @@ export const symbolTypes: Symbol[] = [
       const isDestroyed = getIsDestroyed(grid, index);
       return {
         isDestroyed,
-        bonusValue: 15,
+        bonusValue: isDestroyed ? 15 : 0,
         multiplier,
       };
     },
@@ -1645,12 +1645,12 @@ export const symbolTypes: Symbol[] = [
     emoji: "🎲",
     type: [],
     effectDescription: "Gives between Coin 1 and Coin 3 randomly.",
-    effect: function (): effectResult {
+    effect: function (grid: (Symbol | null)[], index: number): effectResult {
       return {
         isDestroyed: false,
         bonusValue: calculateBonusValue(
           Math.floor(Math.random() * 3) + 1,
-          getModifier(null, 0)
+          getModifier(grid, index)
         ),
         multiplier: 0,
       };

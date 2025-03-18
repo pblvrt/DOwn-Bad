@@ -84,12 +84,18 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
       const effectResult = symbol.effect(newGrid, index);
       effectGrid[index] = effectResult;
 
-      // Update bonus value on the symbol in the grid
-      symbol.bonusValue = effectResult.bonusValue;
-      bonusCoins += effectResult.bonusValue || 0;
-      bonusCoins *= effectResult.multiplier
+      // Calculate bonus value from multiplier if present
+      const multiplierBonus = effectResult.multiplier
         ? effectResult.multiplier * (bonusCoins + symbol.value)
         : 0;
+
+      // Update bonus values
+      symbol.bonusValue = (effectResult.bonusValue || 0) + multiplierBonus;
+      effectResult.bonusValue = symbol.bonusValue;
+
+      // Add to total bonus coins
+      bonusCoins += symbol.bonusValue;
+
       // Track symbols to add
       if (effectResult.add && effectResult.add.length > 0) {
         effectResult.add.forEach((addId) => {
@@ -287,21 +293,71 @@ export function getRandomSymbol(
 export function getStartingSymbols(): Symbol[] {
   return [
     {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "flower"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cat"))),
+      tempId: crypto.randomUUID(),
+    },
+    {
       ...JSON.parse(
-        JSON.stringify(symbolTypes.find((s) => s.id === "hooligan"))
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
       ),
       tempId: crypto.randomUUID(),
     },
     {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "urn"))),
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
       tempId: crypto.randomUUID(),
     },
     {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "urn"))),
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
       tempId: crypto.randomUUID(),
     },
     {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "urn"))),
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
+      tempId: crypto.randomUUID(),
+    },
+    {
+      ...JSON.parse(
+        JSON.stringify(symbolTypes.find((s) => s.id === "buffing_capsule"))
+      ),
       tempId: crypto.randomUUID(),
     },
   ].filter(Boolean) as Symbol[];
