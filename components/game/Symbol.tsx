@@ -95,7 +95,7 @@ export default function SymbolComponent({
               onAnimationComplete={handleEffectAnimationComplete}
               position={symbolPosition}
               targetPosition={targetPosition}
-              soundUrl="/specialEffect.wav"
+              soundId="specialEffect"
             />
           )}
           <DynamicRewardAnimation
@@ -105,7 +105,7 @@ export default function SymbolComponent({
             onAnimationComplete={handleAnimationComplete}
             position={symbolPosition}
             targetPosition={targetPosition}
-            soundUrl="/coin.wav"
+            soundId="coin"
           />
         </>
       )}

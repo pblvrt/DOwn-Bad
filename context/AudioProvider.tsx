@@ -21,15 +21,11 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 // Sound definitions
 const SOUNDS = {
-  spin: "/spin.wav",
-  coin: "/coin.wav",
-  purchase: "/purchase.mp3",
-  rent: "/rent.mp3",
-  gameover: "/sounds/gameover.mp3",
-  success: "/sounds/success.mp3",
-  specialEffect: "/specialEffect.wav",
-  destroy: "/sounds/destroy.mp3",
-  background: "/background.wav",
+  spin: "/sounds/spin.wav",
+  coin: "/sounds/coin.wav",
+  purchase: "/sounds/purchase.wav",
+  specialEffect: "/sounds/specialEffect.wav",
+  background: "/sounds/background.wav",
 };
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {
@@ -93,13 +89,33 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     // Helper function to load a single audio file
     const loadAudio = async (id: string, url: string) => {
       try {
+        console.log(`Attempting to load audio: ${id} from ${url}`);
         const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch audio file: ${response.status} ${response.statusText}`
+          );
+        }
+
         const arrayBuffer = await response.arrayBuffer();
-        const audioBuffer = await context.decodeAudioData(arrayBuffer);
-        audioBuffersRef.current[id] = audioBuffer;
-        console.log(`Loaded audio: ${id}`);
+
+        if (arrayBuffer.byteLength === 0) {
+          throw new Error("Received empty audio file");
+        }
+
+        try {
+          const audioBuffer = await context.decodeAudioData(arrayBuffer);
+          audioBuffersRef.current[id] = audioBuffer;
+          console.log(`Successfully loaded audio: ${id}`);
+        } catch (decodeError) {
+          console.error(`Error decoding audio ${id}:`, decodeError);
+          // Try to recover by using HTML Audio as fallback
+          const audio = new Audio(url);
+          console.log(`Falling back to HTML Audio for ${id}`);
+        }
       } catch (error) {
-        console.error(`Error loading audio ${id}:`, error);
+        console.error(`Error loading audio ${id} from ${url}:`, error);
       }
     };
 
@@ -109,7 +125,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     );
 
     await Promise.all(loadPromises);
-    console.log("All audio preloaded");
+    console.log("Audio preload complete");
   };
 
   // Play a sound effect
@@ -120,7 +136,22 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     const buffer = audioBuffersRef.current[soundId];
 
     if (!buffer) {
-      console.warn(`Sound ${soundId} not loaded`);
+      console.warn(`Sound ${soundId} not loaded, trying fallback method`);
+      // Fallback to HTML Audio
+      try {
+        const audio = new Audio(SOUNDS[soundId as keyof typeof SOUNDS]);
+        audio.volume = volume;
+        audio
+          .play()
+          .catch((err) =>
+            console.error(`Error playing sound ${soundId}:`, err)
+          );
+      } catch (error) {
+        console.error(
+          `Failed to play sound ${soundId} with fallback method:`,
+          error
+        );
+      }
       return;
     }
 
@@ -129,20 +160,24 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       context.resume();
     }
 
-    // Create and configure source
-    const source = context.createBufferSource();
-    source.buffer = buffer;
+    try {
+      // Create and configure source
+      const source = context.createBufferSource();
+      source.buffer = buffer;
 
-    // Create individual gain node for this sound
-    const gainNode = context.createGain();
-    gainNode.gain.value = volume;
+      // Create individual gain node for this sound
+      const gainNode = context.createGain();
+      gainNode.gain.value = volume;
 
-    // Connect to the main SFX gain node
-    source.connect(gainNode);
-    gainNode.connect(gainNodesRef.current.sfx);
+      // Connect to the main SFX gain node
+      source.connect(gainNode);
+      gainNode.connect(gainNodesRef.current.sfx);
 
-    // Play the sound
-    source.start(0);
+      // Play the sound
+      source.start(0);
+    } catch (error) {
+      console.error(`Error playing sound ${soundId}:`, error);
+    }
   };
 
   // Play background music

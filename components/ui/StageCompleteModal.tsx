@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import styles from "@/styles/StageCompleteModal.module.css";
 import Modal from "@/components/ui/Modal";
 import { useGameState } from "@/context/GameStateProvider";
+import { useAudio } from "@/context/AudioProvider";
 
 export default function StageCompleteModal() {
   const { state, dispatch } = useGameState();
+  const { playSound } = useAudio();
   const [isOpen, setIsOpen] = useState(false);
   const [stageData, setStageData] = useState({
     floor: 0,
@@ -25,29 +27,16 @@ export default function StageCompleteModal() {
       setIsOpen(true);
 
       // Play success sound
-      const audio = document.getElementById(
-        "success-sound"
-      ) as HTMLAudioElement;
-      if (state.soundEnabled && audio) {
-        audio.currentTime = 0;
-        audio.play().catch((e) => console.log("Error playing sound:", e));
-      }
+      playSound("success");
     } else {
       setIsOpen(false);
     }
-  }, [
-    state.stageComplete,
-    state.floor,
-    state.rentSchedule,
-    state.soundEnabled,
-  ]);
+  }, [state.stageComplete, state.floor, state.rentSchedule]);
 
   const handleContinue = () => {
     dispatch({ type: "CLOSE_COMPLETED_STAGE" });
     setIsOpen(false);
   };
-
-
 
   return (
     <Modal
@@ -56,7 +45,6 @@ export default function StageCompleteModal() {
       className={styles.stageModal}
     >
       <div className={styles.modalContent}>
-
         <div className={styles.stageInfo}>
           <h3>Floor {stageData.floor} Completed!</h3>
           <p className={styles.rentInfo}>

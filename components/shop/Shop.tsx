@@ -1,6 +1,7 @@
 "use client";
 
 import { useGameState } from "@/context/GameStateProvider";
+import { useAudio } from "@/context/AudioProvider";
 import { getRandomSymbol } from "@/lib/gameLogic";
 import ShopItem from "./ShopItem";
 import { useEffect, useState } from "react";
@@ -9,65 +10,10 @@ import styles from "@/styles/Shop.module.css";
 import Modal from "@/components/ui/Modal";
 import Inventory from "../game/Inventory";
 
-// Audio context and buffer at module level
-let audioContext: AudioContext | null = null;
-let coinBuffer: AudioBuffer | null = null;
-
 export default function Shop() {
   const { state, dispatch } = useGameState();
+  const { playSound } = useAudio();
   const [shopItems, setShopItems] = useState<Symbol[]>([]);
-
-  // Initialize audio context and load coin sound
-  useEffect(() => {
-    if (!audioContext) {
-      audioContext = new (window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext })
-          .webkitAudioContext)();
-
-      // Load coin sound
-      fetch("/coins.wav")
-        .then((response) => response.arrayBuffer())
-        .then((arrayBuffer) => audioContext!.decodeAudioData(arrayBuffer))
-        .then((buffer) => {
-          coinBuffer = buffer;
-          console.log("Coin sound loaded in Shop");
-        })
-        .catch((error) => {
-          console.error("Error loading coin sound in Shop:", error);
-        });
-    }
-
-    return () => {
-      // No need to close audioContext here as it's shared
-    };
-  }, []);
-
-  // Function to play coin sound
-  const playCoinSound = () => {
-    if (!audioContext || !coinBuffer || !state.soundEnabled) {
-      return;
-    }
-
-    // Resume audio context if suspended
-    if (audioContext.state === "suspended") {
-      audioContext.resume();
-    }
-
-    // Create new source for coin sound
-    const coinSource = audioContext.createBufferSource();
-    coinSource.buffer = coinBuffer;
-
-    // Create gain node for volume control
-    const gainNode = audioContext.createGain();
-    gainNode.gain.value = 0.7; // 70% volume
-
-    // Connect nodes
-    coinSource.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    // Play the coin sound once
-    coinSource.start(0);
-  };
 
   // Regenerate shop items when shop is opened
   useEffect(() => {
@@ -92,8 +38,8 @@ export default function Shop() {
       },
     });
 
-    // Play coin sound
-    playCoinSound();
+    // Play purchase sound
+    playSound("purchase");
 
     dispatch({ type: "CLOSE_SHOP" });
   };
@@ -104,7 +50,6 @@ export default function Shop() {
 
   return (
     <>
-
       <Modal
         key="shop"
         isOpen={state.shopOpen}

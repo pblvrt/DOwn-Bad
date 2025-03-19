@@ -12,13 +12,15 @@ import IntroModal from "@/components/ui/IntroModal";
 import StageCompleteModal from "@/components/ui/StageCompleteModal";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import AudioInitializer from "@/components/AudioInitializer";
+import { AudioProvider } from "@/context/AudioProvider";
 
 export default function Home() {
   return (
     <GameStateProvider>
-      <ServiceWorkerRegistration />
-      <AudioInitializer />
-      <div className={styles.gameContainer}>
+      <AudioProvider>
+        <ServiceWorkerRegistration />
+        <AudioInitializer />
+        <div className={styles.gameContainer}>
         <LostModal />
         <IntroModal />
         <StageCompleteModal />
@@ -42,23 +44,9 @@ export default function Home() {
             <span className={styles.navBadge}>2</span>
             🏪
           </div>
+          </div>
         </div>
-
-        {/* Audio elements */}
-        <audio id="spin-sound" src="/sounds/spin.mp3" preload="auto"></audio>
-        <audio id="coin-sound" src="/sounds/coin.mp3" preload="auto"></audio>
-        <audio
-          id="purchase-sound"
-          src="/sounds/purchase.mp3"
-          preload="auto"
-        ></audio>
-        <audio id="rent-sound" src="/sounds/rent.mp3" preload="auto"></audio>
-        <audio
-          id="gameover-sound"
-          src="/sounds/gameover.mp3"
-          preload="auto"
-        ></audio>
-      </div>
+      </AudioProvider>
     </GameStateProvider>
   );
 }

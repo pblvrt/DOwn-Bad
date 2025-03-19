@@ -2,13 +2,14 @@ import { useState, useRef } from "react";
 import { activeAnimations } from "./types";
 import { useAnimationStyles } from "./useAnimationStyles";
 import { useAudio } from "@/context/AudioProvider";
+
 export function useAnimationSequences(
   position: { x: number; y: number },
   targetPosition: { x: number; y: number },
   onAnimationComplete: () => void,
   isEffect = false,
   isDestroy = false,
-  soundUrl?: string,
+  soundId?: string,
   id = "default"
 ) {
   const [isAnimating, setIsAnimating] = useState(false);
@@ -25,7 +26,6 @@ export function useAnimationSequences(
     setBuzzingStyle,
     setFadeOutStyle,
   } = useAnimationStyles();
-
 
   const completeAnimation = () => {
     setIsAnimating(false);

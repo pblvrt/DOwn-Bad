@@ -9,6 +9,7 @@ export interface RewardAnimationProps {
   soundUrl?: string;
   isDestroy?: boolean;
   id?: string;
+  soundId?: string;
 }
 
 // Track active animations globally
