@@ -1,8 +1,7 @@
 import { useState, useRef } from "react";
 import { activeAnimations } from "./types";
 import { useAnimationStyles } from "./useAnimationStyles";
-import { useSoundEffects } from "./useSoundEffects";
-
+import { useAudio } from "@/context/AudioProvider";
 export function useAnimationSequences(
   position: { x: number; y: number },
   targetPosition: { x: number; y: number },
@@ -15,6 +14,7 @@ export function useAnimationSequences(
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationPhase, setAnimationPhase] = useState(0); // 0: not started, 1: appear, 2: move, 3: destroy
   const animationIdRef = useRef<string>(`${id}-${Date.now()}`);
+  const { playSound } = useAudio();
 
   const {
     style,
@@ -26,7 +26,6 @@ export function useAnimationSequences(
     setFadeOutStyle,
   } = useAnimationStyles();
 
-  const { playSound, playDestroySound } = useSoundEffects(soundUrl, isDestroy);
 
   const completeAnimation = () => {
     setIsAnimating(false);
@@ -39,7 +38,7 @@ export function useAnimationSequences(
   // Animation sequences
   const runDestroyAnimation = () => {
     setAnimationPhase(3);
-    playDestroySound();
+    playSound("destroy");
     setInitialStyle(position);
 
     setTimeout(() => {
@@ -65,7 +64,7 @@ export function useAnimationSequences(
 
   const runEffectAnimation = () => {
     setAnimationPhase(1);
-    playSound();
+    playSound("specialEffect");
     setInitialStyle(position);
 
     setTimeout(() => {
@@ -88,7 +87,7 @@ export function useAnimationSequences(
 
   const runRewardAnimation = () => {
     setAnimationPhase(1);
-    playSound();
+    playSound("coin");
     setInitialStyle(position);
 
     setTimeout(() => {

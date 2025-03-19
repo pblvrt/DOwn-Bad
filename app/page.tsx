@@ -11,11 +11,13 @@ import Inventory from "@/components/game/Inventory";
 import IntroModal from "@/components/ui/IntroModal";
 import StageCompleteModal from "@/components/ui/StageCompleteModal";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import AudioInitializer from "@/components/AudioInitializer";
 
 export default function Home() {
   return (
     <GameStateProvider>
       <ServiceWorkerRegistration />
+      <AudioInitializer />
       <div className={styles.gameContainer}>
         <LostModal />
         <IntroModal />

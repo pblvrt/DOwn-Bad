@@ -1,26 +1,16 @@
 "use client";
 
 import { useGameState } from "@/context/GameStateProvider";
+import { useAudio } from "@/context/AudioProvider";
 import { spinGrid } from "@/lib/gameLogic";
 import { totalDelayUntilPos } from "@/lib/utils";
 import styles from "@/styles/Home.module.css";
 import { effectResult, Symbol } from "@/types/game";
 import { CELL_NUMBER } from "@/lib/constants";
+
 export default function SpinButton() {
   const { state, dispatch } = useGameState();
-
-  const playSpinSound = () => {
-    if (!state.soundEnabled) return;
-
-    const audio = new Audio("/spin.wav");
-    audio.play().catch((e) => console.log("Error playing sound:", e));
-
-    // Stop the sound after 3 seconds
-    setTimeout(() => {
-      audio.pause();
-      audio.currentTime = 0;
-    }, 1000);
-  };
+  const { playSound } = useAudio();
 
   const processSpinResults = (spinResults: {
     grid: (Symbol | null)[];
@@ -56,7 +46,7 @@ export default function SpinButton() {
   const handleSpin = () => {
     if (state.isSpinning) return;
     dispatch({ type: "START_SPIN_GRID" });
-    playSpinSound();
+    playSound("spin");
 
     const spinResults = spinGrid(state.grid, state.symbols);
     processSpinResults(spinResults);
