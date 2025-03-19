@@ -291,25 +291,19 @@ export function getRandomSymbol(
 
 // Get starting symbols for a new game
 export function getStartingSymbols(): Symbol[] {
-  return [
-    {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "flower"))),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cat"))),
-      tempId: crypto.randomUUID(),
-    },
-    {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "cherry"))),
-      tempId: crypto.randomUUID(),
-    },
+  const startingSymbols = [
+    "flower",
+    "cat",
+    "cherry",
+    "coin",
+  ];
 
-    {
-      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === "coin"))),
+  return startingSymbols.map((symbol) => {
+    return {
+      ...JSON.parse(JSON.stringify(symbolTypes.find((s) => s.id === symbol))),
       tempId: crypto.randomUUID(),
-    },
-  ].filter(Boolean) as Symbol[];
+    };
+  });
 }
 
 // Add a new symbol to the game

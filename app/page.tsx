@@ -13,6 +13,8 @@ import StageCompleteModal from "@/components/ui/StageCompleteModal";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import AudioInitializer from "@/components/AudioInitializer";
 import { AudioProvider } from "@/context/AudioProvider";
+import SettingsModal from "@/components/ui/SettingsModal";
+import Navigation from "@/components/ui/Navigation";
 
 export default function Home() {
   return (
@@ -21,30 +23,19 @@ export default function Home() {
         <ServiceWorkerRegistration />
         <AudioInitializer />
         <div className={styles.gameContainer}>
-        <LostModal />
-        <IntroModal />
-        <StageCompleteModal />
-        <Shop />
-        <Header />
-        <GameBoard />
-        <Inventory />
-        <ProgressBar />
-        <div className={styles.spinButtonContainer}>
-          <SpinButton />
-        </div>
-        <div className={styles.bottomNav}>
-          <div className={styles.navItem}>
-            <span className={styles.navBadge}>3</span>
-            🍊
+          <LostModal />
+          <IntroModal />
+          <StageCompleteModal />
+          <SettingsModal />
+          <Shop />
+          <Header />
+          <GameBoard />
+          <Inventory />
+          <ProgressBar />
+          <div className={styles.spinButtonContainer}>
+            <SpinButton />
           </div>
-          <div className={styles.navItem}>📱</div>
-          <div className={styles.navItem}>🔄</div>
-          <div className={styles.navItem}>⭐</div>
-          <div className={styles.navItem}>
-            <span className={styles.navBadge}>2</span>
-            🏪
-          </div>
-          </div>
+          <Navigation />
         </div>
       </AudioProvider>
     </GameStateProvider>

@@ -57,10 +57,6 @@ export default function StageCompleteModal() {
           <h4>Rewards</h4>
           <div className={styles.rewardsList}>
             <div className={styles.rewardItem}>
-              <span className={styles.rewardIcon}>🏆</span>
-              <span className={styles.rewardText}>Bonus Coins: +50 🪙</span>
-            </div>
-            <div className={styles.rewardItem}>
               <span className={styles.rewardIcon}>⭐</span>
               <span className={styles.rewardText}>Luck Increased: +0.05</span>
             </div>

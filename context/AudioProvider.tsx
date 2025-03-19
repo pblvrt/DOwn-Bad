@@ -6,6 +6,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useCallback,
 } from "react";
 import { useGameState } from "./GameStateProvider";
 
@@ -15,6 +16,8 @@ type AudioContextType = {
   stopBackgroundMusic: () => void;
   preloadAudio: () => void;
   isMusicPlaying: boolean;
+  isMuted: boolean;
+  toggleMute: () => void;
 };
 
 const AudioContext = createContext<AudioContextType | undefined>(undefined);
@@ -31,6 +34,7 @@ const SOUNDS = {
 export function AudioProvider({ children }: { children: React.ReactNode }) {
   const { state } = useGameState();
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
 
   // Audio context and buffers
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -228,18 +232,38 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Toggle mute function
+  const toggleMute = useCallback(() => {
+    if (!audioContextRef.current) return;
+
+    setIsMuted((prev) => {
+      const newMuted = !prev;
+
+      // Update all gain nodes
+      Object.values(gainNodesRef.current).forEach((node) => {
+        node.gain.value = newMuted
+          ? 0
+          : node === gainNodesRef.current.music
+          ? 0.5
+          : 0.7;
+      });
+
+      return newMuted;
+    });
+  }, []);
+
+  const value = {
+    playSound,
+    playBackgroundMusic,
+    stopBackgroundMusic,
+    preloadAudio,
+    isMusicPlaying,
+    isMuted,
+    toggleMute,
+  };
+
   return (
-    <AudioContext.Provider
-      value={{
-        playSound,
-        playBackgroundMusic,
-        stopBackgroundMusic,
-        preloadAudio,
-        isMusicPlaying,
-      }}
-    >
-      {children}
-    </AudioContext.Provider>
+    <AudioContext.Provider value={value}>{children}</AudioContext.Provider>
   );
 }
 

@@ -33,6 +33,7 @@ type GameState = {
   shopOpen: boolean;
   stageComplete: boolean;
   tutorialSeen: boolean;
+  settingsOpen: boolean;
 };
 
 type GameAction =
@@ -52,6 +53,8 @@ type GameAction =
   | { type: "UPDATE_EFFECT_GRID"; payload: (effectResult | null)[] }
   | { type: "ADD_COINS"; payload: { baseCoins: number; bonusCoins: number } }
   | { type: "CLOSE_COMPLETED_STAGE" }
+  | { type: "TOGGLE_SETTINGS" }
+  | { type: "CLOSE_SETTINGS" }
 
 const GameStateContext = createContext<
   | {
@@ -158,6 +161,10 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, shopOpen: false };
     case "CLOSE_COMPLETED_STAGE":
       return { ...state, stageComplete: false, shopOpen: true };
+    case "TOGGLE_SETTINGS":
+      return { ...state, settingsOpen: !state.settingsOpen };
+    case "CLOSE_SETTINGS":
+      return { ...state, settingsOpen: false };
     default:
       return state;
   }

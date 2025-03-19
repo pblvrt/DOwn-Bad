@@ -191,13 +191,15 @@ export function getModifier(grid: (Symbol | null)[], index: number): number {
     "doglikes",
     1
   );
-  moneyModifier += checkIfModifierIsActive(
-    adjacentSymbols,
-    symbolGroups,
-    "toddler",
-    "toddlerlikes",
-    2
-  );
+  
+  // moneyModifier += checkIfModifierIsActive(
+  //   adjacentSymbols,
+  //   symbolGroups,
+  //   "toddler",
+  //   "toddlerlikes",
+  //   2
+  // );
+
   moneyModifier += checkIfModifierIsActive(
     adjacentSymbols,
     symbolGroups,

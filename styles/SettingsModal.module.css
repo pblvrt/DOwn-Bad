@@ -1,0 +1,107 @@
+.settingsModal {
+  background: linear-gradient(to bottom, #2a3a7a, #1a2a5a);
+  max-width: 500px;
+  color: white;
+  box-sizing: border-box;
+  border: 2px solid #4b2882bb;
+}
+
+.modalContent {
+  padding: 1.5rem;
+}
+
+.modalTitle {
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #ffcc00;
+  text-align: center;
+}
+
+.settingItem {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.settingItem span {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.toggleButton {
+  background: linear-gradient(to bottom, #4a90e2, #3a70c2);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggleButton:hover {
+  filter: brightness(1.1);
+}
+
+.dangerButton {
+  background: linear-gradient(to bottom, #e25c5c, #c23a3a);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dangerButton:hover {
+  filter: brightness(1.1);
+}
+
+.closeButton {
+  background: linear-gradient(to bottom, #ffcc00, #ff9900);
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
+  box-shadow: 0 4px 0 #cc7700;
+  transition: all 0.1s;
+}
+
+.closeButton:hover {
+  transform: translateY(-2px);
+}
+
+.closeButton:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.settingsButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.installText {
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0 0;
+  color: #cccccc;
+} 
