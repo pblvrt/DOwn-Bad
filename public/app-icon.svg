@@ -1,0 +1,36 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6a3cb5" />
+      <stop offset="100%" stop-color="#4a2882" />
+    </linearGradient>
+    
+    <!-- Glow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Main rounded rectangle background -->
+  <rect x="0" y="0" width="512" height="512" rx="80" fill="url(#bgGradient)" />
+  
+  <!-- Slot machine reels -->
+  <rect x="106" y="156" width="80" height="80" rx="10" fill="#2a1a4a" stroke="#8a5cd5" stroke-width="4" />
+  <rect x="216" y="156" width="80" height="80" rx="10" fill="#2a1a4a" stroke="#8a5cd5" stroke-width="4" />
+  <rect x="326" y="156" width="80" height="80" rx="10" fill="#2a1a4a" stroke="#8a5cd5" stroke-width="4" />
+  
+  <!-- Emoji symbols in reels -->
+  <text x="146" y="216" font-size="48" text-anchor="middle" fill="white" filter="url(#glow)">🔥</text>
+  <text x="256" y="216" font-size="48" text-anchor="middle" fill="white" filter="url(#glow)">💎</text>
+  <text x="366" y="216" font-size="48" text-anchor="middle" fill="white" filter="url(#glow)">⚔️</text>
+  
+  <!-- Logo text -->
+  <text x="256" y="320" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white" filter="url(#glow)">SPIN</text>
+  <text x="256" y="380" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white" filter="url(#glow)">MOJI</text>
+  
+  <!-- Spin button -->
+  <rect x="176" y="420" width="160" height="40" rx="20" fill="#00C853" stroke="#00FF9B" stroke-width="2" />
+  <text x="256" y="448" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="white">SPIN</text>
+</svg>

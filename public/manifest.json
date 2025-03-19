@@ -1,7 +1,7 @@
 {
-  "name": "Symbol Slots",
-  "short_name": "Symbol Slots",
-  "description": "A slot machine game where you earn coins to pay rent",
+  "name": "Spinmoji",
+  "short_name": "Spinmoji",
+  "description": "A roguelike deckbuilding slot machine game",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#6a3cb5",

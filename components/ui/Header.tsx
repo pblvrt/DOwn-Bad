@@ -1,17 +1,27 @@
 "use client";
+import Image from "next/image";
 import styles from "@/styles/Header.module.css";
+import { useGameState } from "@/context/GameStateProvider";
 
 export default function Header() {
+  const { state } = useGameState();
+  const { coins } = state;
+
   return (
-    <div className={styles.header}>
+    <header className={styles.header}>
       <div className={styles.logoContainer}>
-        <h1 className={styles.title}>DOwn Bad</h1>
-        <p className={styles.version}>v0.0.1</p>
+        <Image
+          src="/logo.svg"
+          alt="Spinmoji Logo"
+          width={150}
+          height={50}
+          priority
+        />
       </div>
-      <div className={styles.links}>
-        <p className={styles.link}> <a href="https://x.com/pblvrt" target="_blank" rel="noopener noreferrer">X</a></p>
-        <p className={styles.link}> <a href="https://github.com/pblvrt/DOwn-Bad" target="_blank" rel="noopener noreferrer">Github</a></p>
+      <div className={styles.coinContainer}>
+        <span className={styles.coinIcon}>🪙</span>
+        <span className={styles.coinCount}>{coins}</span>
       </div>
-    </div>
+    </header>
   );
 }
