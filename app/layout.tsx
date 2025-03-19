@@ -53,10 +53,10 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico" },
-      { url: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
-      { url: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
+      { url: "/icons/192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: [{ url: "/icons/icon-192x192.png" }],
+    apple: [{ url: "/icons/192x192.png" }],
   },
   applicationName: "Spinmoji",
   keywords: [
@@ -79,6 +79,37 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <title>Spinmoji</title>
+        <meta
+          name="description"
+          content="A roguelike deckbuilding slot machine game"
+        />
+
+        <meta property="og:url" content="https://spinmoji.gg" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Spinmoji" />
+        <meta
+          property="og:description"
+          content="A roguelike deckbuilding slot machine game"
+        />
+        <meta
+          property="og:image"
+          content="https://opengraph.b-cdn.net/production/images/5908da24-1b14-45a2-9356-42152851a646.png?token=J98zRm7OT0_6zzgYJHi2GmVSnnW9Mx-cNT-iLzmqu_E&height=630&width=1200&expires=33278401097"
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="spinmoji.gg" />
+        <meta property="twitter:url" content="https://spinmoji.gg" />
+        <meta name="twitter:title" content="Spinmoji" />
+        <meta
+          name="twitter:description"
+          content="A roguelike deckbuilding slot machine game"
+        />
+        <meta
+          name="twitter:image"
+          content="https://opengraph.b-cdn.net/production/images/5908da24-1b14-45a2-9356-42152851a646.png?token=J98zRm7OT0_6zzgYJHi2GmVSnnW9Mx-cNT-iLzmqu_E&height=630&width=1200&expires=33278401097"
+        />
+
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
