@@ -34,12 +34,19 @@ type GameState = {
   stageComplete: boolean;
   tutorialSeen: boolean;
   settingsOpen: boolean;
+  removeTokens: number;
 };
 
 type GameAction =
   | { type: "PAY_RENT" }
-  | { type: "UPDATE_GRID"; payload: { grid: (Symbol | null)[]; symbols: Symbol[] } }
+  | {
+      type: "UPDATE_GRID";
+      payload: { grid: (Symbol | null)[]; symbols: Symbol[] };
+    }
   | { type: "ADD_SYMBOL"; payload: Symbol }
+  | { type: "REMOVE_SYMBOL"; payload: { symbolId: string } }
+  | { type: "ADD_REMOVE_TOKEN"; payload: number }
+  | { type: "USE_REMOVE_TOKEN" }
   | { type: "STOP_SPIN_GRID" }
   | { type: "DECREASE_TURNS" }
   | { type: "TOGGLE_SOUND" }
@@ -54,7 +61,7 @@ type GameAction =
   | { type: "ADD_COINS"; payload: { baseCoins: number; bonusCoins: number } }
   | { type: "CLOSE_COMPLETED_STAGE" }
   | { type: "TOGGLE_SETTINGS" }
-  | { type: "CLOSE_SETTINGS" }
+  | { type: "CLOSE_SETTINGS" };
 
 const GameStateContext = createContext<
   | {
@@ -82,6 +89,7 @@ const initialState: GameState = {
   shopOpen: false,
   stageComplete: false,
   tutorialSeen: false,
+  removeTokens: 0,
   rentSchedule: [
     { rent: 25, turns: 4 },
     { rent: 50, turns: 4 },
@@ -120,7 +128,11 @@ function gameReducer(state: GameState, action: GameAction): GameState {
         floor: state.floor + 1,
       };
     case "UPDATE_GRID":
-      return { ...state, grid: action.payload.grid, symbols: action.payload.symbols };
+      return {
+        ...state,
+        grid: action.payload.grid,
+        symbols: action.payload.symbols,
+      };
     case "UPDATE_EFFECT_GRID":
       return { ...state, effectGrid: action.payload };
     case "START_SPIN_GRID":
@@ -165,6 +177,23 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, settingsOpen: !state.settingsOpen };
     case "CLOSE_SETTINGS":
       return { ...state, settingsOpen: false };
+    case "ADD_REMOVE_TOKEN":
+      return {
+        ...state,
+        removeTokens: state.removeTokens + action.payload,
+      };
+    case "USE_REMOVE_TOKEN":
+      return {
+        ...state,
+        removeTokens: Math.max(0, state.removeTokens - 1),
+      };
+    case "REMOVE_SYMBOL":
+      return {
+        ...state,
+        symbols: state.symbols.filter(
+          (symbol) => symbol.tempId !== action.payload.symbolId
+        ),
+      };
     default:
       return state;
   }

@@ -89,8 +89,65 @@
   margin-bottom: 4px;
 }
 
+.spinButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.inventoryButton {
+  background: linear-gradient(to bottom, #7b5fc7, #5d3b9c);
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #3a2670, 0 6px 10px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: -5px; 
+  right: -50px; 
+  z-index: 99;
+  transition: all 0.2s;
+}
+
+.inventoryButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #3a2670, 0 8px 15px rgba(0, 0, 0, 0.3);
+}
+
+.inventoryButton:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #3a2670, 0 4px 5px rgba(0, 0, 0, 0.3);
+}
+
+.inventoryIcon {
+  font-size: 1.8rem;
+}
+
+.inventoryCount {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ff3a3a;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 .spinButton {
-  width: 240px;
+  width: 200px;
   height: 120px;
   background: none;
   border: none;
