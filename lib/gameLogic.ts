@@ -64,11 +64,6 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
 
   // Calculate base coins
   let baseCoins = 0;
-  newGrid.forEach((symbol) => {
-    if (symbol) {
-      baseCoins += symbol.value;
-    }
-  });
 
   // Apply effects cell by cell
   let bonusCoins = 0;
@@ -84,18 +79,9 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
       const effectResult = symbol.effect(newGrid, index);
       effectGrid[index] = effectResult;
 
-      // Calculate bonus value from multiplier if present
-      const multiplierBonus = effectResult.multiplier
-        ? effectResult.multiplier * (bonusCoins + symbol.value)
-        : 0;
-
-      // Update bonus values
-      symbol.bonusValue = (effectResult.bonusValue || 0) + multiplierBonus;
-      effectResult.bonusValue = symbol.bonusValue;
-
       // Add to total bonus coins
-      bonusCoins += symbol.bonusValue;
-
+      bonusCoins += effectResult.multiplier !== 0 ? (effectResult.multiplier * effectResult.bonusValue) : effectResult.bonusValue ;
+      baseCoins += effectResult.isDestroyed ? 0 : (effectResult.multiplier !== 0 ? effectResult.multiplier * symbol.value : symbol.value); 
       // Track symbols to add
       if (effectResult.add && effectResult.add.length > 0) {
         effectResult.add.forEach((addId) => {
@@ -127,7 +113,6 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
       for (const gridSymbol of newGrid) {
         if (gridSymbol && gridSymbol.tempId === symbol.tempId) {
           // Copy updated values from grid symbol
-          symbol.bonusValue = gridSymbol.bonusValue || 0;
           if (gridSymbol.counter !== undefined) {
             symbol.counter = gridSymbol.counter;
           }
@@ -145,7 +130,7 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
 
   // Add new symbols
   symbolsToKeep.push(...symbolsToAdd);
-
+  console.log(newGrid, effectGrid)
   return {
     grid: newGrid,
     effectGrid,
@@ -252,7 +237,7 @@ export function getRandomSymbol(
       break;
     case timeRentPaid === 3:
       veryRareChance = 0.0;
-      rareChance = 0.01;
+      rareChance = 0.1;
       uncommonChance = 0.26; // 0.01 + 0.25
       break;
     case timeRentPaid === 4:

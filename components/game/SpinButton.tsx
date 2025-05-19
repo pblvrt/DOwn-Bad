@@ -78,7 +78,7 @@ export default function SpinButton() {
         <span className={styles.inventoryIcon}>🎒</span>
         <span className={styles.inventoryCount}>{state.symbols.length}</span>
       </button>
-      <button onClick={handleSpin} className={styles.spinButton}>
+      <button onClickCapture={handleSpin} className={styles.spinButton}>
         <svg
           width="100%"
           height="100%"

@@ -70,12 +70,12 @@ const checkIfModifierIsActive = (
 export function getModifier(grid: (Symbol | null)[], index: number): number {
   if (!grid) {
     console.log("grid is null", grid, index);
-    return 0;
+    return 1;
   }
   const adjacentSymbols = getAdjacentSymbols(grid, index);
   const currentSymbol = grid[index];
   const symbolGroups = currentSymbol?.type;
-  if (!symbolGroups) return 0;
+  if (!symbolGroups) return 1;
   let moneyModifier = 0;
 
   // Character modifiers for specific groups
@@ -213,6 +213,9 @@ export function getModifier(grid: (Symbol | null)[], index: number): number {
     moneyModifier += 2;
   }
 
+  if (moneyModifier === 0 ){
+    return 1;
+  }
   return moneyModifier;
 }
 

@@ -69,6 +69,7 @@ export default function Shop() {
             </span>
           </div>
         </div>
+        <Inventory />
 
         <div className={styles.shopItems}>
           {shopItems.map((item, index) => (
@@ -79,7 +80,6 @@ export default function Shop() {
             />
           ))}
         </div>
-        <Inventory />
 
         <div className={styles.shopFooter}>
           <div className={styles.buttonGroup}>

@@ -74,6 +74,7 @@ export default function SymbolComponent({
   }
 
   const currentEffect = state.effectGrid[position];
+  const multiplier = currentEffect?.multiplier ?? 1
   const hasEffectBonus =
     currentEffect?.bonusValue !== undefined && currentEffect.bonusValue > 0;
   const isDestroy = currentEffect?.isDestroyed ?? false;
@@ -88,7 +89,7 @@ export default function SymbolComponent({
           {(hasEffectBonus || isDestroy) && (
             <DynamicRewardAnimation
               key={`effect-${position}`}
-              value={currentEffect?.bonusValue ?? 0}
+              value={(currentEffect?.bonusValue ?? 0) * multiplier}
               isTriggered={triggerEffectReward}
               isEffect={hasEffectBonus}
               isDestroy={isDestroy}
@@ -98,15 +99,17 @@ export default function SymbolComponent({
               soundId="specialEffect"
             />
           )}
-          <DynamicRewardAnimation
-            key={`reward-${position}`}
-            value={rewardValue}
-            isTriggered={triggerReward}
-            onAnimationComplete={handleAnimationComplete}
-            position={symbolPosition}
-            targetPosition={targetPosition}
-            soundId="coin"
-          />
+          {!isDestroy && (
+            <DynamicRewardAnimation
+              key={`reward-${position}`}
+              value={rewardValue * multiplier}
+              isTriggered={triggerReward}
+              onAnimationComplete={handleAnimationComplete}
+              position={symbolPosition}
+              targetPosition={targetPosition}
+              soundId="coin"
+            />
+          )}
         </>
       )}
       {showModal && (

@@ -199,24 +199,18 @@ export const symbolTypes: Symbol[] = [
     type: ["animal", "organism"],
     effectDescription: "Destroys [<honey>] Gives Coin 40 for each destroyed",
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
-      const isAdjacent = isAdjacentToSymbols(grid, index, ["honey"]);
       const multiplier = getModifier(grid, index);
       const isDestroyed = getIsDestroyed(grid, index);
+      const adjacentIndices = getAdjacentIndices(index);
+      let honeyCount = 0;
 
-      if (isAdjacent) {
-        const adjacentIndices = getAdjacentIndices(index);
-        let honeyCount = 0;
-
-        for (const adjIndex of adjacentIndices) {
-          const adjSymbol = grid[adjIndex];
-          if (adjSymbol && adjSymbol.id === "honey") {
-            honeyCount++;
-          }
+      for (const adjIndex of adjacentIndices) {
+        const adjSymbol = grid[adjIndex];
+        if (adjSymbol && adjSymbol.id === "honey") {
+          honeyCount++;
         }
-
-        return { isDestroyed, bonusValue: 40 * honeyCount, multiplier };
       }
-      return { isDestroyed, bonusValue: 0, multiplier };
+      return { isDestroyed, bonusValue: 40 * honeyCount, multiplier };
     },
   },
   {
@@ -227,7 +221,7 @@ export const symbolTypes: Symbol[] = [
     type: ["human", "organism", "doglikes"],
     emoji: "🧙‍♂️",
     effectDescription:
-      "Adjacent [[<chick><chicken><cow><crab><crow><dog><egg><golden_egg><goldfish><goose><turtle><wolf>] give 2x more coins.",
+      "Adjacent [<chick><chicken><cow><crab><crow><dog><egg><golden_egg><goldfish><goose><turtle><wolf>] give 2x more coins.",
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const multiplier = getModifier(grid, index);
       const isDestroyed = getIsDestroyed(grid, index);
@@ -1981,14 +1975,14 @@ export const symbolTypes: Symbol[] = [
       "darkhumor",
       "richlikes",
     ],
+    counter: 0,
     effectDescription: "Counter +1 coin permanently after 8 spins.",
     effect: function (grid: (Symbol | null)[], index: number): effectResult {
       const multiplier = getModifier(grid, index);
       const counter = grid[index]?.counter || 0;
-      // Base value plus any permanent counter bonus
       return {
-        isDestroyed: false,
-        bonusValue: 2 + (counter % 8),
+        isDestroyed:  getIsDestroyed(grid, index),
+        bonusValue: counter % 8,
         multiplier,
       };
     },

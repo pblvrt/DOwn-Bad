@@ -205,9 +205,9 @@ export function GameStateProvider({ children }: { children: ReactNode }) {
   // Load saved game on mount
   useEffect(() => {
     const savedGame = localStorage.getItem("landlordLuckSave");
-    if (savedGame) {
-      dispatch({ type: "LOAD_GAME", payload: JSON.parse(savedGame) });
-    }
+    // if (savedGame) {
+    //   dispatch({ type: "LOAD_GAME", payload: JSON.parse(savedGame) });
+    // }
     setIsLoading(false);
   }, []);
 

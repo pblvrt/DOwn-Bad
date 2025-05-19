@@ -6,7 +6,6 @@ export type Symbol = {
   rarity: "common" | "uncommon" | "rare" | "very_rare" | "special";
   emoji: string;
   effectDescription?: string;
-  bonusValue?: number;
   counter?: number;
   type: Group[];
   effect?: (grid: (Symbol | null)[], index: number) => effectResult;
@@ -91,7 +90,7 @@ export type GameState = {
 
 export type effectResult = {
   isDestroyed: boolean;
-  multiplier?: number;
-  bonusValue?: number;
+  multiplier: number;
+  bonusValue: number;
   add?: string[];
 };
