@@ -15,7 +15,6 @@ import AudioInitializer from "@/components/AudioInitializer";
 import { AudioProvider } from "@/context/AudioProvider";
 import SettingsModal from "@/components/ui/SettingsModal";
 import Navigation from "@/components/ui/Navigation";
-import InventoryModal from "@/components/game/InventoryModal";
 
 export default function Home() {
   return (
@@ -24,7 +23,6 @@ export default function Home() {
         <ServiceWorkerRegistration />
         <AudioInitializer />
         <div className={styles.gameContainer}>
-          <InventoryModal />
           <LostModal />
           <IntroModal />
           <StageCompleteModal />
@@ -35,7 +33,6 @@ export default function Home() {
           <Inventory />
           <ProgressBar />
           <div className={styles.spinButtonContainer}>
-            
             <SpinButton />
           </div>
           <Navigation />

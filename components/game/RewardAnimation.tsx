@@ -31,7 +31,8 @@ export default function RewardAnimation({
       isEffect,
       isDestroy,
       soundUrl,
-      id
+      id,
+      value
     );
 
   // Handle client-side rendering for createPortal

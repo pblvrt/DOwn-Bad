@@ -30,6 +30,12 @@ export default function SymbolComponent({
   const [triggerEffectReward, setTriggerEffectReward] = useState(false);
   const symbolRef = useRef<HTMLDivElement>(null);
 
+  const currentEffect = state.effectGrid[position];
+  const multiplier = currentEffect?.multiplier ?? 1;
+  const hasEffectBonus =
+    currentEffect?.bonusValue !== undefined && currentEffect.bonusValue > 0;
+  const isDestroy = currentEffect?.isDestroyed ?? false;
+
   // Custom hooks for animation logic
   const { symbolPosition, targetPosition } = useAnimationPositions(
     symbolRef as React.RefObject<HTMLDivElement>,
@@ -47,7 +53,7 @@ export default function SymbolComponent({
     effectGrid: state.effectGrid,
     setTriggerEffectReward,
     setTriggerReward,
-    symbol: symbol,
+    symbol,
   });
 
   // Event handlers
@@ -72,12 +78,6 @@ export default function SymbolComponent({
       <div className={`${styles.cellContainer} ${styles.cellEmpty}`}></div>
     );
   }
-
-  const currentEffect = state.effectGrid[position];
-  const multiplier = currentEffect?.multiplier ?? 1
-  const hasEffectBonus =
-    currentEffect?.bonusValue !== undefined && currentEffect.bonusValue > 0;
-  const isDestroy = currentEffect?.isDestroyed ?? false;
 
   return (
     <div onClick={handleClick} ref={symbolRef}>

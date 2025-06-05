@@ -10,7 +10,8 @@ export function useAnimationSequences(
   isEffect = false,
   isDestroy = false,
   soundId?: string,
-  id = "default"
+  id = "default",
+  value = 0
 ) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationPhase, setAnimationPhase] = useState(0); // 0: not started, 1: appear, 2: move, 3: destroy
@@ -32,6 +33,33 @@ export function useAnimationSequences(
     setAnimationPhase(0);
     // Remove this animation from active animations
     activeAnimations.delete(animationIdRef.current);
+
+    // Dispatch custom event for progress bar to listen to
+    // Dispatch for both effect animations and regular coin animations
+    // Only skip for destroy-only animations (that don't give coins)
+    if (animationPhase === 2 && value > 0) {
+      console.log("🚀 Animation: Dispatching coin event", {
+        value,
+        isEffect,
+        isDestroy,
+        animationPhase,
+        id,
+      });
+      window.dispatchEvent(
+        new CustomEvent("coinAnimationComplete", {
+          detail: { coinValue: value },
+        })
+      );
+    } else {
+      console.log("🚫 Animation: NOT dispatching coin event", {
+        value,
+        isEffect,
+        isDestroy,
+        animationPhase,
+        id,
+      });
+    }
+
     onAnimationComplete();
   };
 
@@ -79,8 +107,8 @@ export function useAnimationSequences(
 
           setTimeout(() => {
             completeAnimation();
-          }, 1200); // Match the transition duration
-        }, 800); // Wait time before moving to target
+          }, 600); // Match the transition duration
+        }, 400); // Wait time before moving to target
       }, 200); // Time to settle back to normal size
     }, 50);
   };
@@ -102,8 +130,8 @@ export function useAnimationSequences(
 
           setTimeout(() => {
             completeAnimation();
-          }, 1200); // Match the transition duration
-        }, 800); // Wait time before moving to target
+          }, 600); // Match the transition duration
+        }, 400); // Wait time before moving to target
       }, 200); // Time to settle back to normal size
     }, 50);
   };

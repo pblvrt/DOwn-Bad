@@ -157,12 +157,27 @@
   transition: transform 0.15s ease, filter 0.15s ease;
 }
 
-.spinButton:hover {
+.spinButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.spinButton.spinning {
+  animation: spinButtonPulse 1s infinite;
+}
+
+@keyframes spinButtonPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); }
+  50% { transform: scale(0.98); filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); }
+  100% { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); }
+}
+
+.spinButton:hover:not(:disabled) {
   transform: scale(1.03);
   filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
 }
 
-.spinButton:active {
+.spinButton:active:not(:disabled) {
   transform: scale(0.98);
 }
 
@@ -281,6 +296,7 @@
   background-color: #3a9aff;
   opacity: 0.7;
   border-right: 4px solid #0989de;
+  transition: width 0.5s ease-out;
 }
 
 .stageInfo {

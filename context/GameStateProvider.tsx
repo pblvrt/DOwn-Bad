@@ -88,6 +88,7 @@ const initialState: GameState = {
   lost: false,
   shopOpen: false,
   stageComplete: false,
+  settingsOpen: false,
   tutorialSeen: false,
   removeTokens: 0,
   rentSchedule: [

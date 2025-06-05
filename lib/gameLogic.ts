@@ -2,6 +2,7 @@ import { Symbol } from "@/types/game";
 import { symbolTypes } from "./symbols";
 import { shuffleArray } from "./utils";
 import { CELL_NUMBER } from "./constants";
+
 export function updateGridWithSymbols(symbols: Symbol[]): (Symbol | null)[] {
   // Create a new grid
   const grid: (Symbol | null)[] = Array(CELL_NUMBER).fill(null);
@@ -80,8 +81,15 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
       effectGrid[index] = effectResult;
 
       // Add to total bonus coins
-      bonusCoins += effectResult.multiplier !== 0 ? (effectResult.multiplier * effectResult.bonusValue) : effectResult.bonusValue ;
-      baseCoins += effectResult.isDestroyed ? 0 : (effectResult.multiplier !== 0 ? effectResult.multiplier * symbol.value : symbol.value); 
+      bonusCoins +=
+        effectResult.multiplier !== 0
+          ? effectResult.multiplier * effectResult.bonusValue
+          : effectResult.bonusValue;
+      baseCoins += effectResult.isDestroyed
+        ? 0
+        : effectResult.multiplier !== 0
+        ? effectResult.multiplier * symbol.value
+        : symbol.value;
       // Track symbols to add
       if (effectResult.add && effectResult.add.length > 0) {
         effectResult.add.forEach((addId) => {
@@ -130,7 +138,7 @@ export function spinGrid(grid: (Symbol | null)[], symbols: Symbol[]) {
 
   // Add new symbols
   symbolsToKeep.push(...symbolsToAdd);
-  console.log(newGrid, effectGrid)
+  console.log(newGrid, effectGrid);
   return {
     grid: newGrid,
     effectGrid,
@@ -276,12 +284,7 @@ export function getRandomSymbol(
 
 // Get starting symbols for a new game
 export function getStartingSymbols(): Symbol[] {
-  const startingSymbols = [
-    "flower",
-    "cat",
-    "cherry",
-    "coin",
-  ];
+  const startingSymbols = ["flower", "cat", "cherry", "coin"];
 
   return startingSymbols.map((symbol) => {
     return {

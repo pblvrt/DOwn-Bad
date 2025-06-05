@@ -39,7 +39,7 @@ export default function SpinButton() {
   };
 
   const scheduleEndOfTurn = (effectGrid: (effectResult | null)[]) => {
-    const totalDelay = totalDelayUntilPos(effectGrid, CELL_NUMBER) + 3000;
+    const totalDelay = totalDelayUntilPos(effectGrid, CELL_NUMBER) + 4300;
 
     setTimeout(() => {
       dispatch({ type: "DECREASE_TURNS" });

@@ -1121,7 +1121,7 @@ export const symbolTypes: Symbol[] = [
         (symbol) =>
           symbol?.id === "five_sided_die" || symbol?.id === "three_sided_die"
       );
-      const rolled1 = dices.some((symbol) => symbol?.bonusValue === 1);
+      const rolled1 = dices.some((symbol) => symbol?.value === 1);
 
       if (rolled1) {
         return { isDestroyed: true, bonusValue: 0, multiplier };

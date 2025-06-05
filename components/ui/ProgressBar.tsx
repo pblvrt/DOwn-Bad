@@ -4,12 +4,10 @@ import { useGameState } from "@/context/GameStateProvider";
 
 const ProgressBar: React.FC = () => {
   const { state } = useGameState();
-  const { isSpinning, floor, rentSchedule, effectGrid, grid } = state;
-  const [displayedCoins, setDisplayedCoins] = useState(0);
-  const [actualCoins, setActualCoins] = useState(0);
-  const animationQueue = useRef<Array<{ value: number; delay: number }>>([]);
-  const isAnimating = useRef(false);
+  const { isSpinning, floor, rentSchedule } = state;
+  const [displayedCoins, setDisplayedCoins] = useState(state.coins);
   const prevFloorRef = useRef(floor);
+  const prevCoinsRef = useRef(state.coins);
 
   // Handle floor changes - carry over excess coins or reset if back to floor 0
   useEffect(() => {
@@ -17,114 +15,81 @@ const ProgressBar: React.FC = () => {
       if (floor === 0) {
         // Reset progress when back to floor 0 (game reset)
         setDisplayedCoins(0);
-        setActualCoins(0);
-        animationQueue.current = [];
-        isAnimating.current = false;
       } else {
         // Calculate excess coins from previous floor
         const previousRent = rentSchedule[prevFloorRef.current].rent;
-        const excessCoins = Math.max(0, actualCoins - previousRent);
+        const excessCoins = Math.max(0, state.coins - previousRent);
 
         // Set the carried over coins for the new floor
         setDisplayedCoins(excessCoins);
-        setActualCoins(excessCoins);
       }
 
       prevFloorRef.current = floor;
+      prevCoinsRef.current = state.coins;
     }
-  }, [floor, rentSchedule, actualCoins]);
+  }, [floor, rentSchedule, state.coins]);
 
-  // Calculate the percentage for the progress bar width
-  const percentage = Math.min(
-    (state.coins / rentSchedule[floor].rent) * 100,
-    100
-  );
-
-  // Function to process the animation queue
-  const processQueue = () => {
-    if (animationQueue.current.length === 0) {
-      isAnimating.current = false;
-      return;
+  // Sync displayed coins with actual coins when not spinning
+  useEffect(() => {
+    if (!isSpinning) {
+      setDisplayedCoins(state.coins);
+      prevCoinsRef.current = state.coins;
     }
+  }, [state.coins, isSpinning]);
 
-    isAnimating.current = true;
-    const nextAnimation = animationQueue.current.shift();
+  // Listen for coin animation completions via custom events
+  useEffect(() => {
+    const handleCoinAnimation = (event: CustomEvent) => {
+      const { coinValue } = event.detail;
+      console.log("🪙 Progress Bar: Received coin animation event", {
+        coinValue,
+        currentDisplayed: displayedCoins,
+      });
+      setDisplayedCoins((prev) => {
+        const newValue = prev + coinValue;
+        console.log("🪙 Progress Bar: Updating coins", {
+          from: prev,
+          to: newValue,
+          added: coinValue,
+        });
+        return newValue;
+      });
+    };
 
-    if (nextAnimation) {
-      setTimeout(() => {
-        setDisplayedCoins(nextAnimation.value);
-        processQueue();
-      }, nextAnimation.delay);
-    }
-  };
+    // Add event listener for coin animations
+    window.addEventListener(
+      "coinAnimationComplete",
+      handleCoinAnimation as EventListener
+    );
 
-  // Handle spin results and queue animations
+    return () => {
+      window.removeEventListener(
+        "coinAnimationComplete",
+        handleCoinAnimation as EventListener
+      );
+    };
+  }, []);
+
+  // Reset displayedCoins to match the starting value when spinning begins
   useEffect(() => {
     if (isSpinning) {
-      // Calculate total coins from this spin
-      let newCoins = 0;
-
-      // Add coins from effect grid
-      const effectCoins = effectGrid
-        .filter((effect) => effect !== null)
-        .reduce((sum, effect) => sum + (effect?.bonusValue || 0), 0);
-
-      // Add coins from regular grid
-      const gridCoins = grid
-        .filter((item) => item !== null)
-        .reduce((sum, item) => sum + (item?.value || 0), 0);
-
-      // Total new coins from this spin
-      newCoins = effectCoins + gridCoins;
-
-      // Update actual coins (internal tracking)
-      const updatedTotalCoins = actualCoins + newCoins;
-      setActualCoins(updatedTotalCoins);
-
-      // Clear previous animation queue
-      animationQueue.current = [];
-
-      // Queue effect animations if there are any
-      let runningTotal = displayedCoins;
-      const effectsWithBonus = effectGrid.filter(
-        (effect) => effect !== null && effect.bonusValue && effect.bonusValue > 0
-      );
-
-      // Add effect animations
-      if (effectsWithBonus.length > 0) {
-        effectsWithBonus.forEach((effect) => {
-          if (effect !== null) {
-            runningTotal += effect.bonusValue || 0;
-            animationQueue.current.push({
-              value: runningTotal,
-              delay: 800,
-            });
-          }
-        });
-      }
-
-      // Add grid coins animation at the end
-      if (gridCoins > 0) {
-        runningTotal += gridCoins;
-        animationQueue.current.push({
-          value: runningTotal,
-          delay: 1000,
-        });
-      }
-
-      // Start processing the queue if not already animating
-      if (!isAnimating.current && animationQueue.current.length > 0) {
-        processQueue();
-      }
+      // Set displayed coins to the value before the spin started
+      setDisplayedCoins(prevCoinsRef.current);
     }
-  }, [isSpinning, effectGrid, grid]);
+  }, [isSpinning]);
+
+  // Calculate the percentage for the progress bar width using displayed coins
+  const percentage = Math.min(
+    (displayedCoins / rentSchedule[floor].rent) * 100,
+    100
+  );
 
   return (
     <div className={styles.progressBar} id="reward-bar">
       <div className={styles.stageInfo}>
         <span className={styles.stageLabel}>Stage {floor + 1}</span>
         <span className={styles.coinTarget}>
-          {state.coins} of {rentSchedule[floor].rent}
+          {Math.floor(displayedCoins)} of {rentSchedule[floor].rent}
         </span>
       </div>
       <div

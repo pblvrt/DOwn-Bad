@@ -24,11 +24,11 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 // Sound definitions
 const SOUNDS = {
-  spin: "/sounds/spin.wav",
-  coin: "/sounds/coin.wav",
+  spin: "/sounds/spin.mp3",
+  coin: "/sounds/coin.mp3",
   purchase: "/sounds/purchase.wav",
-  specialEffect: "/sounds/specialEffect.wav",
-  background: "/sounds/background.wav",
+  specialEffect: "/sounds/specialEffect.mp3",
+  background: "/sounds/background.mp3",
 };
 
 export function AudioProvider({ children }: { children: React.ReactNode }) {

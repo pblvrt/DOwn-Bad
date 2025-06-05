@@ -1,5 +1,8 @@
 import { ANIMATION_DELAYS } from "@/hooks/useAnimationTimers";
 import { effectResult, Symbol, Group } from "@/types/game";
+import { symbolTypes } from "./symbols";
+import { GRID_SIZE } from "./constants";
+import styles from "@/styles/GameBoard.module.css";
 
 // Get adjacent indices for a given index in a 4x4 grid (including diagonals)
 export function getAdjacentIndices(index: number): number[] {
@@ -191,7 +194,7 @@ export function getModifier(grid: (Symbol | null)[], index: number): number {
     "doglikes",
     1
   );
-  
+
   // moneyModifier += checkIfModifierIsActive(
   //   adjacentSymbols,
   //   symbolGroups,
@@ -213,7 +216,7 @@ export function getModifier(grid: (Symbol | null)[], index: number): number {
     moneyModifier += 2;
   }
 
-  if (moneyModifier === 0 ){
+  if (moneyModifier === 0) {
     return 1;
   }
   return moneyModifier;
@@ -472,3 +475,59 @@ export function generateId(): string {
 export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+// Utility functions for grid calculations
+export const getGridPosition = (index: number) => ({
+  row: Math.floor(index / GRID_SIZE),
+  col: index % GRID_SIZE,
+});
+
+export const getPositionClasses = (index: number) => {
+  const { col } = getGridPosition(index);
+
+  // Corner positions
+  const isTopLeft = index === 0;
+  const isTopRight = index === GRID_SIZE - 1;
+  const isBottomLeft = index === GRID_SIZE * (GRID_SIZE - 1);
+  const isBottomRight = index === GRID_SIZE * GRID_SIZE - 1;
+
+  // Edge positions
+  const isLeftEdge = col === 0;
+  const isRightEdge = col === GRID_SIZE - 1;
+
+  // Corner classes
+  const cornerClasses = {
+    [styles.topLeft]: isTopLeft,
+    [styles.topRight]: isTopRight,
+    [styles.bottomLeft]: isBottomLeft,
+    [styles.bottomRight]: isBottomRight,
+  };
+
+  const cornerClass =
+    Object.entries(cornerClasses).find(([, condition]) => condition)?.[0] || "";
+
+  return {
+    cornerClass,
+    isCorner: isTopLeft || isTopRight || isBottomLeft || isBottomRight,
+    isLeftEdge,
+    isRightEdge,
+  };
+};
+
+export const getColumnSymbols = (
+  grid: ((typeof symbolTypes)[0] | null)[],
+  index: number
+) => {
+  const { row, col } = getGridPosition(index);
+  const symbols = [];
+
+  // Generate 20 symbols for better spinning effect
+  for (let i = 0; i < 40; i++) {
+    // Cycle through the column by wrapping around the rows
+    const targetRow = ((row) + i) % GRID_SIZE;
+    const targetIndex = targetRow * GRID_SIZE + col;
+    symbols.push(grid[targetIndex] || symbolTypes[0]);
+  }
+
+  return symbols;
+};

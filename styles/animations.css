@@ -1,0 +1,98 @@
+/* Spin Animations */
+@keyframes spinShake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-3px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes spinGlow {
+  0% { box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+  50% { box-shadow: 0 4px 30px rgba(255, 255, 255, 0.3); }
+  100% { box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); }
+}
+
+@keyframes buttonPulse {
+  0% { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); }
+  50% { transform: scale(0.98); filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)); }
+  100% { transform: scale(1); filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)); }
+}
+
+@keyframes buzz {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Animation Transitions */
+.animateInitial {
+  opacity: 0;
+  transform: scale(0.5) translateY(10px);
+}
+
+.animatePopup {
+  opacity: 1;
+  transform: scale(1.2) translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animateNormal {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: all 0.2s ease-out;
+}
+
+.animateMoveToTarget {
+  opacity: 0;
+  transform: scale(0.5) translateY(-20px);
+  transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Effect Animations */
+.effectInitial {
+  opacity: 0;
+  transform: scale(0.5) translateY(10px);
+}
+
+.effectPopup {
+  opacity: 1;
+  transform: scale(1.2) translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.effectNormal {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  transition: all 0.2s ease-out;
+}
+
+.effectMoveToTarget {
+  opacity: 0;
+  transform: scale(0.5) translateY(-20px);
+  transition: all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+/* Destroy Animations */
+.destroyInitial {
+  opacity: 0;
+  transform: scale(0.5) translateY(10px);
+}
+
+.destroyPopup {
+  opacity: 1;
+  transform: scale(1.2) translateY(-10px);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.destroyBuzz {
+  animation: buzz 0.5s ease-in-out;
+}
+
+.destroyFadeOut {
+  opacity: 0;
+  transform: scale(0.5) translateY(-20px);
+  transition: all 0.3s ease-out;
+} 

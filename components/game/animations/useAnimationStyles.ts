@@ -39,7 +39,7 @@ export function useAnimationStyles() {
       top: `${targetPosition.y}px`,
       opacity: 0,
       transform: "scale(0.5) translateY(-20px)",
-      transition: "all 1.2s cubic-bezier(0.25, 0.1, 0.25, 1)",
+      transition: "all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1)",
     });
   };
 

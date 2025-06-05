@@ -55,13 +55,6 @@ const SymbolModal: React.FC<SymbolModalProps> = ({
           </div>
         )}
 
-        {symbol.bonusValue !== undefined && (
-          <div className={styles.detailRow}>
-            <span className={styles.detailLabel}>Bonus Value:</span>
-            <span className={styles.bonusValue}>+{symbol.bonusValue} 🪙</span>
-          </div>
-        )}
-
         {symbol.effectDescription && (
           <div className={styles.effectBox}>
             <h3 className={styles.effectTitle}>Special Effect</h3>

@@ -6,10 +6,14 @@ import styles from "@/styles/GameBoard.module.css";
 import { symbolTypes } from "@/lib/symbols";
 import SymbolComponent from "./Symbol";
 import { CELL_NUMBER, GRID_SIZE } from "@/lib/constants";
+import { getColumnSymbols, getPositionClasses } from "@/lib/utils";
+
 export default function GameBoard() {
   const { state, dispatch } = useGameState();
   const { grid, isSpinning } = state;
-  const slotRefs = useRef<(HTMLDivElement | null)[]>(Array(CELL_NUMBER).fill(null));
+  const slotRefs = useRef<(HTMLDivElement | null)[]>(
+    Array(CELL_NUMBER).fill(null)
+  );
 
   // Memoize the spin slots function to prevent unnecessary recreations
   const spinSlots = useCallback(() => {
@@ -29,9 +33,10 @@ export default function GameBoard() {
           if (!ref) return;
 
           const options = ref.children;
-          // We want to end with the final symbol (which is the last in our array) visible
-          const finalPosition = -(options.length - 1) * 5; // 4rem is the height of each cell
-          ref.style.transition = "top 0.7s ease-out";
+          // Since getColumnSymbols puts the correct final symbol FIRST in the array,
+          // we want to end at position 0 (showing the first symbol)
+          const finalPosition = -options.length * 4; // Show the first symbol which is the correct result
+          ref.style.transition = "top 1.5s ease-out";
           ref.style.top = `${finalPosition}rem`;
         }, Math.floor(i / GRID_SIZE)); // Stagger by row
       }
@@ -44,51 +49,22 @@ export default function GameBoard() {
       spinSlots();
       const timer = setTimeout(() => {
         dispatch({ type: "STOP_SPIN_GRID" });
-      }, 1000);
+      }, 2000);
 
       return () => clearTimeout(timer); // Clean up timeout
     }
   }, [isSpinning, dispatch, spinSlots]);
 
-  // Memoize the column rendering functions to prevent unnecessary recalculations
+  // Optimized spinning columns with extracted utilities
   const renderSpinningColumns = useMemo(() => {
-    const columns = [];
+    return Array.from({ length: CELL_NUMBER }, (_, i) => {
+      const { cornerClass, isCorner, isLeftEdge, isRightEdge } =
+        getPositionClasses(i);
+      const columnSymbols = getColumnSymbols(grid, i);
 
-    for (let i = 0; i < CELL_NUMBER; i++) {
-      const row = Math.floor(i / GRID_SIZE);
-      const col = i % GRID_SIZE;
-      const columnSymbols = [];
-
-      // Determine if this is a corner cell
-      const isTopLeft = i === 0;
-      const isTopRight = i === GRID_SIZE - 1;
-      const isBottomLeft = i === GRID_SIZE * (GRID_SIZE - 1);
-      const isBottomRight = i === GRID_SIZE * GRID_SIZE - 1;
-      const isCorner = isTopLeft || isTopRight || isBottomLeft || isBottomRight;
-
-      // Determine if cell is on an edge
-      const isLeftEdge = col === 0;
-      const isRightEdge = col === GRID_SIZE - 1;
-
-      // Add corner class based on position
-      let cornerClass = "";
-      if (isTopLeft) cornerClass = styles.topLeft;
-      if (isTopRight) cornerClass = styles.topRight;
-      if (isBottomLeft) cornerClass = styles.bottomLeft;
-      if (isBottomRight) cornerClass = styles.bottomRight;
-
-      // Add symbols in reverse order (top to bottom in the slot)
-      for (let offset = 20; offset >= 0; offset--) {
-        // Calculate which row's symbol to show
-        // We're showing symbols that will end up offset rows above current position
-        const sourceRow = (row - offset + GRID_SIZE) % GRID_SIZE;
-        const sourceIndex = sourceRow * GRID_SIZE + col;
-        columnSymbols.push(grid[sourceIndex] || symbolTypes[0]);
-      }
-
-      columns.push(
+      return (
         <div
-          key={i + "spin"}
+          key={`${i}-spin`}
           className={`${styles.slotColumn} ${isCorner ? cornerClass : ""}`}
         >
           <div
@@ -112,32 +88,13 @@ export default function GameBoard() {
           </div>
         </div>
       );
-    }
-
-    return columns;
+    });
   }, [grid, isSpinning]);
 
   const renderColumns = useMemo(() => {
     return grid.map((symbol, i) => {
-      const col = i % GRID_SIZE;
-
-      // Determine if this is a corner cell
-      const isTopLeft = i === 0;
-      const isTopRight = i === GRID_SIZE - 1;
-      const isBottomLeft = i === GRID_SIZE * (GRID_SIZE - 1);
-      const isBottomRight = i === GRID_SIZE * GRID_SIZE - 1;
-      const isCorner = isTopLeft || isTopRight || isBottomLeft || isBottomRight;
-
-      // Determine if cell is on an edge
-      const isLeftEdge = col === 0;
-      const isRightEdge = col === GRID_SIZE - 1;
-
-      // Add corner class based on position
-      let cornerClass = "";
-      if (isTopLeft) cornerClass = styles.topLeft;
-      if (isTopRight) cornerClass = styles.topRight;
-      if (isBottomLeft) cornerClass = styles.bottomLeft;
-      if (isBottomRight) cornerClass = styles.bottomRight;
+      const { cornerClass, isCorner, isLeftEdge, isRightEdge } =
+        getPositionClasses(i);
 
       return (
         <div
