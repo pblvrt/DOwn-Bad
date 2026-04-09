@@ -1,3 +1,4 @@
+"use client";
 import { useEffect } from "react";
 import { effectResult, Symbol } from "@/types/game";
 import { totalDelayUntilPos, calculateAnimationDelay } from "@/lib/utils";
