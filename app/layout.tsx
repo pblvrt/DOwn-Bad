@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/react"
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -16,16 +15,10 @@ export const metadata: Metadata = {
   title: "Spinmoji",
   description: "A roguelike deckbuilding slot machine game",
   manifest: "/manifest.json",
-  themeColor: "#6a3cb5",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "Spinmoji",
-  },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
   },
   openGraph: {
     type: "website",
@@ -79,7 +72,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Analytics />
         <title>Spinmoji</title>
         <meta
           name="description"
